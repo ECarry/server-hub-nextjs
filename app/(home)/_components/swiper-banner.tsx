@@ -28,9 +28,18 @@ const SwiperBanner = () => {
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
         className="h-[500px] w-full rounded-3xl"
+        style={{
+          // @ts-ignore
+          '--swiper-navigation-size': '22px',
+          '--swiper-navigation-sides-offset': '22px',
+          '--swiper-navigation-color': '#d1d5db',
+          '--swiper-pagination-color': '#f43f5e',
+          '--swiper-pagination-bullet-size': '12px',
+          '--swiper-pagination-bullet-inactive-opacity': '0.1'
+        }}
       >
         <SwiperSlide>
-          <div className='w-full h-full bg-rose-500'>
+          <div className='w-full h-full bg-rose-300'>
 
           </div>
         </SwiperSlide>
