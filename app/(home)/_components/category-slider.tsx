@@ -13,7 +13,7 @@ const CategorySlider = () => {
       <div className='flex gap-8'>
         <h1 className='text-3xl font-semibold'>Product Categories</h1>
 
-        <ul className='flex gap-4 items-end text-lg'>
+        <ul className='flex gap-4 items-end font-semibold'>
           <li className='text-rose-500'>Servers</li>
           <li>Storage</li>
           <li>Networking</li>
