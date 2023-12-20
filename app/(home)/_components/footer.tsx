@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const Footer = () => {
   return (
-    <footer className="container w-full space-y-4">
+    <footer className="container w-full space-y-4 py-8">
       <div className='w-full flex justify-center'>
         <Image 
           src={Logo}
