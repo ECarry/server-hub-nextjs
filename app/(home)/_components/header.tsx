@@ -41,7 +41,9 @@ const Header = () => {
             className='object-contain'
           />
 
-          <Search />
+          <div className='hidden lg:block'>
+            <Search />
+          </div>
         </div>
 
         <div className='ml-auto flex items-center gap-4'>

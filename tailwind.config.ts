@@ -70,6 +70,10 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: 0 },
         },
+        "auto-scroll": {
+          "0%": { transform: 'translateX(0)' },
+          "100%": { transform: 'translateX(calc(-250px * 7))' }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
