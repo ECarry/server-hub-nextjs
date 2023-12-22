@@ -54,11 +54,6 @@ const Header = () => {
 
       <Separator className="w-full" />
 
-      <div className='container p-4'>
-        <NavigationBar />
-      </div>
-
-      <Separator className="w-full" />
     </header>
   )
 }
