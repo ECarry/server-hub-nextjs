@@ -7,6 +7,8 @@ export default function Home() {
     <main className="container px-4 py-8 space-y-12">
       <SwiperBanner />
 
+      
+
       <CategorySlider />
 
       <ProductGallery />
