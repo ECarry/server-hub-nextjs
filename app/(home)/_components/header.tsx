@@ -13,7 +13,7 @@ const Header = () => {
     <header className='flex flex-col w-full'>
       <div className='container px-4 py-[6px] flex items-center'>
         <div className='flex items-center gap-4'>
-          <Link href="#" className='text-[13px] text-gray-500'>About Us</Link>
+          <Link href="/about" className='text-[13px] text-gray-500 hover:text-gray-700 transition-colors duration-150'>About Us</Link>
           <Separator orientation='vertical' className='h-4' />
           <Link href="#" className='text-[13px] text-gray-500'>My Account</Link>
           <Separator orientation='vertical' className='h-4' />
@@ -32,14 +32,17 @@ const Header = () => {
       
       <div className='container px-4 py-8 flex items-center'>
         <div className='flex items-center gap-8'>
-          <Image 
-            src={Logo}
-            alt='logo'
-            width={250}
-            height={150}
-            priority
-            className='object-contain'
-          />
+          <Link href={'/'}>
+            <Image 
+              src={Logo}
+              alt='logo'
+              width={250}
+              height={150}
+              priority
+              className='object-contain'
+            />
+          </Link>
+
 
           <div className='hidden lg:block'>
             <Search />

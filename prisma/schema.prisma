@@ -23,4 +23,36 @@ model Manufacturer {
   id        String    @id @default(uuid()) @map("_id")
   name      String
   imageUrl  String?
+
+  products Product[]
+}
+
+model Category {
+  id        String @id @default(uuid()) @map("_id")
+  name      String
+  imageUrl  String?
+
+  products Product[]
+}
+
+model Product {
+  id            String    @id @default(uuid()) @map("_id")
+  name          String
+  description   String?
+
+  manufacturerId String
+  manufacturer  Manufacturer @relation(fields: [manufacturerId], references: [id])
+
+  categoryId     String
+  category       Category @relation(fields: [categoryId], references: [id])    
+
+  pdfs          Pdf[]
+}
+
+model Pdf {
+  id       String  @id @default(uuid()) @map("_id")
+  url      String
+  
+  product  Product @relation(fields: [productId], references: [id])
+  productId String
 }
