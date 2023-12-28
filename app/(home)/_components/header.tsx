@@ -7,6 +7,7 @@ import LikeListButon from './like-list-button'
 import Link from 'next/link'
 import { ChevronDown } from 'lucide-react'
 import { NavigationBar } from './navigation-bar'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 const Header = () => {
   return (
@@ -25,6 +26,7 @@ const Header = () => {
             <span className='text-[13px] text-gray-500'>English</span>
             <ChevronDown size={13} className='text-gray-500' />
           </div>
+          <ThemeToggle />
         </div>
       </div>
 

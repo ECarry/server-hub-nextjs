@@ -55,7 +55,7 @@ const components: { title: string; href: string; description: string }[] = [
 
 export function NavigationBar() {
   return (
-    <div className="bg-white border-b shadow-md sticky top-0 z-10">
+    <div className="bg-background border-b shadow-md sticky top-0 z-10">
       <div className="container p-4">
         <NavigationMenu>
           <NavigationMenuList className="gap-4">
