@@ -4,6 +4,7 @@ import { db } from "@/lib/db"
 
 import authConfig from "@/auth.config"
 import { UserRole } from "@prisma/client"
+import { getUserById } from "./data/user"
 
 // https://authjs.dev/getting-started/typescript
 declare module "@auth/core/types" {
@@ -21,14 +22,18 @@ export const {
   signIn,
   signOut
 } = NextAuth({
+  pages: {
+    signIn: '/login',
+    
+  },
   callbacks: {
-    // async signIn({ user }) {
-    //   const existingUser = await db.user.findUnique({ where: { id: user.id } })
+    async signIn({ user }) {
+      const existingUser = await getUserById(user.id)
 
-    //   if (!existingUser || !existingUser.emailVerified) return false
+      if (!existingUser || !existingUser.emailVerified) return false
       
-    //   return true
-    // },
+      return true
+    },
     async session({ session, user, token }) {
       if (token.sub && session.user) {
         session.user.id = token.sub
