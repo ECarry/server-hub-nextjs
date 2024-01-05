@@ -24,7 +24,7 @@ import { Checkbox } from "../ui/checkbox"
 import Link from "next/link"
 
 const LoginForm = () => {
-  const [isPending, setTransition] = useTransition()
+  const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | undefined>()
   const [success, setSuccess] = useState<string | undefined>()
 
