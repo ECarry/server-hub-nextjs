@@ -7,7 +7,7 @@ export const sendVerificationEmail = async (
   token: string,
 ) => {
   const confirmLink = process.env.NODE_ENV === 'production' 
-  ? `http://server-hub.net/auth/new-verification?token=${token}`
+  ? `https://server-hub.net/auth/new-verification?token=${token}`
   : `http://localhost:3000/auth/new-verification?token=${token}`
 
   await resend.emails.send({

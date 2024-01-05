@@ -27,7 +27,12 @@ export const {
     
   },
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
+      console.log({
+        USER: user,
+        ACCOUNT: account
+      });
+      
       const existingUser = await getUserById(user.id)
 
       if (!existingUser || !existingUser.emailVerified) return false
