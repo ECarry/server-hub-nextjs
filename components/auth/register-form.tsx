@@ -51,7 +51,7 @@ const RegisterForm = () => {
   return (
     <CardWrapper
       headerLabel="Register"
-      backButtonHref="/login"
+      backButtonHref="/auth/login"
       backButtonLabel="Already have an account? Login"
     >
       <Form {...form}>
