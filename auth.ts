@@ -4,7 +4,7 @@ import { db } from "@/lib/db"
 
 import authConfig from "@/auth.config"
 import { UserRole } from "@prisma/client"
-import { getUserById } from "./data/user"
+import { getUserById } from "@/data/user"
 
 // https://authjs.dev/getting-started/typescript
 declare module "@auth/core/types" {
@@ -23,7 +23,7 @@ export const {
   signOut
 } = NextAuth({
   pages: {
-    signIn: '/login',
+    signIn: '/auth/login',
     
   },
   callbacks: {
