@@ -16,7 +16,7 @@ const Header = () => {
         <div className='flex items-center gap-4'>
           <Link href="/about" className='text-[13px] text-gray-500 hover:text-gray-700 transition-colors duration-150'>About Us</Link>
           <Separator orientation='vertical' className='h-4' />
-          <Link href="#" className='text-[13px] text-gray-500'>My Account</Link>
+          <Link href="/profile" className='text-[13px] text-gray-500'>My Account</Link>
           <Separator orientation='vertical' className='h-4' />
           <Link href="#" className='text-[13px] text-gray-500'>Likelist</Link>
         </div>

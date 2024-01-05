@@ -6,7 +6,7 @@ import { Button } from '../ui/button'
 
 const Social = () => {
   return (
-    <div className="w-full space-y-2">
+    <div className="w-full space-x-2 flex items-center">
       <Button 
         className="w-full"
         variant='outline'

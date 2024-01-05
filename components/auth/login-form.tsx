@@ -20,6 +20,8 @@ import { Button } from "@/components/ui/button"
 import FormError from "@/components/auth/form-error"
 import FormSuccess from "@/components/auth/form-success"
 import CardWrapper from "./card-wrapper"
+import { Checkbox } from "../ui/checkbox"
+import Link from "next/link"
 
 const LoginForm = () => {
   const [isPending, setTransition] = useTransition()
@@ -49,7 +51,7 @@ const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Login"
+      headerLabel="Welcome back!"
       backButtonLabel="Don't have an account? Create here"
       backButtonHref="/register"
       showSocial
@@ -100,6 +102,30 @@ const LoginForm = () => {
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
+
+          <div className="flex items-center">
+            <div className="flex items-center space-x-2">
+              <Checkbox id="terms" />
+              <label
+                htmlFor="terms"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                Remember me
+              </label>
+            </div>
+            <Button
+              variant='link'
+              className="ml-auto"
+              asChild
+            >
+              <Link href='/register'>
+                Forgot password?
+              </Link>
+            </Button>
+          </div>
+
+
+
           <Button
             type="submit"
             disabled={isPending}
