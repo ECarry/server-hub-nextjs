@@ -114,12 +114,13 @@ const LoginForm = () => {
               </label>
             </div>
             <Button
+              size='sm'
               variant='link'
-              className="ml-auto"
+              className="ml-auto px-0"
               disabled={isPending}
               asChild
             >
-              <Link href='/register'>
+              <Link href='/auth/reset'>
                 Forgot password?
               </Link>
             </Button>
@@ -137,7 +138,6 @@ const LoginForm = () => {
         </form>
       </Form>
     </CardWrapper>
-
   )
 }
 

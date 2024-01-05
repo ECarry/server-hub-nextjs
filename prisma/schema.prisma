@@ -64,6 +64,15 @@ model VerificationToken {
   @@unique([email, token])
 }
 
+model PasswordResetToken {
+  id         String    @id @default(uuid()) @map("_id")
+  email      String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([email, token])
+}
+
 model Manufacturer {
   id        String    @id @default(uuid()) @map("_id")
   name      String

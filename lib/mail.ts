@@ -20,3 +20,21 @@ export const sendVerificationEmail = async (
   });
 
 }
+
+export const sendRestPasswordEmail = async (
+  email: string,
+  token: string
+) => {
+  const resetLink = process.env.NODE_ENV === 'production' 
+  ? `https://server-hub.net/auth/new-password?token=${token}`
+  : `http://localhost:3000/auth/new-password?token=${token}`
+
+  await resend.emails.send({
+    from: 'admin@server-hub.net',
+    to: email,
+    subject: 'Reset your password',
+    html: `
+      <p>Click <a href="${resetLink}">here</a> to reset password.</p>
+    `
+  })
+}
