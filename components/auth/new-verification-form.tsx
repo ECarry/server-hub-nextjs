@@ -42,7 +42,7 @@ const NewVerificationForm = () => {
       backButtonLabel='Back to login'
       backButtonHref='/auth/login'
     >
-      <div className='flex items-center justify-center w-full mb-4'>
+      <div className='flex items-center justify-center w-full'>
         {!error && !success && (
           <p>Loading...</p>
         )}
