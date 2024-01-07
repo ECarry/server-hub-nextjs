@@ -104,6 +104,22 @@ export function NavigationBar() {
               </Link>
             </NavigationMenuItem>
 
+            <NavigationMenuItem>
+              <Link href="/server" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Server
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <Link href="/client" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Client
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+
 
           </NavigationMenuList>
         </NavigationMenu>
