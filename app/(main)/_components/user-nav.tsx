@@ -33,17 +33,18 @@ export async function UserNav() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              
                 <form action={async() => {
                   'use server'
 
                   await signOut()
                 }}>
-                  <button type="submit">
-                    Sign out
-                  </button>
+                  <DropdownMenuItem asChild>
+                    <button type="submit" className="w-full h-full cursor-pointer">
+                      Sign out
+                    </button>
+                  </DropdownMenuItem>
                 </form>
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         )
