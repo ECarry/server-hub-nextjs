@@ -1,9 +1,10 @@
 'use client'
 
-import { startTransition, useState, useTransition } from "react"
-import { LoginSchema } from "@/schemas"
+import { useState, useTransition } from "react"
+import Link from "next/link"
 import { useForm } from "react-hook-form"
 import * as z from 'zod'
+import { LoginSchema } from "@/schemas"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { login } from "@/actions/login"
 
@@ -21,7 +22,6 @@ import FormError from "@/components/auth/form-error"
 import FormSuccess from "@/components/auth/form-success"
 import CardWrapper from "./card-wrapper"
 import { Checkbox } from "../ui/checkbox"
-import Link from "next/link"
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition()
@@ -105,9 +105,8 @@ const LoginForm = () => {
 
           <div className="flex items-center">
             <div className="flex items-center space-x-2">
-              <Checkbox id="terms" disabled={isPending} />
+              <Checkbox disabled={isPending} />
               <label
-                htmlFor="terms"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Remember me
