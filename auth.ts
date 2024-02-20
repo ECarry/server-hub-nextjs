@@ -5,6 +5,7 @@ import { db } from "@/lib/db"
 import authConfig from "@/auth.config"
 import { UserRole } from "@prisma/client"
 import { getUserById } from "@/data/user"
+import { getAccountByUserId } from "@/data/account"
 
 // https://authjs.dev/getting-started/typescript
 declare module "@auth/core/types" {
@@ -28,6 +29,9 @@ export const {
   },
   callbacks: {
     async signIn({ user, account }) {
+      // Allow OAuth without email verification
+      if (account?.provider !== "credentials") return true;
+
       console.log({
         USER: user,
         ACCOUNT: account
@@ -57,6 +61,11 @@ export const {
 
       if (!existingUser) return token
 
+      const existingAccount = await getAccountByUserId(
+        existingUser.id
+      );
+      
+      token.isOAuth = !!existingAccount;
       token.role = existingUser.role
       return token
     }
