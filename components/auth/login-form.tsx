@@ -73,7 +73,7 @@ const LoginForm = () => {
                       type="email" 
                       placeholder="Enter email address"
                       disabled={isPending}
-                      className="rounded-2xl"
+                      className="rounded-2xl h-12 bg-gray-100"
                     />
                   </FormControl>
                   <FormMessage />
@@ -92,7 +92,7 @@ const LoginForm = () => {
                       type="password"
                       placeholder="Password"
                       disabled={isPending}
-                      className="rounded-2xl"
+                      className="rounded-2xl h-12 bg-gray-100"
                     />
                   </FormControl>
                   <FormMessage />

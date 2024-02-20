@@ -59,7 +59,7 @@ const RegisterForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-6"
         >
-          <div className="space-y-8">
+          <div className="space-y-6">
             <FormField
               control={form.control}
               name="name"
@@ -71,6 +71,7 @@ const RegisterForm = () => {
                       type="text" 
                       placeholder="Username"
                       disabled={isPending}
+                      className="h-12 bg-gray-100 rounded-2xl"
                     />
                   </FormControl>
                   <FormMessage />
@@ -89,6 +90,7 @@ const RegisterForm = () => {
                       type="email" 
                       placeholder="Enter email address"
                       disabled={isPending}
+                      className="h-12 bg-gray-100 rounded-2xl"
                     />
                   </FormControl>
                   <FormMessage />
@@ -107,6 +109,7 @@ const RegisterForm = () => {
                       type="password"
                       placeholder="Password"
                       disabled={isPending}
+                      className="h-12 bg-gray-100 rounded-2xl"
                     />
                   </FormControl>
                   <FormMessage />

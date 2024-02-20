@@ -63,6 +63,7 @@ const ResetPasswordForm = () => {
                       type="email" 
                       placeholder="Enter email address"
                       disabled={isPending}
+                      className="h-12 bg-gray-100 rounded-2xl"
                     />
                   </FormControl>
                   <FormMessage />
