@@ -6,23 +6,35 @@ import { Button } from '../ui/button'
 
 const Social = () => {
   return (
-    <div className="w-full space-x-2 flex items-center">
-      <Button 
-        className="w-full"
-        variant='outline'
-        onClick={() =>{}}
-      >
-        <FcGoogle className='w-5 h-5' />
-      </Button>
+    <>
+      <div className="w-full space-y-4 flex-col">
+        <Button 
+          className="w-full space-x-2 rounded-2xl"
+          variant='outline'
+          size={'lg'}
+          onClick={() =>{}}
+        >
+          <FcGoogle className='w-5 h-5' />
+          <span>Continue with Google</span>
+        </Button>
 
-      <Button 
-        className="w-full"
-        variant='outline'
-        onClick={() =>{}}
-      >
-        <FaGithub className='w-5 h-5' />
-      </Button>
-    </div>
+        <Button 
+          className="w-full space-x-2 rounded-2xl"
+          variant='outline'
+          size={'lg'}
+          onClick={() =>{}}
+        >
+          <FaGithub className='w-5 h-5' />
+          <span>Continue with Github</span>
+        </Button>
+      </div>
+      <div className="relative flex h-20 items-center justify-center">
+        <hr className="h-[2px] grow border-divider-primary" />
+        <h3 className="w-44 shrink-0 text-center text-body-small-bold text-fg-secondary">or</h3>
+        <hr className="h-[2px] grow border-divider-primary" />
+      </div>
+    </>
+
   )
 }
 

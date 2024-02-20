@@ -1,3 +1,6 @@
+import Image from 'next/image';
+import Logo from '/public/logo.png'
+
 interface HeaderProps {
   label: string;
 }
@@ -6,11 +9,13 @@ const Header = ({
   label
 }: HeaderProps) => {
   return (
-    <div className="w-full flex flex-col gap-y-4 items-center justify-center">
-      <h1 className="text-3xl font-semibold">
-        Auth
-      </h1>
-      <p className="text-muted-foreground text-sm">
+    <div className="w-full flex flex-col gap-y-8 items-center justify-center">
+      <Image 
+        src={Logo}
+        alt='logo'
+        className='scale-50'
+      />
+      <p className="text-black text-3xl font-bold">
         {label}
       </p>
     </div>

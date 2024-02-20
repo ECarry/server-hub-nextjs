@@ -5,6 +5,7 @@ import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 
 import './globals.css'
+import { TailwindIndicator } from '@/components/tailwind-indicator'
 
 const OpenSans = Open_Sans({ subsets: ['latin'] })
 
@@ -32,6 +33,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <TailwindIndicator />
           </ThemeProvider>
         </body>
       </html>

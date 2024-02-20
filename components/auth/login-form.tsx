@@ -51,7 +51,7 @@ const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back!"
+      headerLabel="Welcome back"
       backButtonLabel="Don't have an account? Create here"
       backButtonHref="/auth/register"
       showSocial
@@ -67,13 +67,13 @@ const LoginForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input 
                       {...field}
                       type="email" 
-                      placeholder="hello@example.com"
+                      placeholder="Enter email address"
                       disabled={isPending}
+                      className="rounded-2xl"
                     />
                   </FormControl>
                   <FormMessage />
@@ -86,13 +86,13 @@ const LoginForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input 
                       {...field}
                       type="password"
-                      placeholder="******"
+                      placeholder="Password"
                       disabled={isPending}
+                      className="rounded-2xl"
                     />
                   </FormControl>
                   <FormMessage />
@@ -104,14 +104,6 @@ const LoginForm = () => {
           <FormSuccess message={success} />
 
           <div className="flex items-center">
-            <div className="flex items-center space-x-2">
-              <Checkbox disabled={isPending} />
-              <label
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Remember me
-              </label>
-            </div>
             <Button
               size='sm'
               variant='link'
@@ -130,7 +122,8 @@ const LoginForm = () => {
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full"
+            size={'lg'}
+            className="w-full rounded-2xl"
           >
             Login
           </Button>

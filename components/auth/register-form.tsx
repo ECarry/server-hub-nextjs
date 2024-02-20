@@ -59,18 +59,17 @@ const RegisterForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-6"
         >
-          <div className="space-y-4">
+          <div className="space-y-8">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input 
                       {...field}
                       type="text" 
-                      placeholder="name"
+                      placeholder="Username"
                       disabled={isPending}
                     />
                   </FormControl>
@@ -84,12 +83,11 @@ const RegisterForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input 
                       {...field}
                       type="email" 
-                      placeholder="hello@example.com"
+                      placeholder="Enter email address"
                       disabled={isPending}
                     />
                   </FormControl>
@@ -103,12 +101,11 @@ const RegisterForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input 
                       {...field}
                       type="password"
-                      placeholder="******"
+                      placeholder="Password"
                       disabled={isPending}
                     />
                   </FormControl>
@@ -122,7 +119,8 @@ const RegisterForm = () => {
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full"
+            className="w-full rounded-2xl"
+            size={'lg'}
           >
             Create an account
           </Button>

@@ -57,12 +57,11 @@ const ResetPasswordForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input 
                       {...field}
                       type="email" 
-                      placeholder="your@email.com"
+                      placeholder="Enter email address"
                       disabled={isPending}
                     />
                   </FormControl>
@@ -78,7 +77,8 @@ const ResetPasswordForm = () => {
           <Button
             type="submit"
             disabled={isPending}
-            className="w-full"
+            className="w-full rounded-2xl"
+            size={'lg'}
           >
             Send reset email
           </Button>
