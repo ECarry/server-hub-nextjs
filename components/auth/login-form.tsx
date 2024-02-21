@@ -1,53 +1,52 @@
-'use client'
+"use client";
 
-import { useState, useTransition } from "react"
-import Link from "next/link"
-import { useForm } from "react-hook-form"
-import * as z from 'zod'
-import { LoginSchema } from "@/schemas"
-import { zodResolver } from '@hookform/resolvers/zod'
-import { login } from "@/actions/login"
+import { useState, useTransition } from "react";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { LoginSchema } from "@/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { login } from "@/actions/login";
 
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import FormError from "@/components/auth/form-error"
-import FormSuccess from "@/components/auth/form-success"
-import CardWrapper from "./card-wrapper"
-import { Checkbox } from "../ui/checkbox"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import FormError from "@/components/auth/form-error";
+import FormSuccess from "@/components/auth/form-success";
+import CardWrapper from "./card-wrapper";
+import { Checkbox } from "../ui/checkbox";
 
 const LoginForm = () => {
-  const [isPending, startTransition] = useTransition()
-  const [error, setError] = useState<string | undefined>()
-  const [success, setSuccess] = useState<string | undefined>()
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: '',
-      password: ''
-    }
-  })
+      email: "",
+      password: "",
+    },
+  });
 
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
-    setError('')
-    setSuccess('')
+    setError("");
+    setSuccess("");
 
     startTransition(() => {
-      login(values)
-        .then((data) => {
-          setError(data.error)
-          setSuccess(data.success)
-        })
-      })
-  }
+      login(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
+  };
 
   return (
     <CardWrapper
@@ -57,10 +56,7 @@ const LoginForm = () => {
       showSocial
     >
       <Form {...form}>
-        <form 
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6"
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
             <FormField
               control={form.control}
@@ -68,12 +64,12 @@ const LoginForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
+                    <Input
                       {...field}
-                      type="email" 
+                      type="email"
                       placeholder="Enter email address"
                       disabled={isPending}
-                      className="rounded-2xl h-12 bg-gray-100"
+                      className="rounded-2xl h-12 bg-primary-foreground"
                     />
                   </FormControl>
                   <FormMessage />
@@ -87,12 +83,12 @@ const LoginForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
+                    <Input
                       {...field}
                       type="password"
                       placeholder="Password"
                       disabled={isPending}
-                      className="rounded-2xl h-12 bg-gray-100"
+                      className="rounded-2xl h-12 bg-primary-foreground"
                     />
                   </FormControl>
                   <FormMessage />
@@ -105,24 +101,20 @@ const LoginForm = () => {
 
           <div className="flex items-center">
             <Button
-              size='sm'
-              variant='link'
+              size="sm"
+              variant="link"
               className="ml-auto px-0"
               disabled={isPending}
               asChild
             >
-              <Link href='/auth/reset'>
-                Forgot password?
-              </Link>
+              <Link href="/auth/reset">Forgot password?</Link>
             </Button>
           </div>
-
-
 
           <Button
             type="submit"
             disabled={isPending}
-            size={'lg'}
+            size={"lg"}
             className="w-full rounded-2xl"
           >
             Login
@@ -130,7 +122,7 @@ const LoginForm = () => {
         </form>
       </Form>
     </CardWrapper>
-  )
-}
+  );
+};
 
-export default LoginForm
+export default LoginForm;
