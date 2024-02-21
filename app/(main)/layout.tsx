@@ -1,18 +1,14 @@
-import Footer from './_components/footer'
-import Header from './_components/header'
-import { NavigationBar } from './_components/navigation-bar'
+import Navbar from "./_components/nav-bar";
 
-export default function RootLayout({
+export default function MainLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <div>
-      <Header />
-      <NavigationBar />
+    <div className="flex min-h-screen flex-col">
+      <Navbar />
       {children}
-      <Footer />
     </div>
-  )
+  );
 }

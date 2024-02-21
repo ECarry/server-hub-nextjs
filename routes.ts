@@ -5,10 +5,10 @@
  */
 export const publicRoutes = [
   "/",
-  '/about',
-  '/auth/new-verification',
-  '/server',
-  '/client',
+  "/about",
+  "/auth/new-verification",
+  "/server",
+  "/client",
 ];
 
 /**
@@ -19,8 +19,8 @@ export const publicRoutes = [
 export const authRoutes = [
   "/auth/login",
   "/auth/register",
-  '/auth/reset',
-  '/auth/new-password'
+  "/auth/reset",
+  "/auth/new-password",
 ];
 
 /**
@@ -34,4 +34,4 @@ export const apiAuthPrefix = "/api/auth";
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/profile";
+export const DEFAULT_LOGIN_REDIRECT = "/";
