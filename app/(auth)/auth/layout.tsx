@@ -21,8 +21,8 @@ export default function LoginLayout({
         {children}
       </div>
 
-      <div className="hidden md:block md:space-y-4 max-h-screen overflow-hidden">
-        <div className="flex flex-col -rotate-45 select-none">
+      <div className="hidden md:block md:space-y-4 max-h-screen overflow-hidden bg-primary-foreground">
+        <div className="flex flex-col -rotate-45 select-none]">
           <InfiniteMovingCards
             items={images}
             direction="right"
@@ -59,6 +59,14 @@ export default function LoginLayout({
             items={images}
             direction="right"
             speed="slow"
+            pauseOnHover={false}
+            //className="-rotate-45"
+          />
+
+          <InfiniteMovingCards
+            items={images}
+            direction="left"
+            speed="normal"
             pauseOnHover={false}
             //className="-rotate-45"
           />

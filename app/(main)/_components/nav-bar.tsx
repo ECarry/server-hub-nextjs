@@ -19,7 +19,7 @@ export default async function Navbar() {
             <Image
               src={Logo}
               alt="logo"
-              className="h-10 w-auto object-contain hidden md:block"
+              className="h-10 min-w-20 w-auto object-contain"
             />
           </Link>
           <div className="hidden md:flex items-center gap-5">
@@ -36,7 +36,7 @@ export default async function Navbar() {
             {!user && (
               <div className="hidden lg:flex flex-row items-center gap-3">
                 <Button variant="ghost" size="lg" asChild>
-                  <Link href="/login">Login</Link>
+                  <Link href="/login">Log in</Link>
                 </Button>
                 <Button variant="default" size="lg" asChild>
                   <Link href="/auth/register">Create free account</Link>

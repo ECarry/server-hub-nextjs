@@ -55,13 +55,24 @@ export async function NavMenu() {
             </div>
           </DropdownMenuLabel>
         )}
+        <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link className="flex justify-start items-center gap-x-2" href="">
             <Icons.bookmark className="size-5" />
             <span>Collections</span>
           </Link>
         </DropdownMenuItem>
+
+        {user && (
+          <DropdownMenuItem asChild>
+            <Link className="flex justify-start items-center gap-x-2" href="">
+              <Icons.settings className="size-5" />
+              <span>Settings</span>
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuSeparator />
+
         <DropdownMenuItem asChild>
           <ThemeToggle />
         </DropdownMenuItem>
