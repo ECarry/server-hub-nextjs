@@ -21,41 +21,42 @@ export async function NavMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="w-8 md:w-16 flex items-center gap-2 cursor-pointer rounded-full">
-          {user ? (
-            <>
-              <Image
-                src={user.image || ""}
-                alt="avatar"
-                width={32}
-                height={32}
-                className="size-8 rounded-full"
-              />
-              <Icons.menu className="size-4" />
-            </>
-          ) : (
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-11 px-0 cursor-pointer data-[state=open]:bg-background "
-            >
-              <Icons.menu className="size-4" />
-            </Button>
-          )}
-        </div>
+        {user ? (
+          <div className="flex h-8 md:h-11 items-center gap-x-0 md:gap-x-2 rounded-full w-8 md:w-20 cursor-pointer justify-between pl-0 md:pl-[6px] pr-0 md:pr-[14px] border-0 md:border hover:bg-primary-foreground">
+            <Image
+              src={user.image || ""}
+              alt="avatar"
+              width={32}
+              height={32}
+              className="size-8 rounded-full"
+            />
+            <Icons.menu className="size-4 hidden md:block" />
+          </div>
+        ) : (
+          <Button
+            variant="outline"
+            size="lg"
+            className="w-11 px-0 cursor-pointer"
+          >
+            <Icons.menu className="size-4" />
+          </Button>
+        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-60">
         {user && (
-          <DropdownMenuLabel className="font-normal select-none">
-            <div className="flex flex-col gap-2">
-              <h1 className="font-medium leading-none">{user.name}</h1>
-              <p className="text-sm leading-none text-muted-foreground">
-                {user.email}
-              </p>
-            </div>
-          </DropdownMenuLabel>
+          <>
+            <DropdownMenuLabel className="font-normal select-none">
+              <div className="flex flex-col gap-2">
+                <h1 className="font-medium leading-none">{user.name}</h1>
+                <p className="text-sm leading-none text-muted-foreground">
+                  {user.email}
+                </p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
         )}
-        <DropdownMenuSeparator />
+
         <DropdownMenuItem asChild>
           <Link className="flex justify-start items-center gap-x-2" href="">
             <Icons.bookmark className="size-5" />

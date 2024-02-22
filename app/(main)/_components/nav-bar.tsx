@@ -3,8 +3,7 @@ import { NavLinks } from "./nav-links";
 import { NavMenu } from "./nav-menu";
 import { SearchButtonNav } from "./search-button-nav";
 import { Button } from "@/components/ui/button";
-import Logo from "/public/logo.png";
-import LogoIcon from "/public/logo-ico.png";
+import Logo from "/public/images/logo.png";
 import Link from "next/link";
 import { currentUser } from "@/lib/auth";
 
