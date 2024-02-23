@@ -56,7 +56,7 @@ const Hero = () => {
           <Badge className="bg-[#aae1ff] text-xs text-[#0075c4] font-medium py-1">
             COMMING SONG...
           </Badge>
-          <h1 className="px-3 text-heading-xl md:text-[58px] xl:text-[72px] md:px-0 max-w-[660px]">
+          <h1 className="px-3 text-heading-xl md:px-0 max-w-[660px]">
             Connecting Digital Realms: Your Ultimate Tech Hub.
           </h1>
           <p className="max-w-[600px] px-4 text-gray-500 md:text-xl font-normal md:px-0">
