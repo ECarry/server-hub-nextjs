@@ -54,28 +54,22 @@ const Hero = () => {
 
         <div className="flex max-w-[355px] flex-col text-balance items-center justify-center gap-4 md:max-w-fit md:gap-4 md:px-4 mt-8">
           <Badge className="bg-[#aae1ff] text-xs text-[#0075c4] font-medium py-1">
-            NEW DROPS WEEKLY
+            COMMING SONG...
           </Badge>
-          <h1 className="px-3 text-heading-xl md:text-[54px] xl:text-[72px] md:px-0 max-w-[660px]">
-            The world&apos;s largest mobile and web design library
+          <h1 className="px-3 text-heading-xl md:text-[58px] xl:text-[72px] md:px-0 max-w-[660px]">
+            Connecting Digital Realms: Your Ultimate Tech Hub.
           </h1>
           <p className="max-w-[600px] px-1 text-lg font-normal md:px-0">
             <span>
-              Save hours of UI &amp; UX research with our library of 300,000+
-              screens from the world&apos;s best designed apps.
+              Curated Insights into Server, Storage, and Network Devices –
+              Effortlessly Navigate the Tech Landscape.
             </span>
           </p>
 
           <div className="md:pt-4">
             <Button variant="default" size="lg">
-              <Link href="/">Create free account</Link>
+              <Link href="/auth/register">Create free account</Link>
             </Button>
-          </div>
-
-          <div className="flex flex-col items-center gap-4 mt-4 text-muted-foreground/80">
-            <div className="text-sm font-normal tracking-[-0.024em]">
-              Trusted by design-forward companies
-            </div>
           </div>
         </div>
       </div>
