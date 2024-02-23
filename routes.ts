@@ -9,6 +9,7 @@ export const publicRoutes = [
   "/auth/new-verification",
   "/server",
   "/client",
+  "/storage",
 ];
 
 /**

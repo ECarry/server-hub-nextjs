@@ -11,7 +11,7 @@ const links = [
 ];
 
 export const NavLinks = () => {
-  const params = useParams<{ platform: string; feature: string }>();
+  const params = useParams<{ category: string }>();
 
   return (
     <>
@@ -24,9 +24,9 @@ export const NavLinks = () => {
           asChild
         >
           <Link
-            href={link.path + "/" + params.feature}
+            href={link.path + "/"}
             className={
-              link.path === `/${params.platform}`
+              link.path === `/${params.category}`
                 ? "text-primary"
                 : "text-muted-foreground hover:text-primary"
             }
