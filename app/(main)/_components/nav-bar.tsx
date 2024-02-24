@@ -35,7 +35,7 @@ export default async function Navbar() {
             {!user && (
               <div className="hidden lg:flex flex-row items-center gap-3">
                 <Button variant="ghost" size="lg" asChild>
-                  <Link href="/login">Log in</Link>
+                  <Link href="/auth/login">Log in</Link>
                 </Button>
                 <Button variant="default" size="lg" asChild>
                   <Link href="/auth/register">Create free account</Link>

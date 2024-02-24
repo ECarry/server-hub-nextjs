@@ -15,7 +15,7 @@ export const publicRoutes = [
  * These routes do not require authentication
  * @type {string[]}
  */
-export const protectedRoutes = ["/settings"];
+export const protectedRoutes = ["/settings", "/collections"];
 
 /**
  * An array of routes that are used for authentication
