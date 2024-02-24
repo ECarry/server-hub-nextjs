@@ -8,10 +8,15 @@ import IBM from "/public/images/IBM.svg";
 import HP from "/public/images/HP.png";
 import DELL from "/public/images/DELL.png";
 import CISCO from "/public/images/CISCO.png";
+import { Spotlight } from "@/components/ui/spotlight";
 
 const Hero = () => {
   return (
     <div className="h-[620px] w-full overflow-hidden border-b-2 border-divider-primary text-center md:min-h-[580px] xl:min-h-[716px] relative">
+      <Spotlight
+        className="-top-40 left-0 md:left-60 md:-top-20"
+        fill="white"
+      />
       <div className="flex h-full w-full flex-col items-center justify-between pb-6 pt-10 md:absolute md:pt-[60px]">
         <div className="absolute -bottom-10 -z-10 hidden w-full min-w-[1440px] flex-row justify-between md:flex md:px-24 lg:px-8 xl:px-20">
           {/* LEFT ICONS */}
