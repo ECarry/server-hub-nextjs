@@ -11,7 +11,7 @@ const links = [
 ];
 
 export const NavLinks = () => {
-  const params = useParams<{ category: string }>();
+  const params = useParams<{ category: string; manufacturer: string }>();
 
   return (
     <>
@@ -24,7 +24,7 @@ export const NavLinks = () => {
           asChild
         >
           <Link
-            href={link.path + "/"}
+            href={link.path + "/" + params.manufacturer}
             className={
               link.path === `/${params.category}`
                 ? "text-primary"

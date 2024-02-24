@@ -12,6 +12,7 @@ interface LinksProps {
 }
 
 const links: LinksProps[] = [
+  { name: "All", path: "/all" },
   { name: "DELL", path: "/dell" },
   { name: "HP", path: "/hp" },
   { name: "IBM", path: "/ibm" },
@@ -20,17 +21,17 @@ const links: LinksProps[] = [
 
 const CategoriesList = () => {
   const pathname = usePathname();
-  const params = useParams<{ platform: string }>();
+  const params = useParams<{ category: string }>();
 
   return (
     <div className="flex gap-x-6 scrollbar-none overflow-x-auto -my-1 py-1">
       {links.map((link) => (
         <Link
           key={link.path}
-          href={`/browse/${params.platform + link.path}`}
+          href={`/${params.category + link.path}`}
           className={cn(
             "flex items-center gap-x-2 whitespace-nowrap py-1 border-b-2 transition-colors ease-out focus-visible:ring-4 focus-visible:ring-ring",
-            pathname === `/browse/${params.platform + link.path}`
+            pathname === `/${params.category + link.path}` || link.path === "/"
               ? "border-primary text-primary"
               : "border-transparent text-muted-foreground hover:text-primary"
           )}
