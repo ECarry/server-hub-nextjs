@@ -109,6 +109,10 @@
     @apply -mx-3 px-3 md:-mx-6 md:px-6;
   }
 
+  .px-container-x-padding {
+    @apply px-6 2xl:px-20;
+  }
+
   .text-body {
     @apply font-medium text-base tracking-[-.008em];
   }
@@ -119,6 +123,14 @@
 
   .text-heading-xl {
     @apply font-semibold text-4xl tracking-[-.016em] md:text-[56px] md:leading-[64px] md:tracking-[-.024em];
+  }
+
+  .text-heading-medium {
+    @apply text-[36px] leading-[40px] font-semibold;
+  }
+
+  .text-heading-large {
+    @apply text-[44px] leading-[44px] font-semibold;
   }
 
   .scrollbar-none::-webkit-scrollbar {
