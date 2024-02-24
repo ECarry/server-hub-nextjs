@@ -7,14 +7,19 @@ export const publicRoutes = [
   "/",
   "/about",
   "/auth/new-verification",
-  "/server",
-  "/client",
-  "/storage",
+  `/server/all`,
 ];
 
 /**
+ * An array of routes that are accessible to the public
+ * These routes do not require authentication
+ * @type {string[]}
+ */
+export const protectedRoutes = ["/settings"];
+
+/**
  * An array of routes that are used for authentication
- * These routes will redirect logged in users to /settings
+ * These routes will redirect logged in users to /
  * @type {string[]}
  */
 export const authRoutes = [
