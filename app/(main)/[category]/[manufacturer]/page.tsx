@@ -1,4 +1,5 @@
 import React from "react";
+import { TagsList } from "../../_components/tags-list";
 
 const page = ({
   params,
@@ -7,7 +8,11 @@ const page = ({
     category: string;
   };
 }) => {
-  return <div>{params.category} page</div>;
+  return (
+    <div className="flex flex-col">
+      <TagsList />
+    </div>
+  );
 };
 
 export default page;
