@@ -9,6 +9,7 @@ import HP from "/public/images/HP.png";
 import DELL from "/public/images/DELL.png";
 import CISCO from "/public/images/CISCO.png";
 import { Spotlight } from "@/components/ui/spotlight";
+import ShimmerButton from "@/components/shimmer-button";
 
 const Hero = () => {
   return (
@@ -72,9 +73,9 @@ const Hero = () => {
           </p>
 
           <div className="md:pt-4">
-            <Button variant="default" size="lg">
-              <Link href="/auth/register">Create free account</Link>
-            </Button>
+            <Link href={"/auth/register"}>
+              <ShimmerButton label="Create free account" />
+            </Link>
           </div>
         </div>
       </div>
