@@ -22,7 +22,7 @@ export default function LoginLayout({
       </div>
 
       <div className="hidden md:block md:space-y-4 max-h-screen overflow-hidden bg-primary-foreground">
-        <div className="flex flex-col -rotate-45 select-none]">
+        <div className="flex flex-col -rotate-45 select-none">
           <InfiniteMovingCards
             items={images}
             direction="right"
