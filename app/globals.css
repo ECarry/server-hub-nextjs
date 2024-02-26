@@ -2,30 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-display: swap;
-  font-family: "Basier Square";
-  font-style: normal;
-  font-weight: 400;
-  src: url(/fonts/basiersquare-regular-webfont.woff2) format("woff2");
-}
-
-@font-face {
-  font-display: swap;
-  font-family: "Basier Square";
-  font-style: normal;
-  font-weight: 500;
-  src: url(/fonts/basiersquare-medium-webfont.woff2) format("woff2");
-}
-
-@font-face {
-  font-display: swap;
-  font-family: "Basier Square";
-  font-style: normal;
-  font-weight: 600;
-  src: url(/fonts/basiersquare-semibold-webfont.woff2) format("woff2");
-}
-
 @layer base {
   :root {
     --background: 0 0% 100%;
