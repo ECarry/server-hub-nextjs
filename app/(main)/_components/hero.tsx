@@ -13,7 +13,7 @@ import ShimmerButton from "@/components/shimmer-button";
 
 const Hero = () => {
   return (
-    <div className="h-[620px] w-full overflow-hidden border-b-2 border-divider-primary text-center md:min-h-[580px] xl:min-h-[716px] relative">
+    <div className="w-full overflow-hidden border-b-2 border-divider-primary text-center min-h-[580px] xl:min-h-[716px] relative">
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20 lg:left-100 lg:-top-10 xl:left-[300px] xl:-top-40 2xl:left-[350px] 2xl:-top-80"
         fill="white"
