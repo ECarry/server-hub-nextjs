@@ -18,6 +18,8 @@ const page = ({
       <div>
         <CardsList category={category} manufacturer={manufacturer} />
       </div>
+
+      <div></div>
     </div>
   );
 };
