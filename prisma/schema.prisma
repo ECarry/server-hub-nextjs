@@ -11,18 +11,18 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(uuid()) @map("_id")
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
+  id                String  @id @default(uuid()) @map("_id")
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -49,64 +49,77 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
-  role          UserRole @default(USER)
-  
-  accounts      Account[]
-  sessions      Session[]
+  role          UserRole  @default(USER)
+
+  accounts   Account[]
+  sessions   Session[]
+  collection Collection[]
 }
 
 model VerificationToken {
-  id         String    @id @default(uuid()) @map("_id")
-  email      String
-  token      String   @unique
-  expires    DateTime
+  id      String   @id @default(uuid()) @map("_id")
+  email   String
+  token   String   @unique
+  expires DateTime
 
   @@unique([email, token])
 }
 
 model PasswordResetToken {
-  id         String    @id @default(uuid()) @map("_id")
-  email      String
-  token      String   @unique
-  expires    DateTime
+  id      String   @id @default(uuid()) @map("_id")
+  email   String
+  token   String   @unique
+  expires DateTime
 
   @@unique([email, token])
 }
 
+model Collection {
+  id          String @id @default(uuid()) @map("_id")
+  name        String
+  description String
+
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @default(now()) @updatedAt @map("update_time")
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Manufacturer {
-  id        String    @id @default(uuid()) @map("_id")
-  name      String
-  imageUrl  String?
+  id       String  @id @default(uuid()) @map("_id")
+  name     String
+  imageUrl String?
 
   products Product[]
 }
 
 model Category {
-  id        String @id @default(uuid()) @map("_id")
-  name      String
-  imageUrl  String?
+  id       String  @id @default(uuid()) @map("_id")
+  name     String
+  imageUrl String?
 
   products Product[]
 }
 
 model Product {
-  id            String    @id @default(uuid()) @map("_id")
-  name          String
-  description   String?
+  id          String  @id @default(uuid()) @map("_id")
+  name        String
+  description String?
 
   manufacturerId String
-  manufacturer  Manufacturer @relation(fields: [manufacturerId], references: [id])
+  manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
 
-  categoryId     String
-  category       Category @relation(fields: [categoryId], references: [id])    
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 
-  pdfs          Pdf[]
+  pdfs Pdf[]
 }
 
 model Pdf {
-  id       String  @id @default(uuid()) @map("_id")
-  url      String
-  
-  product  Product @relation(fields: [productId], references: [id])
+  id  String @id @default(uuid()) @map("_id")
+  url String
+
+  product   Product @relation(fields: [productId], references: [id])
   productId String
 }
