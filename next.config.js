@@ -19,6 +19,21 @@ const nextConfig = {
         destination: "/server/all",
         permanent: true,
       },
+      {
+        source: "/server/undefined",
+        destination: "/server/all",
+        permanent: true,
+      },
+      {
+        source: "/storage/undefined",
+        destination: "/storage/all",
+        permanent: true,
+      },
+      {
+        source: "/network/undefined",
+        destination: "/network/all",
+        permanent: true,
+      },
     ];
   },
 };
