@@ -58,7 +58,10 @@ export async function NavMenu() {
         )}
 
         <DropdownMenuItem asChild>
-          <Link className="flex justify-start items-center gap-x-2" href="">
+          <Link
+            className="flex justify-start items-center gap-x-2"
+            href="/collections"
+          >
             <Icons.bookmark className="size-5" />
             <span>Collections</span>
           </Link>

@@ -109,6 +109,14 @@
     @apply text-[44px] leading-[44px] font-semibold;
   }
 
+  .text-heading-small {
+    @apply text-2xl font-semibold;
+  }
+
+  .text-body-medium {
+    @apply font-normal;
+  }
+
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
