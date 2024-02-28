@@ -16,7 +16,7 @@ export default function LoginLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-full grid grid-cols-1 md:grid-cols-2 overflow-hidden">
+    <div className="min-h-dvh grid grid-cols-1 md:grid-cols-2 overflow-hidden">
       <div className="flex items-start justify-center md:items-center">
         {children}
       </div>
