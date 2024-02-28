@@ -69,7 +69,7 @@ export function CarouselCard() {
         alt=""
         width={362}
         height={362}
-        className="rounded-3xl overflow-hidden w-full h-auto md:hidden"
+        className="rounded-3xl overflow-hidden w-full md:hidden h-[283px] object-contain"
         priority
       />
 
@@ -84,13 +84,16 @@ export function CarouselCard() {
         >
           <CarouselContent className="m-0">
             {Array.from({ length: 3 }).map((_, index) => (
-              <CarouselItem key={index} className="px-7">
+              <CarouselItem
+                key={index}
+                className="px-7 flex items-center justify-center"
+              >
                 <Image
                   src={r730xd}
                   alt=""
                   width={362}
                   height={362}
-                  className="rounded-3xl overflow-hidden max-h-[583px]"
+                  className="rounded-3xl overflow-hidden h-[283px] object-contain"
                   priority={index === 0 ? true : false}
                 />
               </CarouselItem>
@@ -132,7 +135,7 @@ export function CarouselCard() {
         </div>
       </div>
 
-      {/* BOTTOM  */}
+      {/* BOTTOM LOGO TITLE  */}
       <div className="flex items-center gap-x-3 w-full">
         <div className="shrink-0 h-10 w-10 rounded-xl overflow-hidden">
           <Image
