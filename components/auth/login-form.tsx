@@ -21,7 +21,6 @@ import { Button } from "@/components/ui/button";
 import FormError from "@/components/auth/form-error";
 import FormSuccess from "@/components/auth/form-success";
 import CardWrapper from "./card-wrapper";
-import { Checkbox } from "../ui/checkbox";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
