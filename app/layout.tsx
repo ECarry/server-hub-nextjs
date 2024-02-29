@@ -7,6 +7,7 @@ import { auth } from "@/auth";
 import "./globals.css";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ModalProvider } from "@/components/providers/modal-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const OpenSans = Open_Sans({ subsets: ["latin"] });
 
@@ -33,6 +34,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Toaster />
             <TailwindIndicator />
             <ModalProvider />
           </ThemeProvider>
