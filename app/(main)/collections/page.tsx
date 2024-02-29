@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
 import React from "react";
-import EmpyCollection from "../_components/empy-collection";
-import { getCollectionByUserId } from "@/data/collection";
 import { currentUser } from "@/lib/auth";
+import { getCollectionByUserId } from "@/data/collection";
+
+import EmpyCollection from "../_components/empy-collection";
 import { CollectionTable } from "@/components/collection-table";
+import { Button } from "@/components/ui/button";
 
 const CollectionsPage = async () => {
   const user = await currentUser();

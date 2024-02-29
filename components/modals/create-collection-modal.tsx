@@ -4,6 +4,8 @@ import { useModal } from "@/hooks/use-modal-store";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { CreateCollectionSchema } from "@/schemas";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,13 +29,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { createCollection } from "@/actions/create-collection";
 import FormError from "../auth/form-error";
-import FormSuccess from "../auth/form-success";
+import { Loader2 } from "lucide-react";
 
 export function CreateCollectionModal() {
-  const { isOpen, onClose, type } = useModal();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+  const router = useRouter();
+
+  const { toast } = useToast();
+  const { isOpen, onClose, type } = useModal();
 
   const isModalOpen = isOpen && type === "CreateCollection";
 
@@ -57,9 +62,17 @@ export function CreateCollectionModal() {
     startTransition(() => {
       createCollection(values).then((data) => {
         setError(data?.error);
+        toast({
+          title: "Scheduled: Catch up",
+          description: "Friday, February 10, 2023 at 5:57 PM",
+        });
         setSuccess(data?.success);
       });
     });
+
+    form.reset();
+    onClose();
+    router.refresh();
   };
 
   return (
@@ -113,14 +126,17 @@ export function CreateCollectionModal() {
             </div>
 
             <FormError message={error} />
-            <FormSuccess message={success} />
 
             <DialogFooter className="flex justify-between w-full mt-4">
               <Button variant="outline" className="w-full" disabled={isPending}>
                 Cancel
               </Button>
               <Button type="submit" className="w-full" disabled={isPending}>
-                Create
+                {isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <span>Create</span>
+                )}
               </Button>
             </DialogFooter>
           </form>

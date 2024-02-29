@@ -16,6 +16,9 @@ export const getCollectionByUserId = async (userId: string) => {
       where: {
         userId,
       },
+      orderBy: {
+        createTime: "desc",
+      },
     });
 
     return collections;
