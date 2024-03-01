@@ -45,9 +45,18 @@ export function CollectionTable({ collections }: CollectionTableProps) {
           </div>
         </div>
         <span className="hidden w-[1px] bg-gray-200 md:block"></span>
-        <div>
+        <div className="hidden md:block">
           <Button
             className="px-4 flex gap-2 items-center"
+            onClick={() => onOpen("CreateCollection")}
+          >
+            <Plus size={16} />
+            New Collection
+          </Button>
+        </div>
+        <div className="md:hidden">
+          <Button
+            className="px-4 flex gap-2 items-center fixed bottom-5 left-[30%]"
             onClick={() => onOpen("CreateCollection")}
           >
             <Plus size={16} />
@@ -72,7 +81,9 @@ export function CollectionTable({ collections }: CollectionTableProps) {
               className="cursor-pointer"
               onClick={() => handleClick(collection.id)}
             >
-              <TableCell className="font-medium">{collection.name}</TableCell>
+              <TableCell className="font-medium hover:underline underline-offset-[3px]">
+                {collection.name}
+              </TableCell>
               <TableCell className="text-center">
                 {timeAgo(collection.updateTime)}
               </TableCell>
