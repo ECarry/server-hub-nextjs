@@ -14,11 +14,15 @@ const CollectionsPage = async () => {
   }
   const collections = await getCollectionsByUserId(user?.id);
 
+  if (!collections) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col gap-y-5 px-3 md:px-6 lg:px-8 xl:px-20  pb-6 pt-8">
       <h1 className="text-heading-large">Collections</h1>
       {/* TODO: Collection not empy username div & search div  */}
-      {collections ? (
+      {collections.length > 0 ? (
         <CollectionTable collections={collections} />
       ) : (
         <div className="flex grow items-center justify-center py-20">
