@@ -1,5 +1,10 @@
 "use client";
 
+import { useModal } from "@/hooks/use-modal-store";
+import timeAgo from "@/lib/time-ago";
+import { useRouter } from "next/navigation";
+import { Collection } from "@prisma/client";
+
 import {
   Table,
   TableBody,
@@ -8,15 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Collection } from "@prisma/client";
-
 import { Input } from "./ui/input";
 import { Plus, Search } from "lucide-react";
-
 import { Button } from "./ui/button";
-import { useModal } from "@/hooks/use-modal-store";
-import timeAgo from "@/lib/time-ago";
-import { useRouter } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
 
 interface CollectionTableProps {
   collections: Collection[];
@@ -32,7 +32,7 @@ export function CollectionTable({ collections }: CollectionTableProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex gap-x-4">
+      <div className="flex gap-x-4 items-center">
         <div className="grid grow">
           <div className="relative flex flex-col items-stretch">
             <Input
@@ -44,19 +44,11 @@ export function CollectionTable({ collections }: CollectionTableProps) {
             </div>
           </div>
         </div>
-        <span className="hidden w-[1px] bg-gray-200 md:block"></span>
-        <div className="hidden md:block">
+        {/* <span className="hidden w-[1px] bg-gray-200 md:block"></span> */}
+        <Separator orientation="vertical" className="hidden md:block h-10" />
+        <div>
           <Button
             className="px-4 flex gap-2 items-center"
-            onClick={() => onOpen("createCollection")}
-          >
-            <Plus size={16} />
-            New Collection
-          </Button>
-        </div>
-        <div className="md:hidden">
-          <Button
-            className="px-4 flex gap-2 items-center fixed bottom-5 left-[30%]"
             onClick={() => onOpen("createCollection")}
           >
             <Plus size={16} />
@@ -81,9 +73,7 @@ export function CollectionTable({ collections }: CollectionTableProps) {
               className="cursor-pointer"
               onClick={() => handleClick(collection.id)}
             >
-              <TableCell className="font-medium hover:underline underline-offset-[3px]">
-                {collection.name}
-              </TableCell>
+              <TableCell className="font-medium">{collection.name}</TableCell>
               <TableCell className="text-center">
                 {timeAgo(collection.updateTime)}
               </TableCell>
