@@ -3,12 +3,12 @@
 import { useModal } from "@/hooks/use-modal-store";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { CreateCollectionSchema } from "@/schemas";
+import { EditCollectionSchema } from "@/schemas";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
-import { createCollection } from "@/actions/collection";
+import { useEffect, useState, useTransition } from "react";
+import { editCollection } from "@/actions/collection";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,36 +30,46 @@ import { Input } from "@/components/ui/input";
 import FormError from "../auth/form-error";
 import { Loader2 } from "lucide-react";
 
-export function CreateCollectionModal() {
+export function EditCollectionModal() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
   const router = useRouter();
 
   const { toast } = useToast();
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
 
-  const isModalOpen = isOpen && type === "createCollection";
+  const { collection } = data;
 
-  const form = useForm<z.infer<typeof CreateCollectionSchema>>({
-    resolver: zodResolver(CreateCollectionSchema),
+  const isModalOpen = isOpen && type === "editCollection";
+
+  const form = useForm<z.infer<typeof EditCollectionSchema>>({
+    resolver: zodResolver(EditCollectionSchema),
     defaultValues: {
       name: "",
       description: "",
     },
   });
 
-  const handleClose = () => {
-    form.reset();
-    onClose();
-  };
+  useEffect(() => {
+    if (collection) {
+      form.setValue("name", collection.name);
+      form.setValue("description", collection.description);
+    }
+  }, [form, collection]);
 
-  const onSubmit = (values: z.infer<typeof CreateCollectionSchema>) => {
+  const onSubmit = (values: z.infer<typeof EditCollectionSchema>) => {
+    const newValues = {
+      ...collection,
+      name: values.name,
+      description: values.description,
+    };
+
     setError("");
     setSuccess("");
 
     startTransition(() => {
-      createCollection(values).then((data) => {
+      editCollection(newValues).then((data) => {
         setError(data?.error);
         toast({
           title: "Scheduled: Catch up",
@@ -69,17 +79,16 @@ export function CreateCollectionModal() {
       });
     });
 
-    form.reset();
     onClose();
     router.refresh();
   };
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={handleClose}>
+    <Dialog open={isModalOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle className=" text-center text-xl truncate font-semibold">
-            Create new collection
+            Edit collection
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -134,7 +143,7 @@ export function CreateCollectionModal() {
                 {isPending ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
-                  <span>Create</span>
+                  <span>Save</span>
                 )}
               </Button>
             </DialogFooter>
