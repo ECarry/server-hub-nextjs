@@ -14,7 +14,7 @@ const EmpyCollection = () => {
         show up here.
       </p>
       <div className="flex w-[240px] flex-col items-stretch">
-        <Button onClick={() => onOpen("CreateCollection")}>
+        <Button onClick={() => onOpen("createCollection")}>
           Create a collection
         </Button>
       </div>
