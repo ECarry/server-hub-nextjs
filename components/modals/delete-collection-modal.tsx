@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import FormError from "../auth/form-error";
 import { deleteCollection } from "@/actions/collection";
+import { Loader2 } from "lucide-react";
 
 const DeleteCollectionModal = () => {
   const [isPending, startTransition] = useTransition();
@@ -71,7 +72,11 @@ const DeleteCollectionModal = () => {
             onClick={onSubmit}
             disabled={isPending}
           >
-            Delete collection
+            {isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <span>Delete collection</span>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

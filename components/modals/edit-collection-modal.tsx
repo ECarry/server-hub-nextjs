@@ -4,8 +4,6 @@ import { useModal } from "@/hooks/use-modal-store";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { EditCollectionSchema } from "@/schemas";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState, useTransition } from "react";
 import { editCollection } from "@/actions/collection";
@@ -33,10 +31,7 @@ import { Loader2 } from "lucide-react";
 export function EditCollectionModal() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-  const router = useRouter();
 
-  const { toast } = useToast();
   const { isOpen, onClose, type, data } = useModal();
 
   const { collection } = data;
@@ -59,27 +54,24 @@ export function EditCollectionModal() {
   }, [form, collection]);
 
   const onSubmit = (values: z.infer<typeof EditCollectionSchema>) => {
+    setError("");
+
     const newValues = {
       ...collection,
       name: values.name,
       description: values.description,
     };
 
-    setError("");
-    setSuccess("");
-
     startTransition(() => {
       editCollection(newValues).then((data) => {
-        setError(data?.error);
-        toast({
-          title: "Scheduled: Catch up",
-          description: "Friday, February 10, 2023 at 5:57 PM",
-        });
+        if (data.error) {
+          setError(data?.error);
+        } else {
+          onClose();
+          setError("");
+        }
       });
     });
-
-    onClose();
-    router.refresh();
   };
 
   return (

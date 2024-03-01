@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { CreateCollectionSchema, EditCollectionSchema } from "@/schemas";
 import { Collection } from "@prisma/client";
 import * as z from "zod";
+import { revalidatePath } from "next/cache";
 
 export const createCollection = async (
   values: z.infer<typeof CreateCollectionSchema>
@@ -23,15 +24,14 @@ export const createCollection = async (
   const { name, description } = validatedFields.data;
 
   try {
-    const collection = await db.collection.create({
+    await db.collection.create({
       data: {
         userId: user?.id,
         name,
         description,
       },
     });
-
-    console.log(collection);
+    revalidatePath("/collections");
   } catch (error) {
     throw error;
   }
@@ -48,7 +48,7 @@ export const editCollection = async (values: Partial<Collection>) => {
   }
 
   try {
-    const collection = await db.collection.update({
+    await db.collection.update({
       where: {
         id,
       },
@@ -59,7 +59,7 @@ export const editCollection = async (values: Partial<Collection>) => {
       },
     });
 
-    console.log(collection);
+    revalidatePath("/collections/[[collectionId]]", "page");
     return { success: "success" };
   } catch (error) {
     return { error: "error" };

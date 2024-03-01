@@ -4,8 +4,6 @@ import { useModal } from "@/hooks/use-modal-store";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { CreateCollectionSchema } from "@/schemas";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { createCollection } from "@/actions/collection";
@@ -33,10 +31,7 @@ import { Loader2 } from "lucide-react";
 export function CreateCollectionModal() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-  const router = useRouter();
 
-  const { toast } = useToast();
   const { isOpen, onClose, type } = useModal();
 
   const isModalOpen = isOpen && type === "createCollection";
@@ -56,22 +51,17 @@ export function CreateCollectionModal() {
 
   const onSubmit = (values: z.infer<typeof CreateCollectionSchema>) => {
     setError("");
-    setSuccess("");
 
     startTransition(() => {
       createCollection(values).then((data) => {
-        setError(data?.error);
-        toast({
-          title: "Scheduled: Catch up",
-          description: "Friday, February 10, 2023 at 5:57 PM",
-        });
-        setSuccess(data?.success);
+        if (data?.error) {
+          setError(data?.error);
+        } else {
+          form.reset();
+          onClose();
+        }
       });
     });
-
-    form.reset();
-    onClose();
-    router.refresh();
   };
 
   return (
