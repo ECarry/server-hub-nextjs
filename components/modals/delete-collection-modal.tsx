@@ -39,9 +39,9 @@ const DeleteCollectionModal = () => {
 
     startTransition(() => {
       deleteCollection(collection.id).then((data) => {
-        onClose();
         router.push("/collections");
         router.refresh();
+        onClose();
       });
     });
   };
