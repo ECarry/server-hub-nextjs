@@ -44,7 +44,7 @@ export const editCollection = async (values: Partial<Collection>) => {
   const { id, name, description } = values;
 
   if (!user) {
-    return { error: "User does not exitd!" };
+    return { error: "User doesn't exist!" };
   }
 
   try {
@@ -64,4 +64,28 @@ export const editCollection = async (values: Partial<Collection>) => {
   } catch (error) {
     return { error: "error" };
   }
+};
+
+export const deleteCollection = async (id: string) => {
+  if (!id) {
+    return { error: "Collection ID is missing!" };
+  }
+
+  const collection = await db.collection.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  if (!collection) {
+    return { error: "Collection doesn't exist!" };
+  }
+
+  await db.collection.delete({
+    where: {
+      id,
+    },
+  });
+
+  return { success: `${collection.name} has been deleted.` };
 };

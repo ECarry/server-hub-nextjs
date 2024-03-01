@@ -36,7 +36,10 @@ const CollectionAction = ({ collection }: CollectionActionProps) => {
           </div>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <div className="flex justify-start items-center gap-x-2  group">
+          <div
+            className="flex justify-start items-center gap-x-2  group"
+            onClick={() => onOpen("deleteCollection", { collection })}
+          >
             <Icons.trash className="size-5 text-red-500 group-hover:text-red-500" />
             <span className="text-red-500 group-hover:text-red-500">
               Delete

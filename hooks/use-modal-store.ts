@@ -1,7 +1,10 @@
 import { Collection } from "@prisma/client";
 import { create } from "zustand";
 
-export type ModalType = "createCollection" | "editCollection";
+export type ModalType =
+  | "createCollection"
+  | "editCollection"
+  | "deleteCollection";
 
 interface ModalData {
   collection?: Collection;
