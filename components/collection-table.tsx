@@ -48,7 +48,7 @@ export function CollectionTable({ collections }: CollectionTableProps) {
         <div className="hidden md:block">
           <Button
             className="px-4 flex gap-2 items-center"
-            onClick={() => onOpen("CreateCollection")}
+            onClick={() => onOpen("createCollection")}
           >
             <Plus size={16} />
             New Collection
@@ -57,7 +57,7 @@ export function CollectionTable({ collections }: CollectionTableProps) {
         <div className="md:hidden">
           <Button
             className="px-4 flex gap-2 items-center fixed bottom-5 left-[30%]"
-            onClick={() => onOpen("CreateCollection")}
+            onClick={() => onOpen("createCollection")}
           >
             <Plus size={16} />
             New Collection

@@ -1,11 +1,8 @@
 import { db } from "@/lib/db";
+import { getUserById } from "./user";
 
-export const getCollectionByUserId = async (userId: string) => {
-  const user = await db.user.findFirst({
-    where: {
-      id: userId,
-    },
-  });
+export const getCollectionsByUserId = async (userId: string) => {
+  const user = await getUserById(userId);
 
   if (!user) {
     return null;
@@ -25,4 +22,16 @@ export const getCollectionByUserId = async (userId: string) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const getCollectionById = async (id: string) => {
+  try {
+    const collection = await db.collection.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    return collection ? collection : null;
+  } catch (error) {}
 };

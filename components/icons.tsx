@@ -19,6 +19,7 @@ import {
   LucideProps,
   Moon,
   MoreHorizontal,
+  Pen,
   Palette,
   Plus,
   Search,
@@ -64,6 +65,7 @@ export const Icons = {
   sparkles: Sparkles,
   layoutGrid: LayoutGrid,
   arrowRightSquare: ArrowRightSquare,
+  pen: Pen,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

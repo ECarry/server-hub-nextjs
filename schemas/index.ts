@@ -33,3 +33,10 @@ export const CreateCollectionSchema = z.object({
   }),
   description: z.string(),
 });
+
+export const EditCollectionSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required!",
+  }),
+  description: z.string(),
+});

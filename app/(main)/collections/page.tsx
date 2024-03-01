@@ -1,6 +1,6 @@
 import React from "react";
 import { currentUser } from "@/lib/auth";
-import { getCollectionByUserId } from "@/data/collection";
+import { getCollectionsByUserId } from "@/data/collection";
 
 import EmpyCollection from "../_components/empy-collection";
 import { CollectionTable } from "@/components/collection-table";
@@ -12,7 +12,7 @@ const CollectionsPage = async () => {
   if (!user) {
     return null;
   }
-  const collections = await getCollectionByUserId(user?.id);
+  const collections = await getCollectionsByUserId(user?.id);
 
   return (
     <div className="flex flex-col gap-y-5 px-3 md:px-6 lg:px-8 xl:px-20  pb-6 pt-8">
