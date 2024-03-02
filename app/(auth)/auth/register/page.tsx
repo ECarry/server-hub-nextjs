@@ -1,11 +1,13 @@
-import RegisterForm from '@/components/auth/register-form'
-import Link from 'next/link'
-import React from 'react'
+import type { Metadata } from "next";
+
+import RegisterForm from "@/components/auth/register-form";
+
+export const metadata: Metadata = {
+  title: "Sign up",
+};
 
 const RegisterPage = () => {
-  return (
-    <RegisterForm />
-  )
-}
+  return <RegisterForm />;
+};
 
-export default RegisterPage
+export default RegisterPage;

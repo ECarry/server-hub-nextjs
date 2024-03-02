@@ -12,7 +12,10 @@ import { Toaster } from "@/components/ui/toaster";
 const OpenSans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Server Hub - DATA & NEXUS",
+  title: {
+    template: "%s - Server Hub - DATA & NEXUS",
+    default: "Server Hub - DATA & NEXUS",
+  },
   description: "DATA & NEXUS",
 };
 

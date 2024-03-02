@@ -1,10 +1,13 @@
-import React from "react";
 import { currentUser } from "@/lib/auth";
 import { getCollectionsByUserId } from "@/data/collection";
+import type { Metadata } from "next";
 
 import EmpyCollection from "../_components/empy-collection";
 import { CollectionTable } from "@/components/collection-table";
-import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Collections",
+};
 
 const CollectionsPage = async () => {
   const user = await currentUser();

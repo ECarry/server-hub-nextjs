@@ -1,9 +1,23 @@
 import { getCollectionById } from "@/data/collection";
+import type { Metadata } from "next";
+
 import CollectionAction from "../../_components/cllection-actions";
 
 interface CollectionIdPageProps {
   params: {
     collectionId: string;
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: CollectionIdPageProps): Promise<Metadata> {
+  const { collectionId } = params;
+
+  const collection = await getCollectionById(collectionId);
+
+  return {
+    title: `${collection?.name}`,
   };
 }
 

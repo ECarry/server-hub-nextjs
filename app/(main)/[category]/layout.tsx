@@ -1,6 +1,19 @@
 import { currentUser } from "@/lib/auth";
+import type { Metadata } from "next";
+
 import CategoriesList from "../_components/categories-list";
 import Hero from "../_components/hero";
+
+type Props = {
+  params: { category: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { category } = params;
+  return {
+    title: `Discover ${category}`,
+  };
+}
 
 export default async function MainLayout({
   children,
