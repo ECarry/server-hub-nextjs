@@ -4,7 +4,8 @@ import { create } from "zustand";
 export type ModalType =
   | "createCollection"
   | "editCollection"
-  | "deleteCollection";
+  | "deleteCollection"
+  | "requestContent";
 
 interface ModalData {
   collection?: Collection;

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CreateCollectionModal } from "../modals/create-collection-modal";
 import { EditCollectionModal } from "../modals/edit-collection-modal";
 import DeleteCollectionModal from "../modals/delete-collection-modal";
+import { RequestContentModal } from "../modals/request-content-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -21,6 +22,7 @@ export const ModalProvider = () => {
       <CreateCollectionModal />
       <EditCollectionModal />
       <DeleteCollectionModal />
+      <RequestContentModal />
     </>
   );
 };

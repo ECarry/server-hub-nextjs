@@ -1,4 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import Image from "next/image";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useModal } from "@/hooks/use-modal-store";
+import { signOut } from "next-auth/react";
 
 import { Icons } from "@/components/icons";
 import ThemeToggle from "@/components/theme-toggle";
@@ -11,12 +17,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { currentUser } from "@/lib/auth";
-import { signOut } from "@/auth";
-import Image from "next/image";
 
-export async function NavMenu() {
-  const user = await currentUser();
+export function NavMenu() {
+  const user = useCurrentUser();
+  const { onOpen } = useModal();
 
   return (
     <DropdownMenu>
@@ -51,9 +55,17 @@ export async function NavMenu() {
                 <p className="text-sm leading-none text-muted-foreground">
                   {user.email}
                 </p>
+                <Button
+                  variant={"secondary"}
+                  className="mt-2 text-sm"
+                  onClick={() => onOpen("requestContent")}
+                >
+                  Request content
+                </Button>
               </div>
+
+              <DropdownMenuSeparator />
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
           </>
         )}
 
@@ -92,19 +104,15 @@ export async function NavMenu() {
           </Link>
         </DropdownMenuItem>
         {user && (
-          <form
-            action={async () => {
-              "use server";
-
-              await signOut();
-            }}
-          >
-            <DropdownMenuItem asChild>
-              <button type="submit" className="w-full h-full cursor-pointer">
-                Log out
-              </button>
-            </DropdownMenuItem>
-          </form>
+          <DropdownMenuItem asChild>
+            <button
+              type="submit"
+              className="w-full h-full cursor-pointer"
+              onClick={() => signOut()}
+            >
+              Log out
+            </button>
+          </DropdownMenuItem>
         )}
       </DropdownMenuContent>
     </DropdownMenu>
