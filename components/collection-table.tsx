@@ -46,9 +46,16 @@ export function CollectionTable({ collections }: CollectionTableProps) {
         </div>
         {/* <span className="hidden w-[1px] bg-gray-200 md:block"></span> */}
         <Separator orientation="vertical" className="hidden md:block h-10" />
-        <div>
+        <Button
+          className="hidden md:flex px-4 gap-2 items-center"
+          onClick={() => onOpen("createCollection")}
+        >
+          <Plus size={16} />
+          New Collection
+        </Button>
+        <div className="md:hidden">
           <Button
-            className="px-4 flex gap-2 items-center"
+            className="fixed bottom-5 left-[50%] translate-x-[-50%] px-4 flex gap-2 items-center"
             onClick={() => onOpen("createCollection")}
           >
             <Plus size={16} />
