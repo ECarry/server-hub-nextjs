@@ -20,10 +20,10 @@ export function SearchButtonNav() {
           </span>
         </div>
         <span className="absolute right-0 top-0 hidden sm:flex gap-x-1 h-full items-center justify-end pr-5 pointer-events-none invisible group-hover:visible group-focus:visible">
-          <kbd className="pointer-events-none inline-flex justify-center items-center text-center size-4 select-none gap-1 rounded border bg-background text-xs font-medium text-muted-foreground">
+          <kbd className="pointer-events-none inline-flex justify-center items-center text-center size-5 select-none gap-1 rounded border bg-background text-xs font-medium text-muted-foreground">
             ⌘
           </kbd>
-          <kbd className="pointer-events-none inline-flex justify-center items-center text-center size-4 select-none gap-1 rounded border bg-background text-xs font-medium text-muted-foreground">
+          <kbd className="pointer-events-none inline-flex justify-center items-center text-center size-5 select-none gap-1 rounded border bg-background text-xs font-medium text-muted-foreground">
             K
           </kbd>
         </span>
