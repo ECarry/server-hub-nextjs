@@ -11,11 +11,18 @@ export const publicRoutes = [
 ];
 
 /**
- * An array of routes that are accessible to the public
- * These routes do not require authentication
+ * An array of routes that are accessible to the protecte
+ * These routes require authentication
  * @type {string[]}
  */
 export const protectedRoutes = ["/settings", "/collections"];
+
+/**
+ * An array of routes that are accessible to the protecte
+ * These routes require authentication & user role must be admin
+ * @type {string[]}
+ */
+export const adminRoutes = ["/dashboard"];
 
 /**
  * An array of routes that are used for authentication
