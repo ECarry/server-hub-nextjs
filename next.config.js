@@ -16,12 +16,12 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: "/server/all",
+        destination: "/servers/all",
         permanent: true,
       },
       {
-        source: "/server/undefined",
-        destination: "/server/all",
+        source: "/servers/undefined",
+        destination: "/servers/all",
         permanent: true,
       },
       {
@@ -30,8 +30,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/network/undefined",
-        destination: "/network/all",
+        source: "/networking/undefined",
+        destination: "/networking/all",
         permanent: true,
       },
     ];
