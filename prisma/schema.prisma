@@ -54,6 +54,7 @@ model User {
   accounts   Account[]
   sessions   Session[]
   collection Collection[]
+  Posts      Post[]
 }
 
 model VerificationToken {
@@ -91,15 +92,28 @@ model Manufacturer {
   name     String
   imageUrl String?
 
-  products Product[]
+  infrastructure Infrastructure[]
 }
 
-model Category {
+model Infrastructure {
   id       String  @id @default(uuid()) @map("_id")
   name     String
   imageUrl String?
 
+  Manufacturer   Manufacturer? @relation(fields: [manufacturerId], references: [id])
+  manufacturerId String?
+
+  series Series[]
+}
+
+model Series {
+  id   String @id @default(uuid()) @map("_id")
+  name String
+
   products Product[]
+
+  Infrastructure   Infrastructure? @relation(fields: [infrastructureId], references: [id])
+  infrastructureId String?
 }
 
 model Product {
@@ -107,19 +121,37 @@ model Product {
   name        String
   description String?
 
-  manufacturerId String
-  manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
+  seriesId String?
+  series   Series? @relation(fields: [seriesId], references: [id])
 
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
-
-  pdfs Pdf[]
+  pdfs  Pdf[]
+  Posts Post[]
 }
 
 model Pdf {
   id  String @id @default(uuid()) @map("_id")
   url String
 
-  product   Product @relation(fields: [productId], references: [id])
-  productId String
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+}
+
+model Post {
+  id        String  @id @default(uuid()) @map("_id")
+  title     String
+  content   String
+  published Boolean @default(true)
+
+  comments Json
+  views    Int  @default(0)
+  likes    Int  @default(0)
+
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @default(now()) @updatedAt @map("update_time")
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?
 }
