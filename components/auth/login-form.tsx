@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import FormError from "@/components/auth/form-error";
 import FormSuccess from "@/components/auth/form-success";
 import CardWrapper from "./card-wrapper";
+import { Loader2 } from "lucide-react";
 
 const LoginForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -116,7 +117,11 @@ const LoginForm = () => {
             size={"lg"}
             className="w-full rounded-2xl"
           >
-            Login
+            {isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <span>Login</span>
+            )}
           </Button>
         </form>
       </Form>
