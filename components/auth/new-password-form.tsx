@@ -13,7 +13,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -21,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import FormError from "@/components/auth/form-error";
 import FormSuccess from "@/components/auth/form-success";
 import CardWrapper from "./card-wrapper";
+import { Loader2 } from "lucide-react";
 
 const NewPasswordForm = () => {
   const searchParams = useSearchParams();
@@ -81,7 +81,11 @@ const NewPasswordForm = () => {
           <FormSuccess message={success} />
 
           <Button type="submit" disabled={isPending} className="w-full">
-            Reset password
+            {isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <span>Reset password</span>
+            )}
           </Button>
         </form>
       </Form>

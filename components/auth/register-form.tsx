@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { RegisterSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -12,7 +12,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -20,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import FormError from "@/components/auth/form-error";
 import FormSuccess from "@/components/auth/form-success";
 import CardWrapper from "./card-wrapper";
+import { Loader2 } from "lucide-react";
 
 const RegisterForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -122,7 +122,11 @@ const RegisterForm = () => {
             className="w-full rounded-2xl"
             size={"lg"}
           >
-            Create an account
+            {isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <span>Create an account</span>
+            )}
           </Button>
         </form>
       </Form>

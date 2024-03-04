@@ -13,13 +13,13 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "../ui/form";
 import FormError from "./form-error";
 import FormSuccess from "./form-success";
 import { Input } from "../ui/input";
 import { resetPassword } from "@/actions/reset";
+import { Loader2 } from "lucide-react";
 
 const ResetPasswordForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -82,7 +82,11 @@ const ResetPasswordForm = () => {
             className="w-full rounded-2xl"
             size={"lg"}
           >
-            Send reset email
+            {isPending ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <span>Send reset email</span>
+            )}
           </Button>
         </form>
       </Form>
