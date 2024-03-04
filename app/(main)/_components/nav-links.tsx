@@ -5,9 +5,9 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 const links = [
-  { name: "Server", path: "/server" },
+  { name: "Servers", path: "/servers" },
   { name: "Storage", path: "/storage" },
-  { name: "Network", path: "/network" },
+  { name: "Networking", path: "/networking" },
 ];
 
 export const NavLinks = () => {
