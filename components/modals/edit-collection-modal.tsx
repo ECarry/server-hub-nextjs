@@ -5,7 +5,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { EditCollectionSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { editCollection } from "@/actions/collection";
 
 import { Button } from "@/components/ui/button";
@@ -41,14 +41,17 @@ export function EditCollectionModal() {
   const form = useForm<z.infer<typeof EditCollectionSchema>>({
     resolver: zodResolver(EditCollectionSchema),
     defaultValues: {
-      name: collection?.name || "",
-      description: collection?.description || "",
+      name: "",
+      description: "",
     },
   });
 
-  const {
-    formState: { isDirty },
-  } = form;
+  useEffect(() => {
+    if (collection) {
+      form.setValue("name", collection.name);
+      form.setValue("description", collection.description);
+    }
+  }, [form, collection]);
 
   const onSubmit = (values: z.infer<typeof EditCollectionSchema>) => {
     setError("");
@@ -126,18 +129,13 @@ export function EditCollectionModal() {
             <DialogFooter className="flex justify-between w-full mt-4">
               <Button
                 variant="outline"
-                type="button"
                 className="w-full"
-                disabled={isPending}
+                type="button"
                 onClick={() => onClose()}
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={!isDirty || isPending}
-              >
+              <Button type="submit" className="w-full" disabled={isPending}>
                 {isPending ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
