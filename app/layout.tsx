@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
-import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 
+import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ModalProvider } from "@/components/providers/modal-provider";
