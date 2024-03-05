@@ -84,10 +84,13 @@ export function NavMenu() {
 
         {user && (
           <DropdownMenuItem asChild>
-            <Link className="flex justify-start items-center gap-x-2" href="">
+            <div
+              className="flex justify-start items-center gap-x-2"
+              onClick={() => onOpen("settings")}
+            >
               <Icons.settings className="size-5" />
               <span>Settings</span>
-            </Link>
+            </div>
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />

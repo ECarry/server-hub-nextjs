@@ -5,7 +5,8 @@ export type ModalType =
   | "createCollection"
   | "editCollection"
   | "deleteCollection"
-  | "requestContent";
+  | "requestContent"
+  | "settings";
 
 interface ModalData {
   collection?: Collection;
