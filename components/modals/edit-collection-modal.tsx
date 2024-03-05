@@ -5,7 +5,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { EditCollectionSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { editCollection } from "@/actions/collection";
 
 import { Button } from "@/components/ui/button";
@@ -41,17 +41,14 @@ export function EditCollectionModal() {
   const form = useForm<z.infer<typeof EditCollectionSchema>>({
     resolver: zodResolver(EditCollectionSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      name: collection?.name || "",
+      description: collection?.description || "",
     },
   });
 
-  useEffect(() => {
-    if (collection) {
-      form.setValue("name", collection.name);
-      form.setValue("description", collection.description);
-    }
-  }, [form, collection]);
+  const {
+    formState: { isDirty },
+  } = form;
 
   const onSubmit = (values: z.infer<typeof EditCollectionSchema>) => {
     setError("");
@@ -130,7 +127,11 @@ export function EditCollectionModal() {
               <Button variant="outline" className="w-full" disabled={isPending}>
                 Cancel
               </Button>
-              <Button type="submit" className="w-full" disabled={isPending}>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!isDirty || isPending}
+              >
                 {isPending ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (

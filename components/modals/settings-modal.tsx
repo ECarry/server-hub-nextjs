@@ -29,23 +29,19 @@ export function SettingsModal() {
   const [error, setError] = useState<string | undefined>();
 
   const { isOpen, onClose, type } = useModal();
-
   const isModalOpen = isOpen && type === "settings";
 
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
-      name: "",
-      email: "",
+      name: user?.name || "",
+      email: user?.email || "",
     },
   });
 
-  useEffect(() => {
-    if (user?.name && user.email) {
-      form.setValue("name", user.name);
-      form.setValue("email", user.email);
-    }
-  }, [form, user]);
+  const {
+    formState: { isDirty },
+  } = form;
 
   const onSubmit = (values: z.infer<typeof ProfileSchema>) => {
     setError("");
@@ -55,7 +51,7 @@ export function SettingsModal() {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="h-full min-w-full">
+      <DialogContent className="h-full max-h-[95%] min-w-[97%]">
         <div className="flex h-full flex-col items-stretch overflow-y-auto md:items-center">
           <div className="grid grid-cols-[1fr] items-start px-4 py-6 md:w-min md:py-13 md:grid-cols-[calc(2*290px+24px)]">
             <div className="flex flex-col items-stretch divide-y-2 divide-divider-primary">
@@ -122,7 +118,11 @@ export function SettingsModal() {
                     />
                   </div>
                   <FormError message={error} />
-                  <Button size={"sm"} type="submit" disabled>
+                  <Button
+                    size={"sm"}
+                    type="submit"
+                    disabled={!isDirty || isPending}
+                  >
                     {isPending ? (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
