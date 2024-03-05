@@ -124,7 +124,13 @@ export function EditCollectionModal() {
             <FormError message={error} />
 
             <DialogFooter className="flex justify-between w-full mt-4">
-              <Button variant="outline" className="w-full" disabled={isPending}>
+              <Button
+                variant="outline"
+                type="button"
+                className="w-full"
+                disabled={isPending}
+                onClick={() => onClose()}
+              >
                 Cancel
               </Button>
               <Button
