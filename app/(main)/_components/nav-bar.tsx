@@ -32,6 +32,12 @@ export default async function Navbar() {
 
         <div className="shrink-0 items-end">
           <div className="flex flex-row items-center justify-end gap-3">
+            {user && user.role === "ADMIN" && (
+              <Button variant="ghost" size="lg" asChild>
+                <Link href="/dashboard">Dashboard</Link>
+              </Button>
+            )}
+
             {!user && (
               <div className="hidden lg:flex flex-row items-center gap-3">
                 <Button variant="ghost" size="lg" asChild>
