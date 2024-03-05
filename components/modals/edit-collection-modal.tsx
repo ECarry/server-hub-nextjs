@@ -5,7 +5,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { EditCollectionSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState, useTransition } from "react";
+import { useLayoutEffect, useState, useTransition } from "react";
 import { editCollection } from "@/actions/collection";
 
 import { Button } from "@/components/ui/button";
@@ -46,7 +46,11 @@ export function EditCollectionModal() {
     },
   });
 
-  useEffect(() => {
+  const {
+    formState: { isDirty },
+  } = form;
+
+  useLayoutEffect(() => {
     if (collection) {
       form.setValue("name", collection.name);
       form.setValue("description", collection.description);
@@ -135,7 +139,11 @@ export function EditCollectionModal() {
               >
                 Cancel
               </Button>
-              <Button type="submit" className="w-full" disabled={isPending}>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={!isDirty || isPending}
+              >
                 {isPending ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
