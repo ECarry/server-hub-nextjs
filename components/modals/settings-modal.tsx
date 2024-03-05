@@ -51,7 +51,7 @@ export function SettingsModal() {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="h-full max-h-[95%] min-w-[97%]">
+      <DialogContent className="h-full max-h-[95%] min-w-[97%] bg-primary-foreground">
         <div className="flex h-full flex-col items-stretch overflow-y-auto md:items-center">
           <div className="grid grid-cols-[1fr] items-start px-4 py-6 md:w-min md:py-13 md:grid-cols-[calc(2*290px+24px)]">
             <div className="flex flex-col items-stretch divide-y-2 divide-divider-primary">
