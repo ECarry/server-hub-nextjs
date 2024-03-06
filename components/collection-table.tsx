@@ -17,14 +17,42 @@ import { Input } from "./ui/input";
 import { Plus, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 
 interface CollectionTableProps {
   collections: Collection[];
 }
 
 export function CollectionTable({ collections }: CollectionTableProps) {
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const { onOpen } = useModal();
   const router = useRouter();
+
+  const filteredCollections = collections.filter((collection) =>
+    collection.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const highlightMatch = (text: string): React.ReactNode => {
+    if (
+      !searchQuery ||
+      !text.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
+      return text;
+    }
+
+    const startIndex = text.toLowerCase().indexOf(searchQuery.toLowerCase());
+    const endIndex = startIndex + searchQuery.length;
+
+    return (
+      <>
+        {text.substring(0, startIndex)}
+        <span className="bg-yellow-300 dark:text-black font-bold">
+          {text.substring(startIndex, endIndex)}
+        </span>
+        {text.substring(endIndex)}
+      </>
+    );
+  };
 
   const handleClick = (id: string) => {
     router.push(`/collections/${id}`);
@@ -38,6 +66,8 @@ export function CollectionTable({ collections }: CollectionTableProps) {
             <Input
               className="rounded-full h-11 px-4 py-3 pl-9 rtl:pr-9 outline-none ring-inset focus:bg-primary-foreground focus:ring-2 focus:ring-primary-foreground disabled:cursor-not-allowed disabled:bg-primary-foreground"
               placeholder="Find collections"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <div className="pointer-events-none absolute flex h-full items-center px-3">
               <Search size={16} />
@@ -74,13 +104,15 @@ export function CollectionTable({ collections }: CollectionTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {collections.map((collection) => (
+          {filteredCollections.map((collection) => (
             <TableRow
               key={collection.id}
               className="cursor-pointer"
               onClick={() => handleClick(collection.id)}
             >
-              <TableCell className="font-medium">{collection.name}</TableCell>
+              <TableCell className="font-medium">
+                {highlightMatch(collection.name)}
+              </TableCell>
               <TableCell className="text-center">
                 {timeAgo(collection.updateTime)}
               </TableCell>
