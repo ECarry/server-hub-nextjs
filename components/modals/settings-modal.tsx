@@ -9,6 +9,7 @@ import { useState, useTransition } from "react";
 import Image from "next/image";
 import { editProfile } from "@/actions/user";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { useSession } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -24,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import FormError from "../auth/form-error";
 import { Loader2 } from "lucide-react";
 import FormSuccess from "../auth/form-success";
-import { useSession } from "next-auth/react";
+import Avatar from "/public/images/avatar.jpg";
 
 export function SettingsModal() {
   const user = useCurrentUser();
@@ -32,6 +33,8 @@ export function SettingsModal() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+
+  const AvatarImage = user?.image ? user.image : Avatar;
 
   const { isOpen, onClose, type } = useModal();
   const isModalOpen = isOpen && type === "settings";
@@ -82,7 +85,7 @@ export function SettingsModal() {
                     <FormLabel>Profile photo</FormLabel>
                     <div className="flex h-[140px] w-[140px] items-center justify-center cursor-pointer select-none overflow-hidden rounded-full bg-bg-quarternary focus-visible:ring-4 focus-visible:ring-blue-200/50">
                       <Image
-                        src={user?.image || " "}
+                        src={AvatarImage}
                         alt="avatar"
                         width={140}
                         height={140}
