@@ -28,11 +28,12 @@ import FormSuccess from "../auth/form-success";
 import Avatar from "/public/images/avatar.jpg";
 
 export function SettingsModal() {
-  const user = useCurrentUser();
-  const { update } = useSession();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+
+  const user = useCurrentUser();
+  const { update } = useSession();
 
   const AvatarImage = user?.image ? user.image : Avatar;
 
@@ -44,6 +45,8 @@ export function SettingsModal() {
     defaultValues: {
       name: user?.name || undefined,
       email: user?.email || undefined,
+      password: undefined,
+      newPassword: undefined,
     },
   });
 
@@ -64,8 +67,15 @@ export function SettingsModal() {
     });
   };
 
+  const handleClose = () => {
+    onClose();
+    form.reset();
+    setError("");
+    setSuccess("");
+  };
+
   return (
-    <Dialog open={isModalOpen} onOpenChange={onClose}>
+    <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="h-full max-h-[95%] min-w-[97%] bg-primary-foreground">
         <div className="flex h-full flex-col items-stretch overflow-y-auto md:items-center">
           <div className="grid grid-cols-[1fr] items-start px-4 py-6 md:w-min md:py-13 md:grid-cols-[calc(2*290px+24px)]">
@@ -123,7 +133,7 @@ export function SettingsModal() {
                               {...field}
                               placeholder="Enter email"
                               type="email"
-                              disabled={isPending}
+                              disabled={isPending || user?.isOAuth}
                               className="rounded-2xl bg-primary-foreground"
                             />
                           </FormControl>
@@ -131,6 +141,47 @@ export function SettingsModal() {
                         </FormItem>
                       )}
                     />
+
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="password"
+                              placeholder="* * * * * * * *"
+                              disabled={isPending || user?.isOAuth}
+                              className="rounded-2xl bg-primary-foreground"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="newPassword"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>New password</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="password"
+                              placeholder="* * * * * * * *"
+                              disabled={isPending || user?.isOAuth}
+                              className="rounded-2xl bg-primary-foreground"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <FormError message={error} />
                     <FormSuccess message={success} />
                     <Button

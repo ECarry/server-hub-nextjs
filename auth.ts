@@ -13,6 +13,7 @@ declare module "@auth/core/types" {
     user: {
       id: string;
       role: UserRole;
+      isOAuth: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -51,6 +52,7 @@ export const {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
+        session.user.isOAuth = token.isOAuth as boolean;
       }
 
       return session;
