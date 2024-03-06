@@ -1,12 +1,14 @@
 import { auth } from "@/auth";
+import RoleGate from "@/components/auth/role-gate";
+import { redirect } from "next/navigation";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
-
-  if (session?.user.role !== "ADMIN") {
-    return <h1>401</h1>;
+  if (!session) {
+    redirect("/auth/login");
   }
-  return <div>{children}</div>;
+
+  return <RoleGate allowedRole="ADMIN">{children}</RoleGate>;
 };
 
 export default DashboardLayout;
