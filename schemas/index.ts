@@ -35,10 +35,8 @@ export const CreateCollectionSchema = z.object({
 });
 
 export const EditCollectionSchema = z.object({
-  name: z.string().min(1, {
-    message: "Name is required!",
-  }),
-  description: z.string(),
+  name: z.optional(z.string()),
+  description: z.optional(z.string()),
 });
 
 export const ProfileSchema = z.object({
