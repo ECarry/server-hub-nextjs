@@ -47,6 +47,12 @@ export const {
         session.user.role = token.role as UserRole;
       }
 
+      if (session) {
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.image = token.picture;
+      }
+
       return session;
     },
     async jwt({ token }) {
@@ -60,6 +66,9 @@ export const {
 
       const existingAccount = await getAccountByUserId(existingUser.id);
 
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.picture = existingUser.image;
       token.isOAuth = !!existingAccount;
       token.role = existingUser.role;
       return token;

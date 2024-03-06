@@ -5,7 +5,10 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { ProfileSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import Image from "next/image";
+import { editProfile } from "@/actions/user";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -20,13 +23,15 @@ import {
 import { Input } from "@/components/ui/input";
 import FormError from "../auth/form-error";
 import { Loader2 } from "lucide-react";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import Image from "next/image";
+import FormSuccess from "../auth/form-success";
+import { useSession } from "next-auth/react";
 
 export function SettingsModal() {
   const user = useCurrentUser();
+  const { update } = useSession();
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
 
   const { isOpen, onClose, type } = useModal();
   const isModalOpen = isOpen && type === "settings";
@@ -34,8 +39,8 @@ export function SettingsModal() {
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
     defaultValues: {
-      name: user?.name || "",
-      email: user?.email || "",
+      name: user?.name || undefined,
+      email: user?.email || undefined,
     },
   });
 
@@ -45,8 +50,15 @@ export function SettingsModal() {
 
   const onSubmit = (values: z.infer<typeof ProfileSchema>) => {
     setError("");
+    setSuccess("");
 
-    startTransition(() => {});
+    startTransition(() => {
+      editProfile(values).then((data) => {
+        update();
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
   };
 
   return (
@@ -116,19 +128,20 @@ export function SettingsModal() {
                         </FormItem>
                       )}
                     />
+                    <FormError message={error} />
+                    <FormSuccess message={success} />
+                    <Button
+                      size={"sm"}
+                      type="submit"
+                      disabled={!isDirty || isPending}
+                    >
+                      {isPending ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <span className="text-sm">Update</span>
+                      )}
+                    </Button>
                   </div>
-                  <FormError message={error} />
-                  <Button
-                    size={"sm"}
-                    type="submit"
-                    disabled={!isDirty || isPending}
-                  >
-                    {isPending ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    ) : (
-                      <span className="text-sm">Update</span>
-                    )}
-                  </Button>
                 </form>
               </Form>
             </div>
