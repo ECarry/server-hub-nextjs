@@ -4,17 +4,14 @@ import { CarouselButtonsTags } from "@/components/carousel-buttons-tags";
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useSearchModal } from "@/hooks/use-search-modal";
 
 export function TagsList() {
-  const searchModal = useSearchModal();
-
   return (
     <div className="flex items-center gap-4">
       <Button
         size="lg"
         variant="secondary"
-        onClick={searchModal.onOpen}
+        onClick={() => {}}
         className="max-md:hidden rounded-full"
         asChild
       >
