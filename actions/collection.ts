@@ -2,7 +2,7 @@
 
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { CreateCollectionSchema, EditCollectionSchema } from "@/schemas";
+import { CreateCollectionSchema } from "@/schemas";
 import { Collection } from "@prisma/client";
 import * as z from "zod";
 import { revalidatePath } from "next/cache";
