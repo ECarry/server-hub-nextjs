@@ -95,7 +95,7 @@ export function CollectionTable({ collections }: CollectionTableProps) {
       </div>
       <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow className="border-none hover:bg-muted/0">
             <TableHead className="w-auto"> Collection name</TableHead>
             <TableHead className="text-center w-[280px]">
               Last modified
@@ -107,10 +107,10 @@ export function CollectionTable({ collections }: CollectionTableProps) {
           {filteredCollections.map((collection) => (
             <TableRow
               key={collection.id}
-              className="cursor-pointer"
+              className="cursor-pointer border-none"
               onClick={() => handleClick(collection.id)}
             >
-              <TableCell className="font-medium">
+              <TableCell className="font-medium hover:underline underline-offset-4">
                 {highlightMatch(collection.name)}
               </TableCell>
               <TableCell className="text-center">
