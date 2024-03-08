@@ -102,7 +102,7 @@ export function NavMenu() {
         <DropdownMenuItem asChild>
           <Link
             className="flex justify-between items-center"
-            href={""}
+            href={"https://github.com/ECarry/server-hub-nextjs"}
             target="_blank"
           >
             <span>Github</span>

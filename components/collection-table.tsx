@@ -110,7 +110,7 @@ export function CollectionTable({ collections }: CollectionTableProps) {
               <TableRow
                 key={collection.id}
                 className="cursor-pointer border-none"
-                onClick={() => router.push(collection.id)}
+                onClick={() => router.push(`/collections/${collection.id}`)}
               >
                 <TableCell className="font-medium hover:underline underline-offset-4">
                   {highlightMatch(collection.name)}
