@@ -3,7 +3,6 @@ import RoleGate from "@/components/auth/role-gate";
 import { redirect } from "next/navigation";
 
 import Navbar from "../_components/navbar";
-import { BreadcrumbNav } from "@/components/breadcrumb";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
