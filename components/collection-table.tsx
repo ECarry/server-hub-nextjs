@@ -18,6 +18,7 @@ import { Plus, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
+import NoCollectionsFound from "./no-collections-found";
 
 interface CollectionTableProps {
   collections: Collection[];
@@ -54,8 +55,8 @@ export function CollectionTable({ collections }: CollectionTableProps) {
     );
   };
 
-  const handleClick = (id: string) => {
-    router.push(`/collections/${id}`);
+  const handleClick = () => {
+    setSearchQuery("");
   };
 
   return (
@@ -93,36 +94,40 @@ export function CollectionTable({ collections }: CollectionTableProps) {
           </Button>
         </div>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow className="border-none hover:bg-muted/0">
-            <TableHead className="w-auto"> Collection name</TableHead>
-            <TableHead className="text-center w-[280px]">
-              Last modified
-            </TableHead>
-            <TableHead className="text-center w-[280px]"> Created</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredCollections.map((collection) => (
-            <TableRow
-              key={collection.id}
-              className="cursor-pointer border-none"
-              onClick={() => handleClick(collection.id)}
-            >
-              <TableCell className="font-medium hover:underline underline-offset-4">
-                {highlightMatch(collection.name)}
-              </TableCell>
-              <TableCell className="text-center">
-                {timeAgo(collection.updateTime)}
-              </TableCell>
-              <TableCell className="text-center">
-                {timeAgo(collection.createTime)}
-              </TableCell>
+      {filteredCollections.length > 0 ? (
+        <Table>
+          <TableHeader>
+            <TableRow className="border-none hover:bg-muted/0">
+              <TableHead className="w-auto"> Collection name</TableHead>
+              <TableHead className="text-center w-[280px]">
+                Last modified
+              </TableHead>
+              <TableHead className="text-center w-[280px]"> Created</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {filteredCollections.map((collection) => (
+              <TableRow
+                key={collection.id}
+                className="cursor-pointer border-none"
+                onClick={() => router.push(collection.id)}
+              >
+                <TableCell className="font-medium hover:underline underline-offset-4">
+                  {highlightMatch(collection.name)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {timeAgo(collection.updateTime)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {timeAgo(collection.createTime)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : (
+        <NoCollectionsFound onClick={handleClick} />
+      )}
     </div>
   );
 }
