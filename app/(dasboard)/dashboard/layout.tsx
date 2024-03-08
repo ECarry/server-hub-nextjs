@@ -2,7 +2,8 @@ import { auth } from "@/auth";
 import RoleGate from "@/components/auth/role-gate";
 import { redirect } from "next/navigation";
 
-import Navbar from "./_components/navbar";
+import Navbar from "../_components/navbar";
+import { BreadcrumbNav } from "@/components/breadcrumb";
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
@@ -12,8 +13,14 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <RoleGate allowedRole="ADMIN">
-      <Navbar />
-      {children}
+      <div className="flex min-h-screen flex-col">
+        <Navbar />
+        <main className="flex-1">
+          <div className="z-0 flex flex-col gap-y-5 px-container-x-padding pt-[32px]">
+            {children}
+          </div>
+        </main>
+      </div>
     </RoleGate>
   );
 };
