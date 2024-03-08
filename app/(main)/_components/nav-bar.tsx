@@ -1,11 +1,13 @@
 import Image from "next/image";
+import Link from "next/link";
+import { currentUser } from "@/lib/auth";
+
+import { Icons } from "@/components/icons";
 import { NavLinks } from "./nav-links";
 import { NavMenu } from "./nav-menu";
 import { SearchButtonNav } from "./search-button-nav";
 import { Button } from "@/components/ui/button";
 import Logo from "/public/images/logo.png";
-import Link from "next/link";
-import { currentUser } from "@/lib/auth";
 
 export default async function Navbar() {
   const user = await currentUser();
@@ -35,7 +37,10 @@ export default async function Navbar() {
             <div className="hidden lg:flex flex-row items-center gap-3">
               {user && user.role === "ADMIN" && (
                 <Button variant="ghost" size="lg" asChild>
-                  <Link href="/dashboard">Dashboard</Link>
+                  <Link href="/dashboard">
+                    Dashboard
+                    <Icons.arrowUpRight className="size-5" />
+                  </Link>
                 </Button>
               )}
             </div>
