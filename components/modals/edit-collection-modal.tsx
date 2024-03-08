@@ -136,6 +136,7 @@ export function EditCollectionModal() {
                 className="w-full"
                 type="button"
                 onClick={() => onClose()}
+                disabled={isPending}
               >
                 Cancel
               </Button>
