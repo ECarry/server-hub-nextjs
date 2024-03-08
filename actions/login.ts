@@ -1,7 +1,7 @@
 "use server";
 
 import { signIn } from "@/auth";
-import { generateVerificationToekn } from "@/data/tokens";
+import { generateVerificationToken } from "@/data/tokens";
 import { getUserByEmail } from "@/data/user";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/schemas";
@@ -29,7 +29,7 @@ export const login = async (
   }
 
   if (!existingUser.emailVerified) {
-    await generateVerificationToekn(existingUser.email);
+    await generateVerificationToken(existingUser.email);
 
     return { success: "Confirmation email sent!" };
   }

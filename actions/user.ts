@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { ProfileSchema } from "@/schemas";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
-import { generateVerificationToekn } from "@/data/tokens";
+import { generateVerificationToken } from "@/data/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 
 export const editProfile = async (values: z.infer<typeof ProfileSchema>) => {
@@ -40,7 +40,7 @@ export const editProfile = async (values: z.infer<typeof ProfileSchema>) => {
       return { error: "Email already in use!" };
     }
 
-    const verificationToken = await generateVerificationToekn(values.email);
+    const verificationToken = await generateVerificationToken(values.email);
     await sendVerificationEmail(
       verificationToken.email,
       verificationToken.token

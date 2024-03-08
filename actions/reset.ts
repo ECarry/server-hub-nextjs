@@ -1,6 +1,6 @@
 "use server";
 
-import { generatePasswordResetToekn } from "@/data/tokens";
+import { generatePasswordResetToken } from "@/data/tokens";
 import { getUserByEmail } from "@/data/user";
 import { sendRestPasswordEmail } from "@/lib/mail";
 import { ResetPasswordSchema } from "@/schemas";
@@ -23,7 +23,7 @@ export const resetPassword = async (
     return { error: "Email does not exist!" };
   }
 
-  const resetPasswordToken = await generatePasswordResetToekn(email);
+  const resetPasswordToken = await generatePasswordResetToken(email);
 
   await sendRestPasswordEmail(
     resetPasswordToken.email,
