@@ -6,9 +6,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Overview } from "../../_components/overview";
-import { RecentSales } from "../../_components/recent-sales";
+import { RecentUsers } from "../../_components/recent-users";
+import { getAllUsers } from "@/data/user";
 
-const DashboardPage = () => {
+const DashboardPage = async () => {
+  const users = await getAllUsers();
+
   return (
     <div className="space-y-4">
       <h1 className="text-heading-medium md:text-heading-large">Dashboard</h1>
@@ -120,11 +123,10 @@ const DashboardPage = () => {
         </Card>
         <Card className="col-span-3">
           <CardHeader>
-            <CardTitle>Recent Sales</CardTitle>
-            <CardDescription>You made 265 sales this month.</CardDescription>
+            <CardTitle>Recent Users</CardTitle>
           </CardHeader>
           <CardContent>
-            <RecentSales />
+            <RecentUsers users={users} />
           </CardContent>
         </Card>
       </div>
