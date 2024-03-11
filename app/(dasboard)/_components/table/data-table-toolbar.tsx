@@ -4,9 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Plus, Search } from "lucide-react";
+import { Table } from "@tanstack/react-table";
+import { Cross2Icon } from "@radix-ui/react-icons";
 
-const DataTableToolbar = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
+interface DataTableToolbarProps<TData> {
+  table: Table<TData>;
+}
+
+export default function DataTableToolbar<TData>({
+  table,
+}: DataTableToolbarProps<TData>) {
+  const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
     <div className="flex gap-x-4 items-center">
@@ -15,14 +23,26 @@ const DataTableToolbar = () => {
           <Input
             className="rounded-full h-11 px-4 py-3 pl-9 rtl:pr-9 outline-none ring-inset focus:bg-primary-foreground focus:ring-2 focus:ring-primary-foreground disabled:cursor-not-allowed disabled:bg-primary-foreground"
             placeholder="Find products"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            }
           />
           <div className="pointer-events-none absolute flex h-full items-center px-3">
             <Search size={16} />
           </div>
         </div>
       </div>
+      {isFiltered && (
+        <Button
+          variant="ghost"
+          onClick={() => table.resetColumnFilters()}
+          className="h-8 px-2 lg:px-3"
+        >
+          Reset
+          <Cross2Icon className="ml-2 h-4 w-4" />
+        </Button>
+      )}
       {/* <span className="hidden w-[1px] bg-gray-200 md:block"></span> */}
       <Separator orientation="vertical" className="hidden md:block h-10" />
       <Button
@@ -43,6 +63,4 @@ const DataTableToolbar = () => {
       </div>
     </div>
   );
-};
-
-export default DataTableToolbar;
+}
