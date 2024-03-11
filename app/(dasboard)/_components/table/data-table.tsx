@@ -30,11 +30,15 @@ import { DataTablePagination } from "./data-table-pagination";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  searchPlaceholder: string;
+  showCreateButton: boolean;
 }
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
+  searchPlaceholder,
+  showCreateButton,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = useState({});
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -65,7 +69,11 @@ export default function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4 pb-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar
+        table={table}
+        searchPlaceholder={searchPlaceholder}
+        showCreateButton={showCreateButton}
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

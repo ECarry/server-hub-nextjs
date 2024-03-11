@@ -788,7 +788,12 @@ const ProductsPage = () => {
   return (
     <div className="space-y-4">
       <h1 className="text-heading-medium md:text-heading-large">Products</h1>
-      <DataTable data={tasks} columns={columns} />
+      <DataTable
+        data={tasks}
+        columns={columns}
+        searchPlaceholder="title"
+        showCreateButton
+      />
     </div>
   );
 };
