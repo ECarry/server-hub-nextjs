@@ -8,6 +8,7 @@ const links = [
   { name: "Dashboard", path: "/dashboard" },
   { name: "Products", path: "/dashboard/products" },
   { name: "Posts", path: "/dashboard/posts" },
+  { name: "Users", path: "/dashboard/users" },
 ];
 
 export const NavLinks = () => {
