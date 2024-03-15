@@ -3,11 +3,12 @@
 import { getUserByEmail, getUserById } from "@/data/user";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { ProfileSchema } from "@/schemas";
+import { ProfileSchema, UserSchema } from "@/schemas";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { generateVerificationToken } from "@/data/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
+import { revalidatePath } from "next/cache";
 
 export const editProfile = async (values: z.infer<typeof ProfileSchema>) => {
   const validatedFields = ProfileSchema.safeParse(values);
@@ -76,5 +77,47 @@ export const editProfile = async (values: z.infer<typeof ProfileSchema>) => {
     return { success: "Profile updated!" };
   } catch (error) {
     return { error: "Updated error" };
+  }
+};
+
+export const deleteUser = async (values: z.infer<typeof UserSchema>) => {
+  const validatedFields = UserSchema.safeParse(values);
+  const user = await currentUser();
+
+  if (!validatedFields.success) {
+    return { error: "Invalid fields" };
+  }
+
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
+  const dbUser = await getUserById(user.id);
+
+  if (!dbUser) {
+    return { error: "Unauthorized" };
+  }
+
+  const mvUser = await getUserById(values.id);
+
+  if (!mvUser) {
+    return { error: "User not found" };
+  }
+
+  if (dbUser.role !== "ADMIN" && dbUser.id !== mvUser.id) {
+    return { error: "Unauthorized" };
+  }
+
+  try {
+    await db.user.delete({
+      where: {
+        id: mvUser.id,
+      },
+    });
+
+    revalidatePath("/dashboard/users", "page");
+    return { success: "User deleted!" };
+  } catch (error) {
+    return { error: "Delete error" };
   }
 };

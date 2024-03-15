@@ -1,8 +1,9 @@
 "use client";
 
-import { DataTableRowActions } from "@/app/(dasboard)/_components/table/data-table-row-actions";
 import { User } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
+
+import { DataTableRowActions } from "./data-table-row-actions";
 
 export const columns: ColumnDef<User>[] = [
   {
