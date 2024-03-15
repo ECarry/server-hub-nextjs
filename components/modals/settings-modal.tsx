@@ -198,6 +198,15 @@ export function SettingsModal() {
                   </div>
                 </form>
               </Form>
+
+              <section className="flex flex-col gap-y-4 py-8">
+                <header className="flex flex-col gap-y-2">
+                  <h2 className="text-body-large-bold">Delete account</h2>
+                  <p className="text-body-medium text-fg-secondary">
+                    Permanently delete your account and all of your content.
+                  </p>
+                </header>
+              </section>
             </div>
           </div>
         </div>
