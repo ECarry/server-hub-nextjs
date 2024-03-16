@@ -4,7 +4,6 @@ import { useTransition } from "react";
 import { deleteUser } from "@/actions/user";
 import { z } from "zod";
 import { UserSchema } from "@/schemas";
-import { User } from "@prisma/client";
 
 import { Row } from "@tanstack/react-table";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
@@ -13,10 +12,30 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuShortcut,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
+import { Icons } from "@/components/icons";
+import { ShieldQuestion } from "lucide-react";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { cn } from "@/lib/utils";
+
+const roles = [
+  {
+    label: "Admin",
+    value: "ADMIN",
+  },
+  {
+    label: "User",
+    value: "USER",
+  },
+];
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -25,8 +44,11 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
+  const user = useCurrentUser();
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
+
+  const task = UserSchema.parse(row.original);
 
   const handleDelte = (values: z.infer<typeof UserSchema>) => {
     startTransition(() => {
@@ -57,15 +79,45 @@ export function DataTableRowActions<TData>({
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[160px]">
-        {isPending ? (
-          <DropdownMenuItem disabled>Deleting...</DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem onClick={() => handleDelte(row.original as User)}>
-            Delete
-            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        )}
+      <DropdownMenuContent align="end" className="w-[200px]">
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger
+            className={cn(
+              task.name === user?.name && "opacity-50 cursor-not-allowed",
+              "p-2"
+            )}
+            disabled={task.name === user?.name}
+          >
+            <div
+              className="flex justify-start items-center gap-x-2  group"
+              //onClick={() => onOpen("deleteCollection", { collection })}
+            >
+              <ShieldQuestion className="size-5" />
+              <span>Role</span>
+            </div>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuRadioGroup value={task.role}>
+              {roles.map((role) => (
+                <DropdownMenuRadioItem key={role.value} value={role.value}>
+                  {role.label}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem className="p-2" disabled={task.name === user?.name}>
+          <div
+            className="flex justify-start items-center gap-x-2  group"
+            //onClick={() => onOpen("deleteCollection", { collection })}
+          >
+            <Icons.trash className="size-5 text-red-500 group-hover:text-red-500" />
+            <span className="text-red-500 group-hover:text-red-500">
+              Delete
+            </span>
+          </div>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
