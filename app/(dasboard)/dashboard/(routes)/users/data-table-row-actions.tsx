@@ -1,9 +1,8 @@
 "use client";
 
 import { useTransition } from "react";
-import { deleteUser } from "@/actions/user";
-import { z } from "zod";
 import { UserSchema } from "@/schemas";
+import { cn } from "@/lib/utils";
 
 import { Row } from "@tanstack/react-table";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
@@ -20,11 +19,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
 import { Icons } from "@/components/icons";
 import { ShieldQuestion } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import { cn } from "@/lib/utils";
+import { useModal } from "@/hooks/use-modal-store";
 
 const roles = [
   {
@@ -46,28 +44,10 @@ export function DataTableRowActions<TData>({
 }: DataTableRowActionsProps<TData>) {
   const user = useCurrentUser();
   const [isPending, startTransition] = useTransition();
-  const { toast } = useToast();
+  const { onOpen } = useModal();
 
   const task = UserSchema.parse(row.original);
 
-  const handleDelte = (values: z.infer<typeof UserSchema>) => {
-    startTransition(() => {
-      deleteUser(values).then((data) => {
-        if (data.success) {
-          toast({
-            title: "User deleted",
-            description: `User ${values.name} has been deleted`,
-          });
-        } else if (data.error) {
-          toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: data.error,
-          });
-        }
-      });
-    });
-  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -110,7 +90,7 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem className="p-2" disabled={task.name === user?.name}>
           <div
             className="flex justify-start items-center gap-x-2  group"
-            //onClick={() => onOpen("deleteCollection", { collection })}
+            onClick={() => onOpen("deleteUser", { user: task })}
           >
             <Icons.trash className="size-5 text-red-500 group-hover:text-red-500" />
             <span className="text-red-500 group-hover:text-red-500">

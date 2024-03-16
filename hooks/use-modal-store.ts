@@ -1,4 +1,4 @@
-import { Collection } from "@prisma/client";
+import { Collection, User } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType =
@@ -6,10 +6,12 @@ export type ModalType =
   | "editCollection"
   | "deleteCollection"
   | "requestContent"
-  | "settings";
+  | "settings"
+  | "deleteUser";
 
 interface ModalData {
   collection?: Collection;
+  user?: User;
 }
 
 interface ModalStore {

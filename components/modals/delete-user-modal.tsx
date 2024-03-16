@@ -2,7 +2,7 @@
 
 import { useModal } from "@/hooks/use-modal-store";
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { deleteUser } from "@/actions/user";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,33 +14,36 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import FormError from "../auth/form-error";
-import { deleteCollection } from "@/actions/collection";
 import { Loader2 } from "lucide-react";
+import { toast } from "../ui/use-toast";
 
-const DeleteCollectionModal = () => {
+const DeleteUserModal = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
-  const router = useRouter();
   const { isOpen, onClose, type, data } = useModal();
 
-  const { collection } = data;
+  const { user } = data;
 
-  const isModalOpen = isOpen && type === "deleteCollection";
+  const isModalOpen = isOpen && type === "deleteUser";
 
-  if (!collection || !collection.id) {
+  if (!user || !user.id) {
     return null;
   }
 
   const onSubmit = () => {
     setError("");
-    setSuccess("");
 
     startTransition(() => {
-      deleteCollection(collection.id).then((data) => {
-        router.push("/collections");
-        router.refresh();
-        onClose();
+      deleteUser(user).then((data) => {
+        if (data.success) {
+          toast({
+            title: "User deleted",
+            description: `User ${user.name} has been deleted`,
+          });
+          onClose();
+        } else if (data.error) {
+          setError(data.error);
+        }
       });
     });
   };
@@ -53,7 +56,7 @@ const DeleteCollectionModal = () => {
             Are you sure?
           </DialogTitle>
           <DialogDescription className="text-center text-gray-500">
-            Deleting your collection is permanent and irreversible.
+            This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
@@ -74,7 +77,7 @@ const DeleteCollectionModal = () => {
             {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
-              <span>Delete collection</span>
+              <span>Delete User</span>
             )}
           </Button>
         </DialogFooter>
@@ -83,4 +86,4 @@ const DeleteCollectionModal = () => {
   );
 };
 
-export default DeleteCollectionModal;
+export default DeleteUserModal;

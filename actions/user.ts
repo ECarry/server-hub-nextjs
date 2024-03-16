@@ -104,7 +104,7 @@ export const deleteUser = async (values: z.infer<typeof UserSchema>) => {
     return { error: "User not found" };
   }
 
-  if (dbUser.role !== "ADMIN" || dbUser.id !== mvUser.id) {
+  if (dbUser.role !== "ADMIN") {
     return { error: "Unauthorized" };
   }
 
