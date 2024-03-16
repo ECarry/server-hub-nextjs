@@ -42,7 +42,9 @@ export default function Navbar() {
         </div>
 
         <div className="col-span-full row-start-2 flex md:hidden">
-          <div className="flex items-center py-1 md:py-0 h-11 md:h-[unset] gap-x-4 md:gap-x-6"></div>
+          <div className="flex items-center py-1 md:py-0 h-11 md:h-[unset] gap-x-4 md:gap-x-6">
+            <NavLinks />
+          </div>
         </div>
       </div>
     </header>
