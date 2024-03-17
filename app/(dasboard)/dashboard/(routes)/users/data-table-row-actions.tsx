@@ -1,6 +1,5 @@
 "use client";
 
-import { useTransition } from "react";
 import { UserSchema } from "@/schemas";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +22,9 @@ import { Icons } from "@/components/icons";
 import { ShieldQuestion } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { useModal } from "@/hooks/use-modal-store";
+import { useTransition } from "react";
+import { changeRole } from "@/actions/user";
+import { toast } from "@/components/ui/use-toast";
 
 const roles = [
   {
@@ -42,11 +44,29 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const user = useCurrentUser();
   const [isPending, startTransition] = useTransition();
+
+  const user = useCurrentUser();
   const { onOpen } = useModal();
 
   const task = UserSchema.parse(row.original);
+
+  const onRoleChange = (values: { id: string; role: "ADMIN" | "USER" }) => {
+    startTransition(() => {
+      changeRole(values).then((data) => {
+        if (data.success) {
+          toast({
+            title: "Role change successfully",
+          });
+        } else if (data.error) {
+          toast({
+            variant: "destructive",
+            title: data.error,
+          });
+        }
+      });
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -79,7 +99,15 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSubContent>
             <DropdownMenuRadioGroup value={task.role}>
               {roles.map((role) => (
-                <DropdownMenuRadioItem key={role.value} value={role.value}>
+                <DropdownMenuRadioItem
+                  key={role.value}
+                  value={role.value}
+                  className="cursor-pointer"
+                  disabled={role.value === task.role}
+                  onClick={() =>
+                    onRoleChange({ id: task.id, role: role.value as any })
+                  }
+                >
                   {role.label}
                 </DropdownMenuRadioItem>
               ))}

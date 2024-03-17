@@ -3,7 +3,7 @@
 import { getUserByEmail, getUserById } from "@/data/user";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { ProfileSchema, UserSchema } from "@/schemas";
+import { ProfileSchema, UserSchema, roleSchema } from "@/schemas";
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { generateVerificationToken } from "@/data/tokens";
@@ -119,5 +119,45 @@ export const deleteUser = async (values: z.infer<typeof UserSchema>) => {
     return { success: "User deleted!" };
   } catch (error) {
     return { error: "Delete error" };
+  }
+};
+
+export const changeRole = async (values: z.infer<typeof roleSchema>) => {
+  const validatedFields = roleSchema.safeParse(values);
+  const user = await currentUser();
+
+  if (!validatedFields.success) {
+    return { error: "Invalid fields" };
+  }
+
+  if (!user) {
+    return { error: "Unauthorized" };
+  }
+
+  const dbUser = await getUserById(values.id);
+
+  if (!dbUser) {
+    return { error: "User not found!" };
+  }
+
+  if (user.role !== "ADMIN") {
+    return { error: "Unauthorized" };
+  }
+
+  try {
+    await db.user.update({
+      where: {
+        id: dbUser.id,
+      },
+      data: {
+        role: values.role,
+      },
+    });
+
+    revalidatePath("/dashboard/users", "page");
+
+    return { success: "Role changed!" };
+  } catch (error) {
+    return { error: "Role change error" };
   }
 };

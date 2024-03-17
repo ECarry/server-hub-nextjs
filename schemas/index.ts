@@ -88,3 +88,8 @@ export const UserSchema = z.object({
   password: z.string().nullable(),
   role: z.enum(["USER", "ADMIN"]),
 });
+
+export const roleSchema = z.object({
+  id: z.string(),
+  role: z.enum(["USER", "ADMIN"]),
+});
