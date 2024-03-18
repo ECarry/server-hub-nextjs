@@ -88,13 +88,8 @@ export function DataTableRowActions<TData>({
             )}
             disabled={task.name === user?.name}
           >
-            <div
-              className="flex justify-start items-center gap-x-2  group"
-              //onClick={() => onOpen("deleteCollection", { collection })}
-            >
-              <ShieldQuestion className="size-5" />
-              <span>Role</span>
-            </div>
+            <ShieldQuestion className="size-4 mr-2" />
+            <span>Role</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuRadioGroup value={task.role}>
@@ -115,16 +110,13 @@ export function DataTableRowActions<TData>({
           </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="p-2" disabled={task.name === user?.name}>
-          <div
-            className="flex justify-start items-center gap-x-2  group"
-            onClick={() => onOpen("deleteUser", { user: task })}
-          >
-            <Icons.trash className="size-5 text-red-500 group-hover:text-red-500" />
-            <span className="text-red-500 group-hover:text-red-500">
-              Delete
-            </span>
-          </div>
+        <DropdownMenuItem
+          className="p-2"
+          disabled={task.name === user?.name}
+          onClick={() => onOpen("deleteUser", { user: task })}
+        >
+          <Icons.trash className="size-4 mr-2 text-red-500 group-hover:text-red-500" />
+          <span className="text-red-500 group-hover:text-red-500">Delete</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
