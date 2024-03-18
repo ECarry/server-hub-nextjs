@@ -61,7 +61,7 @@ const Social = () => {
       </div>
       <div className="relative flex h-20 items-center justify-center">
         <hr className="h-[2px] grow border-divider-primary" />
-        <h3 className="w-44 shrink-0 text-center text-body-small-bold text-fg-secondary">
+        <h3 className="w-11 shrink-0 text-center text-body-small-bold text-fg-secondary">
           or
         </h3>
         <hr className="h-[2px] grow border-divider-primary" />
