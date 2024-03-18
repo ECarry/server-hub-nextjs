@@ -3,19 +3,20 @@
 import { useModal } from "@/hooks/use-modal-store";
 import { useState, useTransition } from "react";
 import { deleteUser } from "@/actions/user";
+import { toast } from "../ui/use-toast";
 
-import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import FormError from "../auth/form-error";
 import { Loader2 } from "lucide-react";
-import { toast } from "../ui/use-toast";
 
 const DeleteUserModal = () => {
   const [isPending, startTransition] = useTransition();
@@ -49,40 +50,31 @@ const DeleteUserModal = () => {
   };
 
   return (
-    <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader className="space-y-8">
-          <DialogTitle className=" text-center text-xl truncate font-semibold">
-            Are you sure?
-          </DialogTitle>
-          <DialogDescription className="text-center text-gray-500">
-            This action cannot be undone.
-          </DialogDescription>
-        </DialogHeader>
-
+    <AlertDialog open={isModalOpen} onOpenChange={onClose}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete
+            <span className="text-red-500">{" " + user.name + " "}</span>
+            account and remove
+            <span className="text-red-500">{" " + user.name + " "}</span>
+            data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
         <FormError message={error} />
-        <DialogFooter className="mt-4 grid grid-cols-2 gap-x-3">
-          <Button
-            variant={"outline"}
-            onClick={() => onClose()}
-            disabled={isPending}
-          >
-            Cancel
-          </Button>
-          <Button
-            variant={"destructive"}
-            onClick={onSubmit}
-            disabled={isPending}
-          >
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <Button onClick={onSubmit} disabled={isPending} className="w-[120px]">
             {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <span>Delete User</span>
             )}
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 
