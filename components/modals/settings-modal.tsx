@@ -5,7 +5,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { ProfileSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
+import { use, useState, useTransition } from "react";
 import Image from "next/image";
 import { editProfile } from "@/actions/user";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -188,6 +188,7 @@ export function SettingsModal() {
                       size={"sm"}
                       type="submit"
                       disabled={!isDirty || isPending}
+                      className="w-[100px]"
                     >
                       {isPending ? (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -205,6 +206,9 @@ export function SettingsModal() {
                   <p className="text-body-medium text-fg-secondary">
                     Permanently delete your account and all of your content.
                   </p>
+                  <Button variant="destructive" className="w-[200px]">
+                    Delete this account
+                  </Button>
                 </header>
               </section>
             </div>
