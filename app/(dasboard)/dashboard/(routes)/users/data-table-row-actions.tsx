@@ -83,10 +83,10 @@ export function DataTableRowActions<TData>({
         <DropdownMenuSub>
           <DropdownMenuSubTrigger
             className={cn(
-              task.name === user?.name && "opacity-50 cursor-not-allowed",
+              task.email === user?.email && "opacity-50 cursor-not-allowed",
               "p-2"
             )}
-            disabled={task.name === user?.name}
+            disabled={task.email === user?.email}
           >
             <ShieldQuestion className="size-4 mr-2" />
             <span>Role</span>
@@ -112,7 +112,7 @@ export function DataTableRowActions<TData>({
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="p-2"
-          disabled={task.name === user?.name}
+          disabled={task.email === user?.email}
           onClick={() => onOpen("deleteUser", { user: task })}
         >
           <Icons.trash className="size-4 mr-2 text-red-500 group-hover:text-red-500" />
