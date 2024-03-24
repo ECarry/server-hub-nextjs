@@ -10,6 +10,21 @@ export const LoginSchema = z.object({
   }),
 });
 
+export const LoginWithCodeEmailSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+});
+
+export const LoginWithCodeSchema = z.object({
+  email: z.string().email({
+    message: "Email is required",
+  }),
+  code: z.number().min(6, {
+    message: "Code is required",
+  }),
+});
+
 export const RegisterSchema = z.object({
   name: z.string().min(2),
   email: z.string().email({

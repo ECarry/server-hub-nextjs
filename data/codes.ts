@@ -1,12 +1,12 @@
 import { db } from "@/lib/db";
 import { getPasswordResetTokenByEmail } from "./password-reset-token";
-import { getVerificationCodeByEmail } from "./verification-code";
+import { getOTPByEmail } from "./verification-otp";
 
-export const generateVerificationCode = async (email: string) => {
+export const generateOTP = async (email: string) => {
   const code = Math.floor(Math.random() * 900000) + 100000;
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
-  const existingCode = await getVerificationCodeByEmail(email);
+  const existingCode = await getOTPByEmail(email);
 
   if (existingCode) {
     await db.verificationCode.delete({

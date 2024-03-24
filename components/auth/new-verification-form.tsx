@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react";
 const NewVerificationForm = () => {
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
+
   const searchParams = useSearchParams();
 
   const token = searchParams.get("token");
@@ -26,11 +27,11 @@ const NewVerificationForm = () => {
 
     newVerification(token)
       .then((data) => {
-        setError(data?.error);
-        setSuccess(data?.success);
+        setError(data.error);
+        setSuccess(data.success);
       })
       .catch(() => {
-        setError("Something went wron!");
+        setError("Something went wrong!");
       });
   }, [token, error, success]);
 
