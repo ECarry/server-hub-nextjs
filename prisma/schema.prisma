@@ -135,8 +135,10 @@ model Series {
 }
 
 model Product {
-  id          String  @id @default(uuid()) @map("_id")
-  name        String
+  id   String @id @default(uuid()) @map("_id")
+  name String
+  slug String
+
   description String?
 
   seriesId String?

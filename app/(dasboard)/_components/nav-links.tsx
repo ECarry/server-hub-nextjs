@@ -12,7 +12,7 @@ const links = [
 ];
 
 export const NavLinks = () => {
-  const pathName = usePathname();
+  const pathname = usePathname();
 
   return (
     <>
@@ -25,9 +25,9 @@ export const NavLinks = () => {
           asChild
         >
           <Link
-            href={link.path + "/"}
+            href={link.path}
             className={
-              link.path === `${pathName}`
+              pathname === link.path
                 ? "text-primary"
                 : "text-muted-foreground hover:text-primary"
             }

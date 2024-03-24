@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -7,6 +5,7 @@ import { Plus, Search } from "lucide-react";
 import { Table } from "@tanstack/react-table";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -61,12 +60,11 @@ export default function DataTableToolbar<TData>({
         className={cn(showCreateButton && "hidden md:block h-10 bg-gray-200")}
       />
       {showCreateButton && (
-        <Button
-          className="hidden md:flex px-4 gap-2 items-center"
-          //onClick={() => onOpen("createCollection")}
-        >
-          <Plus size={16} />
-          New Product
+        <Button className="hidden md:flex px-4 gap-2 items-center" asChild>
+          <Link href={"/dashboard/products/create"}>
+            <Plus size={16} />
+            New Product
+          </Link>
         </Button>
       )}
       {showCreateButton && (
