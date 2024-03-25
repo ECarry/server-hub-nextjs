@@ -1,8 +1,17 @@
 import { auth } from "@/auth";
 import RoleGate from "@/components/auth/role-gate";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
 
 import Navbar from "../_components/navbar";
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s - Dashboard  - Server Hub - DATA & NEXUS",
+    default: "Dashboard",
+  },
+  description: "DATA & NEXUS",
+};
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
