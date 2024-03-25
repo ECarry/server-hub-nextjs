@@ -1,16 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -26,7 +23,21 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { RefreshCcw } from "lucide-react";
+import { Plus, RefreshCcw } from "lucide-react";
+import FileUpload from "@/components/file-upload";
+import { Heading } from "@/components/ui/heading";
+import { Separator } from "@/components/ui/separator";
+
+const ImgSchema = z.object({
+  fileName: z.string(),
+  name: z.string(),
+  fileSize: z.number(),
+  size: z.number(),
+  fileKey: z.string(),
+  key: z.string(),
+  fileUrl: z.string(),
+  url: z.string(),
+});
 
 const productFormSchema = z.object({
   name: z
@@ -45,6 +56,20 @@ const productFormSchema = z.object({
     .max(30, {
       message: "Name must not be longer than 30 characters.",
     }),
+  manufacturer: z.string({
+    required_error: "Please select a manufacturer.",
+  }),
+  infrastructure: z.string({
+    required_error: "Please select a infrastructure.",
+  }),
+  series: z.string({
+    required_error: "Please select a series.",
+  }),
+  description: z.optional(z.string()),
+  images: z
+    .array(ImgSchema)
+    .max(20, { message: "You can only add up to 20 images" })
+    .min(1, { message: "At least one image must be added." }),
 });
 
 type ProfileFormValues = z.infer<typeof productFormSchema>;
@@ -55,10 +80,16 @@ export function ProductForm() {
     defaultValues: {
       name: "",
       slug: "",
+      images: [],
     },
   });
 
-  function onSubmit(data: ProfileFormValues) {
+  const handleGenerateSlug = () => {
+    const name = form.getValues("name");
+    form.setValue("slug", name.slice(0, 30).replace(/\s/g, "-").toLowerCase());
+  };
+
+  const onSubmit = (data: ProfileFormValues) => {
     toast({
       title: "You submitted the following values:",
       description: (
@@ -67,52 +98,228 @@ export function ProductForm() {
         </pre>
       ),
     });
-  }
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product name</FormLabel>
-              <FormControl>
-                <Input placeholder="Product name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product slug</FormLabel>
-              <div className="flex gap-2">
-                <FormControl>
-                  <Input placeholder="Product slug" {...field} />
-                </FormControl>
-
-                <FormMessage />
-                <Button
-                  type="button"
-                  variant={"outline"}
-                  className="flex gap-2"
-                  disabled
-                >
-                  <RefreshCcw size={16} />
-                  Generate slug
-                </Button>
+    <>
+      <div className="flex items-center justify-between">
+        <Heading title={"Create product"} description={"Add a new product"} />
+      </div>
+      <Separator />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-12 gap-4">
+            <div className="grid grid-cols-12 gap-x-4 gap-y-6 col-span-12 md:col-span-6 border p-4 rounded-xl">
+              <div className="col-span-12">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Product name{" "}
+                        <span className="text-destructive"> *</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input placeholder="Product name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Save changes</Button>
-      </form>
-    </Form>
+
+              <div className="col-span-12">
+                <FormField
+                  control={form.control}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Product slug</FormLabel>
+                      <div className="flex gap-2">
+                        <FormControl>
+                          <Input placeholder="Product slug" {...field} />
+                        </FormControl>
+
+                        <Button
+                          type="button"
+                          variant={"outline"}
+                          className="flex gap-2"
+                          onClick={handleGenerateSlug}
+                          disabled={form.getValues("name") === ""}
+                        >
+                          <RefreshCcw size={16} />
+                          Generate slug
+                        </Button>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-12">
+                <FormField
+                  control={form.control}
+                  name="manufacturer"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Manufacturer</FormLabel>
+                      <div className="flex gap-2">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a manufacturer" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="m@example.com">
+                              m@example.com
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          type="button"
+                          variant={"outline"}
+                          className="flex gap-2"
+                          disabled
+                        >
+                          <Plus size={16} />
+                          New
+                        </Button>
+                      </div>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-12">
+                <FormField
+                  control={form.control}
+                  name="infrastructure"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Infrastructure</FormLabel>
+                      <div className="flex gap-2">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a infrastructure" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="m@example.com">
+                              m@example.com
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          type="button"
+                          variant={"outline"}
+                          className="flex gap-2"
+                          disabled
+                        >
+                          <Plus size={16} />
+                          New
+                        </Button>
+                      </div>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-12">
+                <FormField
+                  control={form.control}
+                  name="series"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Series</FormLabel>
+                      <div className="flex gap-2">
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a series" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="m@example.com">
+                              m@example.com
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button
+                          type="button"
+                          variant={"outline"}
+                          className="flex gap-2"
+                          disabled
+                        >
+                          <Plus size={16} />
+                          New
+                        </Button>
+                      </div>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="col-span-12">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description (optional)</FormLabel>
+                      <FormControl>
+                        <Textarea className="resize-none" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-12 gap-x-4 gap-y-6 col-span-12 md:col-span-6 border p-4 rounded-xl">
+              <div className="col-span-12">
+                <FormField
+                  control={form.control}
+                  name="images"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Images</FormLabel>
+                      <FormControl>
+                        <FileUpload
+                          onChange={field.onChange}
+                          value={field.value}
+                          onRemove={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+
+          <Button type="submit" className="col-span-4 md:col-span-2">
+            Save changes
+          </Button>
+        </form>
+      </Form>
+    </>
   );
 }

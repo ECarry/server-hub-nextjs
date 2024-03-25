@@ -7,7 +7,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { TailwindIndicator } from "@/components/tailwind-indicator";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { Toaster } from "@/components/ui/toaster";
-
 import "./globals.css";
 
 const OpenSans = Open_Sans({ subsets: ["latin"] });

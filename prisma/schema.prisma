@@ -144,9 +144,9 @@ model Product {
   seriesId String?
   series   Series? @relation(fields: [seriesId], references: [id])
 
-  pdfs  Pdf[]
-  Posts Post[]
-  Image ProductImage[]
+  pdfs   Pdf[]
+  posts  Post[]
+  images ProductImage[]
 }
 
 model ProductImage {

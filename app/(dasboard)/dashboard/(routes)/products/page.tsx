@@ -2,6 +2,7 @@ import { Metadata } from "next";
 
 import { columns } from "@/app/(dasboard)/_components/table/columns";
 import DataTable from "@/app/(dasboard)/_components/table/data-table";
+import { Heading } from "@/components/ui/heading";
 
 export const metadata: Metadata = {
   title: "Products",
@@ -793,8 +794,7 @@ const tasks = [
 const ProductsPage = () => {
   return (
     <div className="space-y-4">
-      <h1 className="text-heading-medium md:text-heading-large">Products</h1>
-      <p className="text-sm text-muted-foreground">Manage your products</p>
+      <Heading title={"Products"} description={"Manage products"} />
       <DataTable
         data={tasks}
         columns={columns}

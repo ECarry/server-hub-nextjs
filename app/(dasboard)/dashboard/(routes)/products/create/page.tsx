@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 const page = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -38,7 +38,6 @@ const page = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <Separator />
       <ProductForm />
     </div>
   );

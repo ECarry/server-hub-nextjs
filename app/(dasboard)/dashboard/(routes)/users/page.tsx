@@ -2,6 +2,7 @@ import { getAllUsers } from "@/data/user";
 
 import { columns } from "./columns";
 import DataTable from "@/app/(dasboard)/_components/table/data-table";
+import { Heading } from "@/components/ui/heading";
 
 const PostsPage = async () => {
   const users = await getAllUsers();
@@ -12,7 +13,7 @@ const PostsPage = async () => {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-heading-medium md:text-heading-large">Users</h1>
+      <Heading title={"Users"} description={"Manage users"} />
       <DataTable
         data={users}
         columns={columns}
