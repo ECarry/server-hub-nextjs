@@ -135,7 +135,10 @@ export function ProductForm() {
                   name="slug"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Product slug</FormLabel>
+                      <FormLabel>
+                        Product slug
+                        <span className="text-destructive"> *</span>
+                      </FormLabel>
                       <div className="flex gap-2">
                         <FormControl>
                           <Input placeholder="Product slug" {...field} />
@@ -163,7 +166,10 @@ export function ProductForm() {
                   name="manufacturer"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Manufacturer</FormLabel>
+                      <FormLabel>
+                        Manufacturer
+                        <span className="text-destructive"> *</span>
+                      </FormLabel>
                       <div className="flex gap-2">
                         <Select
                           onValueChange={field.onChange}
@@ -184,7 +190,6 @@ export function ProductForm() {
                           type="button"
                           variant={"outline"}
                           className="flex gap-2"
-                          disabled
                         >
                           <Plus size={16} />
                           New
@@ -202,7 +207,10 @@ export function ProductForm() {
                   name="infrastructure"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Infrastructure</FormLabel>
+                      <FormLabel>
+                        Infrastructure
+                        <span className="text-destructive"> *</span>
+                      </FormLabel>
                       <div className="flex gap-2">
                         <Select
                           onValueChange={field.onChange}
@@ -223,7 +231,6 @@ export function ProductForm() {
                           type="button"
                           variant={"outline"}
                           className="flex gap-2"
-                          disabled
                         >
                           <Plus size={16} />
                           New
@@ -241,7 +248,10 @@ export function ProductForm() {
                   name="series"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Series</FormLabel>
+                      <FormLabel>
+                        Series
+                        <span className="text-destructive"> *</span>
+                      </FormLabel>
                       <div className="flex gap-2">
                         <Select
                           onValueChange={field.onChange}
@@ -262,7 +272,6 @@ export function ProductForm() {
                           type="button"
                           variant={"outline"}
                           className="flex gap-2"
-                          disabled
                         >
                           <Plus size={16} />
                           New
@@ -299,7 +308,10 @@ export function ProductForm() {
                   name="images"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Images</FormLabel>
+                      <FormLabel>
+                        Images
+                        <span className="text-destructive"> *</span>
+                      </FormLabel>
                       <FormControl>
                         <FileUpload
                           onChange={field.onChange}
