@@ -4,7 +4,7 @@ export const getManufacturers = async () => {
   try {
     const manufacturers = await db.manufacturer.findMany({
       include: {
-        infrastructure: true,
+        infrastructures: true,
       },
     });
 
