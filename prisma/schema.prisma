@@ -111,7 +111,7 @@ model Manufacturer {
   description String?
   imageUrl    String?
 
-  infrastructure Infrastructure[]
+  infrastructures Infrastructure[] // 每个 Manufacturer 有多个 Infrastructure
 }
 
 model Infrastructure {
@@ -119,10 +119,9 @@ model Infrastructure {
   name     String
   imageUrl String?
 
-  Manufacturer   Manufacturer? @relation(fields: [manufacturerId], references: [id])
-  manufacturerId String?
-
-  series Series[]
+  manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
+  manufacturerId String // 每个 Infrastructure 都关联到一个 Manufacturer
+  Series         Series[]
 }
 
 model Series {
@@ -131,8 +130,9 @@ model Series {
 
   products Product[]
 
-  Infrastructure   Infrastructure? @relation(fields: [infrastructureId], references: [id])
-  infrastructureId String?
+  // 每个 Series 关联到一个 Infrastructure
+  infrastructure   Infrastructure @relation(fields: [infrastructureId], references: [id])
+  infrastructureId String // 每个 Series 都关联到一个 Infrastructure
 }
 
 model Product {

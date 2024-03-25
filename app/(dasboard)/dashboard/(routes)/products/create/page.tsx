@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { ProductForm } from "@/app/(dasboard)/_components/form/product-form";
+import ProductForm from "@/app/(dasboard)/_components/form/product-form";
 import { Separator } from "@/components/ui/separator";
 import { Slash } from "lucide-react";
 import {
@@ -11,12 +11,18 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { getManufacturers } from "@/data/product";
 
 export const metadata: Metadata = {
   title: "Create Product",
 };
 
-const page = () => {
+const page = async () => {
+  const manufacturers = await getManufacturers();
+
+  console.log(manufacturers);
+  
+
   return (
     <div className="space-y-4">
       <Breadcrumb>
@@ -38,7 +44,7 @@ const page = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <ProductForm />
+      <ProductForm manufacturers={manufacturers} />
     </div>
   );
 };

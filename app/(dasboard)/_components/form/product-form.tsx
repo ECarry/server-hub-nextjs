@@ -28,6 +28,7 @@ import FileUpload from "@/components/file-upload";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/hooks/use-modal-store";
+import { Manufacturer } from "@prisma/client";
 
 const ImgSchema = z.object({
   fileName: z.string(),
@@ -75,7 +76,11 @@ const productFormSchema = z.object({
 
 type ProfileFormValues = z.infer<typeof productFormSchema>;
 
-export function ProductForm() {
+interface ProductFormProps {
+  manufacturers: Manufacturer[] | undefined;
+}
+
+const ProductForm = ({ manufacturers }: ProductFormProps) => {
   const { onOpen } = useModal();
 
   const form = useForm<ProfileFormValues>({
@@ -184,9 +189,14 @@ export function ProductForm() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="m@example.com">
-                              m@example.com
-                            </SelectItem>
+                            {manufacturers?.map((manufacturer) => (
+                              <SelectItem
+                                value={manufacturer.id}
+                                key={manufacturer.id}
+                              >
+                                {manufacturer.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <Button
@@ -338,4 +348,6 @@ export function ProductForm() {
       </Form>
     </>
   );
-}
+};
+
+export default ProductForm;

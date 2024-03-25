@@ -1,5 +1,6 @@
 "use server";
 
+import { getManufacturerByName } from "@/data/product";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { CreateManufacturerSchema } from "@/schemas";
@@ -22,6 +23,12 @@ export const CreateManufacturer = async (
 
   if (user.role !== "ADMIN") {
     return { error: "Not authorized" };
+  }
+
+  const existingManufacturer = await getManufacturerByName(values.name);
+
+  if (!!existingManufacturer) {
+    return { error: "Manufacturer already exists" };
   }
 
   try {
