@@ -50,6 +50,14 @@ export const CreateCollectionSchema = z.object({
   description: z.string(),
 });
 
+export const CreateManufacturerSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required!",
+  }),
+  description: z.optional(z.string()),
+  imageUrl: z.optional(z.string()),
+});
+
 export const EditCollectionSchema = z.object({
   name: z.optional(z.string()),
   description: z.optional(z.string()),

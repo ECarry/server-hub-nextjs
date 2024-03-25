@@ -27,6 +27,7 @@ import { Plus, RefreshCcw } from "lucide-react";
 import FileUpload from "@/components/file-upload";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
+import { useModal } from "@/hooks/use-modal-store";
 
 const ImgSchema = z.object({
   fileName: z.string(),
@@ -75,6 +76,8 @@ const productFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof productFormSchema>;
 
 export function ProductForm() {
+  const { onOpen } = useModal();
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
@@ -190,6 +193,7 @@ export function ProductForm() {
                           type="button"
                           variant={"outline"}
                           className="flex gap-2"
+                          onClick={() => onOpen("createManufacturer")}
                         >
                           <Plus size={16} />
                           New

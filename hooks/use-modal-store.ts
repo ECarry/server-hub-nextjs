@@ -7,7 +7,10 @@ export type ModalType =
   | "deleteCollection"
   | "requestContent"
   | "settings"
-  | "deleteUser";
+  | "deleteUser"
+  | "createManufacturer"
+  | "createInfrastructure"
+  | "createSeries";
 
 interface ModalData {
   collection?: Collection;

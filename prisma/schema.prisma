@@ -106,9 +106,10 @@ model Collection {
 }
 
 model Manufacturer {
-  id       String  @id @default(uuid()) @map("_id")
-  name     String
-  imageUrl String?
+  id          String  @id @default(uuid()) @map("_id")
+  name        String
+  description String?
+  imageUrl    String?
 
   infrastructure Infrastructure[]
 }

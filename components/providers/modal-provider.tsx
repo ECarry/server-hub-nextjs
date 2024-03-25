@@ -7,6 +7,7 @@ import DeleteCollectionModal from "@/components/modals/delete-collection-modal";
 import { RequestContentModal } from "@/components/modals/request-content-modal";
 import { SettingsModal } from "@/components/modals/settings-modal";
 import DeleteUserModal from "../modals/delete-user-modal";
+import { CreateManufacturerModal } from "../modals/create-manufacturer-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -27,6 +28,7 @@ export const ModalProvider = () => {
       <RequestContentModal />
       <SettingsModal />
       <DeleteUserModal />
+      <CreateManufacturerModal />
     </>
   );
 };
