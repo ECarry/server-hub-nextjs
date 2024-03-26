@@ -11,7 +11,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { getManufacturers } from "@/data/product";
+import { getInfrastructures, getManufacturers } from "@/data/product";
 
 export const metadata: Metadata = {
   title: "Create Product",
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 
 const page = async () => {
   const manufacturers = await getManufacturers();
+  const infrastructures = await getInfrastructures();
 
-  console.log(manufacturers);
-  
+  console.log({ manufacturers, infrastructures });
 
   return (
     <div className="space-y-4">
@@ -44,7 +44,10 @@ const page = async () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <ProductForm manufacturers={manufacturers} />
+      <ProductForm
+        manufacturers={manufacturers}
+        infrastructures={infrastructures}
+      />
     </div>
   );
 };

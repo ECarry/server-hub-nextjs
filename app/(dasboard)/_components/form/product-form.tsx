@@ -28,7 +28,7 @@ import FileUpload from "@/components/file-upload";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/hooks/use-modal-store";
-import { Manufacturer } from "@prisma/client";
+import { Infrastructure, Manufacturer } from "@prisma/client";
 
 const ImgSchema = z.object({
   fileName: z.string(),
@@ -78,9 +78,10 @@ type ProfileFormValues = z.infer<typeof productFormSchema>;
 
 interface ProductFormProps {
   manufacturers: Manufacturer[] | undefined;
+  infrastructures: Infrastructure[] | undefined;
 }
 
-const ProductForm = ({ manufacturers }: ProductFormProps) => {
+const ProductForm = ({ manufacturers, infrastructures }: ProductFormProps) => {
   const { onOpen } = useModal();
 
   const form = useForm<ProfileFormValues>({
@@ -236,15 +237,23 @@ const ProductForm = ({ manufacturers }: ProductFormProps) => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="m@example.com">
-                              m@example.com
-                            </SelectItem>
+                            {infrastructures?.map((infrastructure) => (
+                              <SelectItem
+                                value={infrastructure.id}
+                                key={infrastructure.id}
+                              >
+                                {infrastructure.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <Button
                           type="button"
                           variant={"outline"}
                           className="flex gap-2"
+                          onClick={() =>
+                            onOpen("createInfrastructure", { manufacturers })
+                          }
                         >
                           <Plus size={16} />
                           New

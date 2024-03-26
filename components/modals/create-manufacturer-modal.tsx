@@ -73,6 +73,7 @@ export function CreateManufacturerModal() {
               </pre>
             ),
           });
+          form.reset();
           onClose();
         }
       });

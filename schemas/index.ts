@@ -58,6 +58,14 @@ export const CreateManufacturerSchema = z.object({
   imageUrl: z.optional(z.string()),
 });
 
+export const CreateInfrastructureSchema = z.object({
+  manufacturerId: z.string(),
+  name: z.string().min(1, {
+    message: "Name is required!",
+  }),
+  imageUrl: z.optional(z.string()),
+});
+
 export const EditCollectionSchema = z.object({
   name: z.optional(z.string()),
   description: z.optional(z.string()),

@@ -27,3 +27,17 @@ export const getManufacturerByName = (name: string) => {
     return null;
   }
 };
+
+export const getInfrastructures = async () => {
+  try {
+    const infrastructures = await db.infrastructure.findMany({
+      include: {
+        Series: true,
+      },
+    });
+
+    return infrastructures;
+  } catch (error) {
+    console.log(error);
+  }
+};

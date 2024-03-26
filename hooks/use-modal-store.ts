@@ -1,4 +1,4 @@
-import { Collection, User } from "@prisma/client";
+import { Collection, Manufacturer, User } from "@prisma/client";
 import { create } from "zustand";
 
 export type ModalType =
@@ -15,6 +15,7 @@ export type ModalType =
 interface ModalData {
   collection?: Collection;
   user?: User;
+  manufacturers?: Manufacturer[];
 }
 
 interface ModalStore {

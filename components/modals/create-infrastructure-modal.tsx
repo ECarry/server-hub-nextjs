@@ -3,10 +3,9 @@
 import { useModal } from "@/hooks/use-modal-store";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { CreateCollectionSchema } from "@/schemas";
+import { CreateInfrastructureSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import { createCollection } from "@/actions/collection";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,38 +26,62 @@ import {
 import { Input } from "@/components/ui/input";
 import FormError from "../auth/form-error";
 import { Loader2 } from "lucide-react";
+import { Textarea } from "../ui/textarea";
+import ImageUpload from "../image-upload";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { CreateInfrastructure } from "@/actions/product";
+import { toast } from "../ui/use-toast";
 
-export default function CreateInfrastructureModal() {
+const CreateInfrastructureModal = () => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
 
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
 
-  const isModalOpen = isOpen && type === "createCollection";
+  const isModalOpen = isOpen && type === "createInfrastructure";
+  const { manufacturers } = data;
 
-  const form = useForm<z.infer<typeof CreateCollectionSchema>>({
-    resolver: zodResolver(CreateCollectionSchema),
+  const form = useForm<z.infer<typeof CreateInfrastructureSchema>>({
+    resolver: zodResolver(CreateInfrastructureSchema),
     defaultValues: {
+      manufacturerId: "",
       name: "",
-      description: "",
+      imageUrl: "",
     },
   });
 
   const handleClose = () => {
+    setError("");
     form.reset();
     onClose();
   };
 
-  const onSubmit = (values: z.infer<typeof CreateCollectionSchema>) => {
+  const onSubmit = (values: z.infer<typeof CreateInfrastructureSchema>) => {
     setError("");
 
     startTransition(() => {
-      createCollection(values).then((data) => {
-        if (data?.error) {
-          setError(data?.error);
-        } else {
-          form.reset();
-          onClose();
+      CreateInfrastructure(values).then((data) => {
+        if (data.error) {
+          setError(data.error);
+        }
+        if (data.success) {
+          toast({
+            title: "New manufacturer created:",
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  {JSON.stringify(values, null, 2)}
+                </code>
+              </pre>
+            ),
+          });
+          handleClose();
         }
       });
     });
@@ -69,7 +92,7 @@ export default function CreateInfrastructureModal() {
       <DialogContent className="sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle className=" text-center text-xl truncate font-semibold">
-            Create new collection
+            Create new Infrastructure
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -77,10 +100,49 @@ export default function CreateInfrastructureModal() {
             <div className="grid gap-4 py-4">
               <FormField
                 control={form.control}
+                name="manufacturerId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Manufacturer
+                      <span className="text-destructive"> *</span>
+                    </FormLabel>
+                    <div className="flex gap-2">
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a manufacturer" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {manufacturers?.map((manufacturer) => (
+                            <SelectItem
+                              value={manufacturer.id}
+                              key={manufacturer.id}
+                            >
+                              {manufacturer.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>
+                      Name
+                      <span className="text-destructive"> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
@@ -96,16 +158,14 @@ export default function CreateInfrastructureModal() {
 
               <FormField
                 control={form.control}
-                name="description"
+                name="imageUrl"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>Logo (optional)</FormLabel>
                     <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Enter description"
-                        disabled={isPending}
-                        className="rounded-2xl bg-primary-foreground"
+                      <ImageUpload
+                        value={field.value || ""}
+                        onChange={field.onChange}
                       />
                     </FormControl>
                     <FormMessage />
@@ -117,7 +177,13 @@ export default function CreateInfrastructureModal() {
             <FormError message={error} />
 
             <DialogFooter className="flex justify-between w-full mt-4">
-              <Button variant="outline" className="w-full" disabled={isPending}>
+              <Button
+                variant="outline"
+                type="button"
+                className="w-full"
+                disabled={isPending}
+                onClick={handleClose}
+              >
                 Cancel
               </Button>
               <Button type="submit" className="w-full" disabled={isPending}>
@@ -133,4 +199,6 @@ export default function CreateInfrastructureModal() {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default CreateInfrastructureModal;
