@@ -29,7 +29,7 @@ import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/hooks/use-modal-store";
 import { Infrastructure, Manufacturer, Series } from "@prisma/client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 const ImgSchema = z.object({
   fileName: z.string(),
@@ -65,16 +65,22 @@ const productFormSchema = z.object({
     required_error: "Please select a series.",
   }),
   description: z.optional(z.string()),
-  images: z
-    .array(ImgSchema)
-    .max(20, { message: "You can only add up to 20 images" })
-    .min(1, { message: "At least one image must be added." }),
+  // images: z.optional(
+  //   z
+  //     .array(ImgSchema)
+  //     .max(20, { message: "You can only add up to 20 images" })
+  //     .min(1, { message: "At least one image must be added." })
+  // ),
 });
 
 type ProfileFormValues = z.infer<typeof productFormSchema>;
 
+type ManufacturerWithInfrastructures = Manufacturer & {
+  infrastructures: Infrastructure[];
+};
+
 interface ProductFormProps {
-  manufacturers: Manufacturer[] | undefined;
+  manufacturers: ManufacturerWithInfrastructures[] | undefined;
   infrastructures: Infrastructure[] | undefined;
   series: Series[] | undefined;
 }
@@ -85,6 +91,33 @@ const ProductForm = ({
   series,
 }: ProductFormProps) => {
   const [manufacturerId, setmanufacturerId] = useState<string>("");
+  const [infrastructureId, setInfrastructureId] = useState<string>("");
+
+  const [filterInfrastructures, setFilterInfrastructures] = useState<
+    Infrastructure[]
+  >([]);
+  const [filterSeries, setFilterSeries] = useState<Series[]>([]);
+
+  useEffect(() => {
+    if (manufacturerId) {
+      const filtered = infrastructures?.filter(
+        (infrastructure) => infrastructure.manufacturerId === manufacturerId
+      );
+
+      setFilterInfrastructures(filtered || []);
+    }
+  }, [manufacturerId, infrastructures]);
+
+  useEffect(() => {
+    if (infrastructureId) {
+      const filtered = series?.filter(
+        (item) => item.infrastructureId === infrastructureId
+      );
+
+      setFilterSeries(filtered || []);
+    }
+  }, [infrastructureId, series]);
+
   const { onOpen } = useModal();
 
   const form = useForm<ProfileFormValues>({
@@ -96,7 +129,7 @@ const ProductForm = ({
       seriesId: "",
       manufacturerId: "",
       infrastructureId: "",
-      images: [],
+      //images: [],
     },
   });
 
@@ -188,7 +221,11 @@ const ProductForm = ({
                       </FormLabel>
                       <div className="flex gap-2">
                         <Select
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            setmanufacturerId(value);
+                            field.onChange(value);
+                            setFilterInfrastructures([]);
+                          }}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -235,7 +272,10 @@ const ProductForm = ({
                       </FormLabel>
                       <div className="flex gap-2">
                         <Select
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setInfrastructureId(value);
+                          }}
                           defaultValue={field.value}
                         >
                           <FormControl>
@@ -244,12 +284,9 @@ const ProductForm = ({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {infrastructures?.map((infrastructure) => (
-                              <SelectItem
-                                value={infrastructure.id}
-                                key={infrastructure.id}
-                              >
-                                {infrastructure.name}
+                            {filterInfrastructures.map((item) => (
+                              <SelectItem value={item.id} key={item.id}>
+                                {item.name}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -293,9 +330,9 @@ const ProductForm = ({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {series?.map((se) => (
-                              <SelectItem value={se.id} key={se.id}>
-                                {se.name}
+                            {filterSeries?.map((item) => (
+                              <SelectItem value={item.id} key={item.id}>
+                                {item.name}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -338,7 +375,7 @@ const ProductForm = ({
 
             <div className="grid grid-cols-12 gap-x-4 gap-y-6 col-span-12 md:col-span-6 border p-4 rounded-xl">
               <div className="col-span-12">
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="images"
                   render={({ field }) => (
@@ -357,7 +394,7 @@ const ProductForm = ({
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
               </div>
             </div>
           </div>
