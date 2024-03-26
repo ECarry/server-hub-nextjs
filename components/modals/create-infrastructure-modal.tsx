@@ -26,7 +26,6 @@ import {
 import { Input } from "@/components/ui/input";
 import FormError from "../auth/form-error";
 import { Loader2 } from "lucide-react";
-import { Textarea } from "../ui/textarea";
 import ImageUpload from "../image-upload";
 import {
   Select,

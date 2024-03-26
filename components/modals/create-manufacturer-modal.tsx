@@ -148,7 +148,13 @@ export function CreateManufacturerModal() {
             <FormError message={error} />
 
             <DialogFooter className="flex justify-between w-full mt-4">
-              <Button variant="outline" className="w-full" disabled={isPending}>
+              <Button
+                variant="outline"
+                className="w-full"
+                type="button"
+                onClick={handleClose}
+                disabled={isPending}
+              >
                 Cancel
               </Button>
               <Button type="submit" className="w-full" disabled={isPending}>
