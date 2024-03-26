@@ -9,6 +9,7 @@ import { SettingsModal } from "@/components/modals/settings-modal";
 import DeleteUserModal from "../modals/delete-user-modal";
 import { CreateManufacturerModal } from "../modals/create-manufacturer-modal";
 import CreateInfrastructureModal from "../modals/create-infrastructure-modal";
+import CreateSeriesModal from "../modals/create-series-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -31,6 +32,7 @@ export const ModalProvider = () => {
       <DeleteUserModal />
       <CreateManufacturerModal />
       <CreateInfrastructureModal />
+      <CreateSeriesModal />
     </>
   );
 };

@@ -28,7 +28,8 @@ import FileUpload from "@/components/file-upload";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/hooks/use-modal-store";
-import { Infrastructure, Manufacturer } from "@prisma/client";
+import { Infrastructure, Manufacturer, Series } from "@prisma/client";
+import { useEffect, useMemo, useState } from "react";
 
 const ImgSchema = z.object({
   fileName: z.string(),
@@ -58,13 +59,9 @@ const productFormSchema = z.object({
     .max(30, {
       message: "Name must not be longer than 30 characters.",
     }),
-  manufacturer: z.string({
-    required_error: "Please select a manufacturer.",
-  }),
-  infrastructure: z.string({
-    required_error: "Please select a infrastructure.",
-  }),
-  series: z.string({
+  manufacturerId: z.string({}),
+  infrastructureId: z.string({}),
+  seriesId: z.string({
     required_error: "Please select a series.",
   }),
   description: z.optional(z.string()),
@@ -79,9 +76,15 @@ type ProfileFormValues = z.infer<typeof productFormSchema>;
 interface ProductFormProps {
   manufacturers: Manufacturer[] | undefined;
   infrastructures: Infrastructure[] | undefined;
+  series: Series[] | undefined;
 }
 
-const ProductForm = ({ manufacturers, infrastructures }: ProductFormProps) => {
+const ProductForm = ({
+  manufacturers,
+  infrastructures,
+  series,
+}: ProductFormProps) => {
+  const [manufacturerId, setmanufacturerId] = useState<string>("");
   const { onOpen } = useModal();
 
   const form = useForm<ProfileFormValues>({
@@ -89,6 +92,10 @@ const ProductForm = ({ manufacturers, infrastructures }: ProductFormProps) => {
     defaultValues: {
       name: "",
       slug: "",
+      description: "",
+      seriesId: "",
+      manufacturerId: "",
+      infrastructureId: "",
       images: [],
     },
   });
@@ -172,7 +179,7 @@ const ProductForm = ({ manufacturers, infrastructures }: ProductFormProps) => {
               <div className="col-span-12">
                 <FormField
                   control={form.control}
-                  name="manufacturer"
+                  name="manufacturerId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
@@ -219,7 +226,7 @@ const ProductForm = ({ manufacturers, infrastructures }: ProductFormProps) => {
               <div className="col-span-12">
                 <FormField
                   control={form.control}
-                  name="infrastructure"
+                  name="infrastructureId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
@@ -268,7 +275,7 @@ const ProductForm = ({ manufacturers, infrastructures }: ProductFormProps) => {
               <div className="col-span-12">
                 <FormField
                   control={form.control}
-                  name="series"
+                  name="seriesId"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
@@ -286,15 +293,20 @@ const ProductForm = ({ manufacturers, infrastructures }: ProductFormProps) => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="m@example.com">
-                              m@example.com
-                            </SelectItem>
+                            {series?.map((se) => (
+                              <SelectItem value={se.id} key={se.id}>
+                                {se.name}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <Button
                           type="button"
                           variant={"outline"}
                           className="flex gap-2"
+                          onClick={() =>
+                            onOpen("createSeries", { infrastructures })
+                          }
                         >
                           <Plus size={16} />
                           New

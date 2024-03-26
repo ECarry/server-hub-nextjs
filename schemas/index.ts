@@ -66,6 +66,14 @@ export const CreateInfrastructureSchema = z.object({
   imageUrl: z.optional(z.string()),
 });
 
+export const CreateSeriesSchema = z.object({
+  infrastructureId: z.string(),
+  name: z.string().min(1, {
+    message: "Name is required!",
+  }),
+  imageUrl: z.optional(z.string()),
+});
+
 export const EditCollectionSchema = z.object({
   name: z.optional(z.string()),
   description: z.optional(z.string()),

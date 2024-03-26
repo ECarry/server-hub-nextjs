@@ -41,3 +41,13 @@ export const getInfrastructures = async () => {
     console.log(error);
   }
 };
+
+export const getSeries = async () => {
+  try {
+    const series = await db.series.findMany({});
+
+    return series;
+  } catch (error) {
+    console.log(error);
+  }
+};

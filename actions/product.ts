@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import {
   CreateInfrastructureSchema,
   CreateManufacturerSchema,
+  CreateSeriesSchema,
 } from "@/schemas";
 import { revalidatePath } from "next/cache";
 import * as z from "zod";
@@ -77,6 +78,41 @@ export const CreateInfrastructure = async (
     revalidatePath("/dashboard", "layout");
 
     return { success: "Infrastructure created" };
+  } catch (error) {
+    console.log(error);
+
+    return { error: "Something wrong!" };
+  }
+};
+
+export const CreateSeries = async (
+  values: z.infer<typeof CreateSeriesSchema>
+) => {
+  const validatedFields = CreateSeriesSchema.safeParse(values);
+  const user = await currentUser();
+
+  if (!validatedFields.success) {
+    return { error: "Invalid fields" };
+  }
+
+  if (!user) {
+    return { error: "Not logged in" };
+  }
+
+  if (user.role !== "ADMIN") {
+    return { error: "Not authorized" };
+  }
+
+  try {
+    await db.series.create({
+      data: {
+        ...values,
+      },
+    });
+
+    revalidatePath("/dashboard", "layout");
+
+    return { success: "Series created" };
   } catch (error) {
     console.log(error);
 

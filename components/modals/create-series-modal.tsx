@@ -3,10 +3,9 @@
 import { useModal } from "@/hooks/use-modal-store";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { CreateCollectionSchema } from "@/schemas";
+import { CreateCollectionSchema, CreateSeriesSchema } from "@/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import { createCollection } from "@/actions/collection";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,6 +15,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import {
   Form,
   FormControl,
@@ -27,20 +33,23 @@ import {
 import { Input } from "@/components/ui/input";
 import FormError from "../auth/form-error";
 import { Loader2 } from "lucide-react";
+import { CreateSeries } from "@/actions/product";
+import { toast } from "../ui/use-toast";
 
 export default function CreateSeriesModal() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>();
 
-  const { isOpen, onClose, type } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
 
-  const isModalOpen = isOpen && type === "createCollection";
+  const { infrastructures } = data;
 
-  const form = useForm<z.infer<typeof CreateCollectionSchema>>({
-    resolver: zodResolver(CreateCollectionSchema),
+  const isModalOpen = isOpen && type === "createSeries";
+
+  const form = useForm<z.infer<typeof CreateSeriesSchema>>({
+    resolver: zodResolver(CreateSeriesSchema),
     defaultValues: {
       name: "",
-      description: "",
     },
   });
 
@@ -49,16 +58,27 @@ export default function CreateSeriesModal() {
     onClose();
   };
 
-  const onSubmit = (values: z.infer<typeof CreateCollectionSchema>) => {
+  const onSubmit = (values: z.infer<typeof CreateSeriesSchema>) => {
     setError("");
 
     startTransition(() => {
-      createCollection(values).then((data) => {
-        if (data?.error) {
-          setError(data?.error);
-        } else {
-          form.reset();
-          onClose();
+      CreateSeries(values).then((data) => {
+        if (data.error) {
+          setError(data.error);
+        }
+
+        if (data.success) {
+          toast({
+            title: "New series created:",
+            description: (
+              <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                <code className="text-white">
+                  {JSON.stringify(values, null, 2)}
+                </code>
+              </pre>
+            ),
+          });
+          handleClose();
         }
       });
     });
@@ -69,7 +89,7 @@ export default function CreateSeriesModal() {
       <DialogContent className="sm:max-w-[560px]">
         <DialogHeader>
           <DialogTitle className=" text-center text-xl truncate font-semibold">
-            Create new collection
+            Create new Series
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -77,18 +97,35 @@ export default function CreateSeriesModal() {
             <div className="grid gap-4 py-4">
               <FormField
                 control={form.control}
-                name="name"
+                name="infrastructureId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="Enter name"
-                        disabled={isPending}
-                        className="rounded-2xl bg-primary-foreground"
-                      />
-                    </FormControl>
+                    <FormLabel>
+                      Infrastructure
+                      <span className="text-destructive"> *</span>
+                    </FormLabel>
+                    <div className="flex gap-2">
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a infrastructure" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {infrastructures?.map((infrastructure) => (
+                            <SelectItem
+                              value={infrastructure.id}
+                              key={infrastructure.id}
+                            >
+                              {infrastructure.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -96,14 +133,17 @@ export default function CreateSeriesModal() {
 
               <FormField
                 control={form.control}
-                name="description"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>
+                      Name
+                      <span className="text-destructive"> *</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="Enter description"
+                        placeholder="Enter name"
                         disabled={isPending}
                         className="rounded-2xl bg-primary-foreground"
                       />
