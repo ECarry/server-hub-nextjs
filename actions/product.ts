@@ -7,6 +7,7 @@ import {
   CreateInfrastructureSchema,
   CreateManufacturerSchema,
   CreateSeriesSchema,
+  productFormSchema,
 } from "@/schemas";
 import { revalidatePath } from "next/cache";
 import * as z from "zod";
@@ -113,6 +114,54 @@ export const CreateSeries = async (
     revalidatePath("/dashboard", "layout");
 
     return { success: "Series created" };
+  } catch (error) {
+    console.log(error);
+
+    return { error: "Something wrong!" };
+  }
+};
+
+export const CreateProudct = async (
+  values: z.infer<typeof productFormSchema>
+) => {
+  const validatedFields = productFormSchema.safeParse(values);
+  const user = await currentUser();
+
+  if (!validatedFields.success) {
+    return { error: "Invalid fields" };
+  }
+
+  if (!user) {
+    return { error: "Not logged in" };
+  }
+
+  if (user.role !== "ADMIN") {
+    return { error: "Not authorized" };
+  }
+
+  const existingProuct = await db.product.findFirst({
+    where: {
+      slug: values.slug,
+    },
+  });
+
+  if (!!existingProuct) {
+    return { error: "Product already exists" };
+  }
+
+  try {
+    await db.product.create({
+      data: {
+        name: values.name,
+        slug: values.slug,
+        description: values.description,
+        seriesId: values.seriesId,
+      },
+    });
+
+    revalidatePath("/dashboard", "layout");
+
+    return { success: "Product created" };
   } catch (error) {
     console.log(error);
 

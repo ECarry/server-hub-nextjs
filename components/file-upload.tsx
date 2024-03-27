@@ -35,6 +35,7 @@ export default function FileUpload({
 
   const onUpdateFile = (newFiles: UploadFileResponse[]) => {
     onChange([...value, ...newFiles]);
+    console.log([...value, ...newFiles]);
   };
   return (
     <div>
@@ -85,6 +86,10 @@ export default function FileUpload({
               },
             }}
             onClientUploadComplete={(res) => {
+              console.log({
+                UploadRes: res,
+              });
+
               // Do something with the response
               const data: UploadFileResponse[] | undefined = res;
               if (data) {

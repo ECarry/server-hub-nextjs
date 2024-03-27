@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import { columns } from "@/app/(dasboard)/_components/table/columns";
 import DataTable from "@/app/(dasboard)/_components/table/data-table";
 import { Heading } from "@/components/ui/heading";
+import { getAllProucts } from "@/data/product";
 
 export const metadata: Metadata = {
   title: "Products",
@@ -791,7 +792,13 @@ const tasks = [
   },
 ];
 
-const ProductsPage = () => {
+const ProductsPage = async () => {
+  const products = await getAllProucts();
+
+  console.log({
+    PRODUCTS: products,
+  });
+
   return (
     <div className="space-y-4">
       <Heading title={"Products"} description={"Manage products"} />

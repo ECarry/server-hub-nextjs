@@ -51,3 +51,13 @@ export const getSeries = async () => {
     console.log(error);
   }
 };
+
+export const getAllProucts = async () => {
+  try {
+    const products = await db.product.findMany({});
+
+    return products;
+  } catch (error) {
+    console.log(error);
+  }
+};

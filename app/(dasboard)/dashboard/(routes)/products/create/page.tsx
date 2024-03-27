@@ -26,8 +26,6 @@ const page = async () => {
   const infrastructures = await getInfrastructures();
   const series = await getSeries();
 
-  console.log({ manufacturers, infrastructures, series });
-
   return (
     <div className="space-y-4">
       <Breadcrumb>

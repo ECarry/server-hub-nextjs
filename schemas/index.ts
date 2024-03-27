@@ -74,6 +74,35 @@ export const CreateSeriesSchema = z.object({
   imageUrl: z.optional(z.string()),
 });
 
+export const productFormSchema = z.object({
+  name: z
+    .string()
+    .min(2, {
+      message: "Name must be at least 2 characters.",
+    })
+    .max(30, {
+      message: "Name must not be longer than 30 characters.",
+    }),
+  slug: z
+    .string()
+    .min(2, {
+      message: "Name must be at least 2 characters.",
+    })
+    .max(30, {
+      message: "Name must not be longer than 30 characters.",
+    }),
+  manufacturerId: z.string().min(1, {
+    message: "Please select a manufacturer.",
+  }),
+  infrastructureId: z.string().min(1, {
+    message: "Please select a infrastructure.",
+  }),
+  seriesId: z.string().min(1, {
+    message: "Please select a series.",
+  }),
+  description: z.optional(z.string()),
+});
+
 export const EditCollectionSchema = z.object({
   name: z.optional(z.string()),
   description: z.optional(z.string()),

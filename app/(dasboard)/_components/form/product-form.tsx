@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { set, z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -30,50 +30,11 @@ import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/hooks/use-modal-store";
 import { Infrastructure, Manufacturer, Series } from "@prisma/client";
 import { useEffect, useState } from "react";
+import { productFormSchema } from "@/schemas";
+import FormError from "@/components/auth/form-error";
+import { CreateProudct } from "@/actions/product";
 
-const ImgSchema = z.object({
-  fileName: z.string(),
-  name: z.string(),
-  fileSize: z.number(),
-  size: z.number(),
-  fileKey: z.string(),
-  key: z.string(),
-  fileUrl: z.string(),
-  url: z.string(),
-});
-
-const productFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Name must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Name must not be longer than 30 characters.",
-    }),
-  slug: z
-    .string()
-    .min(2, {
-      message: "Name must be at least 2 characters.",
-    })
-    .max(30, {
-      message: "Name must not be longer than 30 characters.",
-    }),
-  manufacturerId: z.string({}),
-  infrastructureId: z.string({}),
-  seriesId: z.string({
-    required_error: "Please select a series.",
-  }),
-  description: z.optional(z.string()),
-  // images: z.optional(
-  //   z
-  //     .array(ImgSchema)
-  //     .max(20, { message: "You can only add up to 20 images" })
-  //     .min(1, { message: "At least one image must be added." })
-  // ),
-});
-
-type ProfileFormValues = z.infer<typeof productFormSchema>;
+type FormValues = z.infer<typeof productFormSchema>;
 
 type ManufacturerWithInfrastructures = Manufacturer & {
   infrastructures: Infrastructure[];
@@ -90,6 +51,7 @@ const ProductForm = ({
   infrastructures,
   series,
 }: ProductFormProps) => {
+  const [error, setError] = useState<string | undefined>();
   const [manufacturerId, setmanufacturerId] = useState<string>("");
   const [infrastructureId, setInfrastructureId] = useState<string>("");
 
@@ -120,7 +82,7 @@ const ProductForm = ({
 
   const { onOpen } = useModal();
 
-  const form = useForm<ProfileFormValues>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {
       name: "",
@@ -129,7 +91,6 @@ const ProductForm = ({
       seriesId: "",
       manufacturerId: "",
       infrastructureId: "",
-      //images: [],
     },
   });
 
@@ -138,14 +99,26 @@ const ProductForm = ({
     form.setValue("slug", name.slice(0, 30).replace(/\s/g, "-").toLowerCase());
   };
 
-  const onSubmit = (data: ProfileFormValues) => {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+  const onSubmit = (data: FormValues) => {
+    setError("");
+    // toast({
+    //   title: "You submitted the following values:",
+    //   description: (
+    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+    //     </pre>
+    //   ),
+    // });
+
+    CreateProudct(data).then((data) => {
+      if (data.error) {
+        setError(data.error);
+      }
+      if (data.success) {
+        toast({
+          title: data.success,
+        });
+      }
     });
   };
 
@@ -387,7 +360,7 @@ const ProductForm = ({
                       <FormControl>
                         <FileUpload
                           onChange={field.onChange}
-                          value={field.value}
+                          value={field.value || []}
                           onRemove={field.onChange}
                         />
                       </FormControl>
@@ -399,6 +372,7 @@ const ProductForm = ({
             </div>
           </div>
 
+          <FormError message={error} />
           <Button type="submit" className="col-span-4 md:col-span-2">
             Save changes
           </Button>
