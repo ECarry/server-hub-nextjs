@@ -33,3 +33,18 @@ export const getAllUsers = async () => {
     return null;
   }
 };
+
+export const getNumberOfUsers = async (count: number) => {
+  try {
+    const users = await db.user.findMany({
+      orderBy: {
+        name: "asc",
+      },
+      take: count,
+    });
+
+    return users;
+  } catch (error) {
+    return [];
+  }
+};

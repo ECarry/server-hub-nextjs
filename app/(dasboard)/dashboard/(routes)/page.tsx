@@ -1,16 +1,10 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Overview } from "../../_components/overview";
 import { RecentUsers } from "../../_components/recent-users";
-import { getAllUsers } from "@/data/user";
+import { getNumberOfUsers } from "@/data/user";
 
 const DashboardPage = async () => {
-  const users = await getAllUsers();
+  const users = await getNumberOfUsers(5);
 
   return (
     <div className="space-y-4">
