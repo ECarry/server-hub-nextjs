@@ -1,9 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-
 import IBM from "/public/images/IBM.svg";
 import HP from "/public/images/HP.png";
 import DELL from "/public/images/DELL.png";
@@ -19,7 +20,15 @@ const Hero = () => {
         fill="white"
       />
       <div className="flex h-full w-full flex-col items-center justify-between pb-6 pt-10 md:absolute md:pt-[60px]">
-        <div className="absolute -bottom-10 -z-10 hidden w-full min-w-[1440px] flex-row justify-between md:flex md:px-24 lg:px-8 xl:px-20">
+        <motion.div
+          initial={{ opacity: 0.0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="absolute -bottom-10 -z-10 hidden w-full min-w-[1440px] flex-row justify-between md:flex md:px-24 lg:px-8 xl:px-20"
+        >
           {/* LEFT ICONS */}
           <div className="grid aspect-square grid-cols-3 gap-5">
             <div className="relative col-span-3 w-fit overflow-hidden rounded-[40px] after:absolute after:inset-0 after:rounded-40 after:shadow-logo-inset ">
@@ -56,9 +65,18 @@ const Hero = () => {
               <Image src={HP} width={140} alt="logo" />
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="flex max-w-[355px] flex-col text-balance items-center justify-center gap-4 md:max-w-fit md:gap-4 md:px-4 mt-8">
+        <motion.div
+          initial={{ opacity: 0.0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: 0.2,
+            duration: 0.8,
+            ease: "easeInOut",
+          }}
+          className="flex max-w-[355px] flex-col text-balance items-center justify-center gap-4 md:max-w-fit md:gap-4 md:px-4 mt-8"
+        >
           <Badge className="bg-[#aae1ff] text-xs text-[#0075c4] font-medium py-1">
             COMMING SONG...
           </Badge>
@@ -77,7 +95,7 @@ const Hero = () => {
               <ShimmerButton label="Create free account" />
             </Link>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
