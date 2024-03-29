@@ -135,6 +135,11 @@ model Series {
   infrastructureId String // 每个 Series 都关联到一个 Infrastructure
 }
 
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+}
+
 model Product {
   id   String @id @default(uuid()) @map("_id")
   name String
@@ -144,6 +149,11 @@ model Product {
 
   seriesId String?
   series   Series? @relation(fields: [seriesId], references: [id])
+
+  createTime DateTime @default(now()) @map("create_time")
+  updateTime DateTime @default(now()) @updatedAt @map("update_time")
+
+  status ProductStatus @default(DRAFT)
 
   pdfs   Pdf[]
   posts  Post[]

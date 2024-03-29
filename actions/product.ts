@@ -156,6 +156,7 @@ export const CreateProudct = async (
         slug: values.slug,
         description: values.description,
         seriesId: values.seriesId,
+        status: values.status,
       },
     });
 

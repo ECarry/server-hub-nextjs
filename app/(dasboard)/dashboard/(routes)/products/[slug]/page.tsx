@@ -1,7 +1,10 @@
-import React from "react";
-
-const ProudctEditPage = () => {
-  return <div>ProudctEditPage</div>;
+interface ProudctEditPageProps {
+  params: {
+    slug: string;
+  };
+}
+const ProudctEditPage = ({ params }: ProudctEditPageProps) => {
+  return <div>{params.slug}</div>;
 };
 
 export default ProudctEditPage;

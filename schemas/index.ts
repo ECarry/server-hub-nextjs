@@ -101,6 +101,7 @@ export const productFormSchema = z.object({
     message: "Please select a series.",
   }),
   description: z.optional(z.string()),
+  status: z.enum(["DRAFT", "ACTIVE"]),
 });
 
 export const EditCollectionSchema = z.object({
