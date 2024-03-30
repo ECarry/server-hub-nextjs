@@ -61,3 +61,18 @@ export const getAllProucts = async () => {
     console.log(error);
   }
 };
+
+export const getProductBySlug = async (slug: string) => {
+  try {
+    const product = await db.product.findFirst({
+      where: {
+        slug,
+      },
+    });
+
+    return product;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
