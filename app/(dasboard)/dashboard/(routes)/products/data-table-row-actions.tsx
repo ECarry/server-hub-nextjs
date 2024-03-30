@@ -8,22 +8,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { Product } from "@prisma/client";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 
-export function DataTableRowActions<TData>({
+export function DataTableRowActions<TData extends Product>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const { original } = row;
@@ -43,14 +37,9 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem>
-          <Link href={`/dasboard/products/${""}`}>Edit</Link>
+          <Link href={`/dashboard/products/${original.slug}`}>Edit</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuItem>
-          Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-        </DropdownMenuItem>
+        <DropdownMenuItem>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
