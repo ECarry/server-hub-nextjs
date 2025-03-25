@@ -3,7 +3,6 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db"; // your drizzle instance
 import { admin } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
-import { emailOTP } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -17,14 +16,10 @@ export const auth = betterAuth({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    },
   },
-  plugins: [
-    admin(),
-    passkey(),
-    emailOTP({
-      async sendVerificationOTP() {
-        // Implement the sendVerificationOTP method to send the OTP to the user's email address
-      },
-    }),
-  ],
+  plugins: [admin(), passkey()],
 });

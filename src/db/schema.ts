@@ -4,7 +4,11 @@ import {
   integer,
   timestamp,
   boolean,
+  pgEnum,
 } from "drizzle-orm/pg-core";
+
+// Role Type
+export const roleType = pgEnum("role_type", ["admin", "user", "plus"]);
 
 // Auth Schema
 export const user = pgTable("user", {
@@ -15,7 +19,7 @@ export const user = pgTable("user", {
   image: text("image"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
-  role: text("role"),
+  role: roleType("role").notNull().default("user"),
   banned: boolean("banned"),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
