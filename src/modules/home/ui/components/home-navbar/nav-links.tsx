@@ -2,36 +2,29 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 
-const links = [
-  { name: "Servers", path: "/servers" },
-  { name: "Storage", path: "/storage" },
-  { name: "Networking", path: "/networking" },
-];
+const menus = [{ name: "Home", link: "/" }];
 
 export const NavLinks = () => {
-  const params = useParams<{ category: string; manufacturer: string }>();
-
   return (
     <>
-      {links.map((link) => (
+      {menus.map((menu) => (
         <Button
-          key={link.path}
+          key={menu.link}
           variant="link"
           size="lg"
           className="px-0"
           asChild
         >
           <Link
-            href={link.path + "/" + params.manufacturer}
+            href={menu.link}
             className={
-              link.path === `/${params.category}`
+              menu.link === "/"
                 ? "text-primary"
                 : "text-muted-foreground hover:text-primary"
             }
           >
-            {link.name}
+            {menu.name}
           </Link>
         </Button>
       ))}

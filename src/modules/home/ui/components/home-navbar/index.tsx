@@ -1,13 +1,17 @@
 import Link from "next/link";
 import { NavLinks } from "./nav-links";
 import { NavMenu } from "./nav-menu";
-//import { Button } from "@/components/ui/button";
 import { SearchButtonNav } from "./search-button-nav";
+import { getCurrentUser } from "@/modules/auth/lib/get-current-user";
+import { Button } from "@/components/ui/button";
+import { UserAvatar } from "@/components/user-avatar";
 
-export const HomeNavbar = () => {
+export const HomeNavbar = async () => {
+  const { user } = await getCurrentUser();
+
   return (
     <header className="z-50 sticky top-0 flex h-[100px] border-b md:border-transparent md:h-[72px] bg-background">
-      <div className="w-full grid grid-cols-[min-content_auto_min-content] grid-rows-[1fr_auto] items-center gap-x-2 md:grid-cols-[1fr_minmax(auto,500px)_1fr] lg:grid-rows-1 marge-x">
+      <div className="w-full grid grid-cols-[min-content_auto_min-content] grid-rows-[1fr_auto] items-center gap-x-2 md:grid-cols-[1fr_minmax(auto,500px)_1fr] lg:grid-rows-1 px-5 sm:px-6 md:px-8 lg:px-12 xl:px-20">
         <div className="flex items-center gap-7">
           <Link href="/" className="flex items-center">
             Logo
@@ -23,18 +27,7 @@ export const HomeNavbar = () => {
 
         <div className="shrink-0 items-end">
           <div className="flex flex-row items-center justify-end gap-3">
-            <div className="hidden lg:flex flex-row items-center gap-3">
-              {/* {user && user.role === "ADMIN" && (
-                <Button variant="ghost" size="lg" asChild>
-                  <Link href="/dashboard">
-                    Dashboard
-                    <Icons.arrowUpRight className="size-5" />
-                  </Link>
-                </Button>
-              )} */}
-            </div>
-
-            {/* {!user && (
+            {!user ? (
               <div className="hidden lg:flex flex-row items-center gap-3">
                 <Button variant="ghost" size="lg" asChild>
                   <Link href="/auth/login">Log in</Link>
@@ -43,7 +36,9 @@ export const HomeNavbar = () => {
                   <Link href="/auth/register">Create free account</Link>
                 </Button>
               </div>
-            )} */}
+            ) : (
+              <UserAvatar name={user.name} imageUrl={user.image || ""} />
+            )}
             <NavMenu />
           </div>
         </div>

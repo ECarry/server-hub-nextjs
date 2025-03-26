@@ -13,7 +13,7 @@ export function SearchButtonNav() {
       asChild
     >
       <div>
-        <div className="flex items-center gap-x-2 px-4">
+        <div className="flex items-center gap-x-2">
           <Search className=" size-4 md:size-5" />
           <span className="text-sm sm:text-base text-muted-foreground/80">
             Search...

@@ -1,7 +1,14 @@
-import React from "react";
+import { HydrateClient } from "@/trpc/server";
+import { HomeView } from "@/modules/home/ui/views/home-view";
 
-const HomePage = () => {
-  return <div>home page</div>;
+export const dynamic = "force-dynamic";
+
+const page = async () => {
+  return (
+    <HydrateClient>
+      <HomeView />
+    </HydrateClient>
+  );
 };
 
-export default HomePage;
+export default page;
