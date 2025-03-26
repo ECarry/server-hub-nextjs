@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   pgTable,
   text,
@@ -5,12 +6,16 @@ import {
   timestamp,
   boolean,
   pgEnum,
+  uuid,
 } from "drizzle-orm/pg-core";
 
 // Role Type
-export const roleType = pgEnum("role_type", ["admin", "user", "plus"]);
+export const roleType = pgEnum("role_type", ["admin", "user", "pro"]);
 
-// Auth Schema
+/* Auth Schema
+ *
+ *
+ */
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -80,3 +85,100 @@ export const passkey = pgTable("passkey", {
   transports: text("transports"),
   createdAt: timestamp("created_at"),
 });
+
+/* Product Schema
+ *  Brand Table
+ *  -- DELL IBM HP...
+ *  Category Table
+ *  -- Servers storages Networks...
+ *  Product Table
+ * -- R740 DL388...
+ */
+
+// ⌚️ Reusable timestamps - Define once, use everywhere!
+export const timestamps = {
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+};
+
+export const server_type = pgEnum("server_type", ["tower", "rack", "blade"]);
+
+export const brands = pgTable("brands", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  logo: text("logo"),
+  ...timestamps,
+});
+
+export const brandsRelations = relations(brands, ({ many }) => ({
+  products: many(products),
+}));
+
+export const productsCategories = pgTable("products_categories", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  ...timestamps,
+});
+
+export const productsCategoriesRelations = relations(
+  productsCategories,
+  ({ many }) => ({
+    products: many(products),
+  })
+);
+
+export const products = pgTable("products", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  serverType: server_type("server_type"),
+  brandId: text("brand_id")
+    .notNull()
+    .references(() => brands.id),
+  categoryId: text("category_id")
+    .notNull()
+    .references(() => productsCategories.id),
+  ...timestamps,
+});
+
+export const productsRelations = relations(products, ({ one, many }) => ({
+  brand: one(brands, {
+    fields: [products.brandId],
+    references: [brands.id],
+  }),
+  categories: one(productsCategories, {
+    fields: [products.categoryId],
+    references: [productsCategories.id],
+  }),
+  downloads: many(downloads),
+}));
+
+/* Document Schema
+ *  Document Table
+ *  -- Document Type
+ *  -- Document Status
+ *  -- Document File
+ */
+
+/* Download Schema
+ *  Download Table
+ */
+
+export const downloads = pgTable("downloads", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  version: text("version"),
+  fileSize: text("file_size"),
+  url: text("url"),
+  productId: text("product_id")
+    .notNull()
+    .references(() => products.id),
+  ...timestamps,
+});
+
+export const downloadsRelations = relations(downloads, ({ many }) => ({
+  products: many(products),
+}));
