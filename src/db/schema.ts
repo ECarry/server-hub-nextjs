@@ -194,14 +194,19 @@ export const download_type = pgEnum("download_type", [
 export const brands = pgTable("brands", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
+  fullName: text("full_name"),
   description: text("description"),
-  logo: text("logo"),
+  brandLogo: text("brand_logo"),
   ...timestamps,
 });
 
 export const brandsRelations = relations(brands, ({ many }) => ({
   products: many(products),
 }));
+
+export const brandsInsertSchema = createInsertSchema(brands);
+export const brandsSelectSchema = createSelectSchema(brands);
+export const brandsUpdateSchema = createUpdateSchema(brands);
 
 export const productsCategories = pgTable("products_categories", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -217,16 +222,18 @@ export const productsCategoriesRelations = relations(
   })
 );
 
+export const ProductVisibility = pgEnum("visibility", ["public", "private"]);
+
 export const products = pgTable("products", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
   model: text("model"),
   description: text("description"),
+  visibility: ProductVisibility("visibility").default("private").notNull(),
   serverType: server_type("server_type"),
   storageType: storage_type("storage_type"),
   networkType: network_type("network_type"),
   releaseYear: integer("release_year"),
-  endOfSupport: timestamp("end_of_support"),
   specifications: text("specifications"),
   imageUrl: text("image_url"),
   features: text("features").array(),

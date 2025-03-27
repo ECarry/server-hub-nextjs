@@ -11,8 +11,13 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { LogOutIcon, VideoIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
+
+// Icons
+import { FaBold } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
+import { HiMiniServerStack } from "react-icons/hi2";
+import { IoLogOut } from "react-icons/io5";
 
 export const DashboardSidebar = () => {
   const pathname = usePathname();
@@ -25,13 +30,39 @@ export const DashboardSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  tooltip="Exit Studio"
-                  isActive={pathname === "/studio"}
+                  tooltip="Dashboard"
+                  isActive={pathname === "/dashboard"}
                   asChild
                 >
-                  <Link href="/studio" className="flex items-center gap-4">
-                    <VideoIcon className="size-4" />
-                    <span className="text-sm">Content</span>
+                  <Link href="/dashboard" className="flex items-center gap-4">
+                    <MdDashboard className="size-4" />
+                    <span className="text-sm">Dashboard</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip="Brands"
+                  isActive={pathname === "/brands"}
+                  asChild
+                >
+                  <Link href="/brands" className="flex items-center gap-4">
+                    <FaBold className="size-4" />
+                    <span className="text-sm">Brands</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip="Products"
+                  isActive={pathname === "/products"}
+                  asChild
+                >
+                  <Link href="/products" className="flex items-center gap-4">
+                    <HiMiniServerStack className="size-4" />
+                    <span className="text-sm">Products</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -41,10 +72,10 @@ export const DashboardSidebar = () => {
               </div>
 
               <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Exit Studio" asChild>
+                <SidebarMenuButton tooltip="Exit dashboard" asChild>
                   <Link href="/" className="flex items-center gap-4">
-                    <LogOutIcon className="size-4" />
-                    <span className="text-sm">Exit Studio</span>
+                    <IoLogOut className="size-4" />
+                    <span className="text-sm">Exit dashboard</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
