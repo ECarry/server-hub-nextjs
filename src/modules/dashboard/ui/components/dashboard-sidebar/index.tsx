@@ -3,7 +3,6 @@
 import * as React from "react";
 import {
   IconCamera,
-  IconChartBar,
   IconDashboard,
   IconDatabase,
   IconFileAi,
@@ -11,10 +10,11 @@ import {
   IconFileWord,
   IconHelp,
   IconInnerShadowTop,
-  IconListDetails,
   IconReport,
   IconSearch,
   IconSettings,
+  IconBold,
+  IconServer,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "@/modules/dashboard/ui/components/dashboard-sidebar/nav-documents";
@@ -30,13 +30,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useSession } from "@/modules/auth/lib/auth-client";
+import Link from "next/link";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -46,12 +43,12 @@ const data = {
     {
       title: "Brands",
       url: "/brands",
-      icon: IconListDetails,
+      icon: IconBold,
     },
     {
       title: "Products",
       url: "/products",
-      icon: IconChartBar,
+      icon: IconServer,
     },
   ],
   navClouds: [
@@ -141,6 +138,14 @@ const data = {
 export const DashboardSidebar = ({
   ...props
 }: React.ComponentProps<typeof Sidebar>) => {
+  const { data: session, isPending } = useSession();
+
+  const user = {
+    name: session?.user?.name,
+    email: session?.user?.email,
+    avatar: session?.user?.image,
+  };
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -150,10 +155,10 @@ export const DashboardSidebar = ({
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <Link href="/">
                 <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+                <span className="text-base font-semibold">Server Hub</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -164,7 +169,12 @@ export const DashboardSidebar = ({
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          name={user.name}
+          email={user.email}
+          avatar={user.avatar}
+          isPending={isPending}
+        />
       </SidebarFooter>
     </Sidebar>
   );
