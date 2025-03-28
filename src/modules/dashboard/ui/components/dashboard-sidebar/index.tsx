@@ -1,88 +1,171 @@
 "use client";
 
-import Link from "next/link";
+import * as React from "react";
+import {
+  IconCamera,
+  IconChartBar,
+  IconDashboard,
+  IconDatabase,
+  IconFileAi,
+  IconFileDescription,
+  IconFileWord,
+  IconHelp,
+  IconInnerShadowTop,
+  IconListDetails,
+  IconReport,
+  IconSearch,
+  IconSettings,
+} from "@tabler/icons-react";
+
+import { NavDocuments } from "@/modules/dashboard/ui/components/dashboard-sidebar/nav-documents";
+import { NavMain } from "@/modules/dashboard/ui/components/dashboard-sidebar/nav-main";
+import { NavSecondary } from "@/modules/dashboard/ui/components/dashboard-sidebar/nav-secondary";
+import { NavUser } from "@/modules/dashboard/ui/components/dashboard-sidebar/nav-user";
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
+  SidebarFooter,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
-import { usePathname } from "next/navigation";
 
-// Icons
-import { FaBold } from "react-icons/fa";
-import { MdDashboard } from "react-icons/md";
-import { HiMiniServerStack } from "react-icons/hi2";
-import { IoLogOut } from "react-icons/io5";
+const data = {
+  user: {
+    name: "shadcn",
+    email: "m@example.com",
+    avatar: "/avatars/shadcn.jpg",
+  },
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: IconDashboard,
+    },
+    {
+      title: "Brands",
+      url: "/brands",
+      icon: IconListDetails,
+    },
+    {
+      title: "Products",
+      url: "/products",
+      icon: IconChartBar,
+    },
+  ],
+  navClouds: [
+    {
+      title: "Capture",
+      icon: IconCamera,
+      isActive: true,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Proposal",
+      icon: IconFileDescription,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Prompts",
+      icon: IconFileAi,
+      url: "#",
+      items: [
+        {
+          title: "Active Proposals",
+          url: "#",
+        },
+        {
+          title: "Archived",
+          url: "#",
+        },
+      ],
+    },
+  ],
+  navSecondary: [
+    {
+      title: "Settings",
+      url: "#",
+      icon: IconSettings,
+    },
+    {
+      title: "Get Help",
+      url: "#",
+      icon: IconHelp,
+    },
+    {
+      title: "Search",
+      url: "#",
+      icon: IconSearch,
+    },
+  ],
+  documents: [
+    {
+      name: "Data Library",
+      url: "#",
+      icon: IconDatabase,
+    },
+    {
+      name: "Reports",
+      url: "#",
+      icon: IconReport,
+    },
+    {
+      name: "Word Assistant",
+      url: "#",
+      icon: IconFileWord,
+    },
+  ],
+};
 
-export const DashboardSidebar = () => {
-  const pathname = usePathname();
-
+export const DashboardSidebar = ({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) => {
   return (
-    <Sidebar className="pt-16 z-40" collapsible="icon">
-      <SidebarContent className="bg-background">
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  tooltip="Dashboard"
-                  isActive={pathname === "/dashboard"}
-                  asChild
-                >
-                  <Link href="/dashboard" className="flex items-center gap-4">
-                    <MdDashboard className="size-4" />
-                    <span className="text-sm">Dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  tooltip="Brands"
-                  isActive={pathname === "/brands"}
-                  asChild
-                >
-                  <Link href="/brands" className="flex items-center gap-4">
-                    <FaBold className="size-4" />
-                    <span className="text-sm">Brands</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  tooltip="Products"
-                  isActive={pathname === "/products"}
-                  asChild
-                >
-                  <Link href="/products" className="flex items-center gap-4">
-                    <HiMiniServerStack className="size-4" />
-                    <span className="text-sm">Products</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <div className="px-4 w-full">
-                <Separator />
-              </div>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Exit dashboard" asChild>
-                  <Link href="/" className="flex items-center gap-4">
-                    <IoLogOut className="size-4" />
-                    <span className="text-sm">Exit dashboard</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+    <Sidebar collapsible="offcanvas" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
+            >
+              <a href="#">
+                <IconInnerShadowTop className="!size-5" />
+                <span className="text-base font-semibold">Acme Inc.</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <NavMain items={data.navMain} />
+        <NavDocuments items={data.documents} />
+        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser user={data.user} />
+      </SidebarFooter>
     </Sidebar>
   );
 };
