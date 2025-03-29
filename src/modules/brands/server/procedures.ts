@@ -37,7 +37,7 @@ export const brandsRouter = createTRPCRouter({
   update: adminProcedure
     .input(brandsUpdateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id, name, description, brandLogo } = input;
+      const { id } = input;
       const { role } = ctx.user;
 
       if (role !== "admin") {
@@ -55,9 +55,7 @@ export const brandsRouter = createTRPCRouter({
       const [updatedBrand] = await db
         .update(brands)
         .set({
-          name,
-          description,
-          brandLogo,
+          ...input,
         })
         .where(eq(brands.id, id))
         .returning();

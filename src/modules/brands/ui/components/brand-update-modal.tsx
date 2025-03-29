@@ -15,48 +15,53 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { brandsInsertSchema } from "@/db/schema";
+import { brandsSelectSchema } from "@/db/schema";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploaderButton } from "@/modules/filesUpload/ui/components/image-uploader-button";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  brand: z.infer<typeof brandsSelectSchema>;
 }
 
-export const BrandCreateModal = ({ open, onOpenChange }: Props) => {
-  const form = useForm<z.infer<typeof brandsInsertSchema>>({
-    resolver: zodResolver(brandsInsertSchema),
+export const BrandUpdateModal = ({ open, onOpenChange, brand }: Props) => {
+  const form = useForm<z.infer<typeof brandsSelectSchema>>({
+    resolver: zodResolver(brandsSelectSchema),
     defaultValues: {
-      name: "",
-      fullName: "",
-      description: "",
-      logoImageKey: "",
+      id: brand.id,
+      name: brand.name,
+      fullName: brand.fullName,
+      description: brand.description,
+      logoImageKey: brand.logoImageKey,
     },
   });
 
   const utils = trpc.useUtils();
-  const create = trpc.brands.create.useMutation({
+  const update = trpc.brands.update.useMutation({
     onSuccess: () => {
       onOpenChange(false);
       form.reset();
       utils.brands.getMany.invalidate();
-      toast.success("Brand created successfully");
+      toast.success("Brand updated successfully");
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof brandsInsertSchema>) => {
-    create.mutateAsync(data);
+  const onSubmit = async (data: z.infer<typeof brandsSelectSchema>) => {
+    console.log(data);
+    update.mutateAsync({
+      ...data,
+    });
   };
 
   return (
     <ResponsiveModal
       open={open}
       onOpenChange={onOpenChange}
-      title="Create a Brand"
+      title="Update a Brand"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -126,8 +131,8 @@ export const BrandCreateModal = ({ open, onOpenChange }: Props) => {
               </FormItem>
             )}
           />
-          <Button disabled={create.isPending} type="submit">
-            Create
+          <Button disabled={update.isPending} type="submit" className="w-full">
+            Update
           </Button>
         </form>
       </Form>

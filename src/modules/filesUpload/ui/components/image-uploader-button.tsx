@@ -85,13 +85,13 @@ export const ImageUploaderButton = ({
         <div className="relative overflow-hidden bg-gray-200 rounded">
           {isUploading && (
             <div
-              className="absolute inset-0 bg-green-500 transition-all duration-300 ease-out z-0 rounded"
+              className="absolute inset-0 bg-green-400 transition-all duration-300 ease-out z-0 rounded"
               style={{ width: `${uploadProgress}%` }}
             />
           )}
 
           <label
-            className="relative z-10 flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded cursor-pointer hover:bg-blue-600 transition-colors w-full"
+            className="relative z-10 flex items-center justify-center gap-2 px-4 py-2 bg-blue-400 text-white rounded cursor-pointer hover:bg-blue-500 transition-colors w-full"
             style={{
               background: isUploading ? "transparent" : undefined,
             }}

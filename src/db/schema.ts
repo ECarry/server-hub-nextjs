@@ -208,7 +208,10 @@ export const brandsRelations = relations(brands, ({ many }) => ({
 export const brandsInsertSchema = createInsertSchema(brands, {
   name: z.string().min(1).max(255),
 });
-export const brandsSelectSchema = createSelectSchema(brands);
+export const brandsSelectSchema = createSelectSchema(brands).omit({
+  createdAt: true,
+  updatedAt: true,
+});
 export const brandsUpdateSchema = createUpdateSchema(brands);
 
 export const productsCategories = pgTable("products_categories", {
