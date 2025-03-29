@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import * as React from "react";
@@ -98,7 +99,7 @@ import { trpc } from "@/trpc/client";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { brandsSelectSchema } from "@/db/schema";
-import Image from "next/image";
+import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 
 export const schema = brandsSelectSchema;
 
@@ -130,15 +131,13 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "brandLogo",
+    accessorKey: "logoImageKey",
     header: "Logo",
     cell: ({ row }) => (
-      <Image
-        src={row.original.brandLogo || "/next.svg"}
+      <img
+        src={getFileUrl(row.original.logoImageKey || "")}
         alt={row.original.name}
-        width={32}
-        height={32}
-        className="object-contain"
+        className="object-contain size-8"
       />
     ),
   },

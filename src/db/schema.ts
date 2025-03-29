@@ -15,6 +15,7 @@ import {
   createSelectSchema,
   createUpdateSchema,
 } from "drizzle-zod";
+import { z } from "zod";
 
 // Role Type
 export const roleEnum = pgEnum("user_role", ["admin", "user", "pro"]);
@@ -196,7 +197,7 @@ export const brands = pgTable("brands", {
   name: text("name").notNull().unique(),
   fullName: text("full_name"),
   description: text("description"),
-  brandLogo: text("brand_logo"),
+  logoImageKey: text("logo_image_key"),
   ...timestamps,
 });
 
@@ -204,7 +205,9 @@ export const brandsRelations = relations(brands, ({ many }) => ({
   products: many(products),
 }));
 
-export const brandsInsertSchema = createInsertSchema(brands);
+export const brandsInsertSchema = createInsertSchema(brands, {
+  name: z.string().min(1).max(255),
+});
 export const brandsSelectSchema = createSelectSchema(brands);
 export const brandsUpdateSchema = createUpdateSchema(brands);
 

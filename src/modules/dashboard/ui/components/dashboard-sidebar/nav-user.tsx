@@ -3,6 +3,7 @@
 import {
   IconCreditCard,
   IconDotsVertical,
+  IconHomeShare,
   IconLogout,
   IconNotification,
   IconUserCircle,
@@ -25,6 +26,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 interface Props {
   name?: string;
@@ -109,6 +111,12 @@ export function NavUser({ name, email, avatar, isPending }: Props) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link href="/">
+                <IconHomeShare />
+                Exit Dashboard
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <IconLogout />
               Log out

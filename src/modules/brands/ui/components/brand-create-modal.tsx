@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { brandsInsertSchema } from "@/db/schema";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUploaderButton } from "@/modules/filesUpload/ui/components/image-uploader-button";
 
 interface Props {
   open: boolean;
@@ -30,7 +31,7 @@ export const BrandCreateModal = ({ open, onOpenChange }: Props) => {
       name: "",
       fullName: "",
       description: "",
-      brandLogo: "",
+      logoImageKey: "",
     },
   });
 
@@ -112,17 +113,15 @@ export const BrandCreateModal = ({ open, onOpenChange }: Props) => {
 
           <FormField
             control={form.control}
-            name="brandLogo"
+            name="logoImageKey"
             render={({ field }) => (
               <FormItem className="mb-4">
                 <FormLabel>Brand Logo</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter brand logo URL"
-                    {...field}
-                    className="w-full"
-                    type="url"
-                    value={field.value || ""}
+                  <ImageUploaderButton
+                    imageKey={field.value}
+                    onUpload={(key) => field.onChange(key)}
+                    className="mb-4"
                   />
                 </FormControl>
               </FormItem>
