@@ -218,6 +218,13 @@ export const products = pgTable("products", {
   ...timestamps,
 });
 
+export const productsSelectSchema = createSelectSchema(products).omit({
+  createdAt: true,
+  updatedAt: true,
+});
+export const productsInsertSchema = createInsertSchema(products);
+export const productsUpdateSchema = createUpdateSchema(products);
+
 export const productsRelations = relations(products, ({ one, many }) => ({
   brand: one(brands, {
     fields: [products.brandId],
