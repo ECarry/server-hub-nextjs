@@ -63,8 +63,11 @@ export const columns: ColumnDef<z.infer<typeof brandsSelectSchema>>[] = [
     accessorKey: "description",
     header: "Description",
     cell: ({ row }) => (
-      <p className="text-muted-foreground px-1.5">{row.original.description}</p>
+      <p className="text-muted-foreground px-1.5 truncate max-w-64">
+        {row.original.description}
+      </p>
     ),
+    enableHiding: false,
   },
   {
     id: "actions",

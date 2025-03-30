@@ -21,6 +21,15 @@ export const Actions = ({
   row: Row<z.infer<typeof brandsSelectSchema>>;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [brandId, setBrandId] = useState<string | null>(null);
+
+  // Get all brands data
+  const { data: allBrands } = trpc.brands.getMany.useQuery(undefined, {
+    enabled: !!brandId && isOpen,
+  });
+  
+  // Find the current brand by id when the modal is open
+  const currentBrand = allBrands?.find(brand => brand.id === brandId);
 
   const util = trpc.useUtils();
   const remove = trpc.brands.remove.useMutation({
@@ -47,7 +56,10 @@ export const Actions = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem onClick={() => setIsOpen(true)}>
+          <DropdownMenuItem onClick={() => {
+            setBrandId(row.original.id);
+            setIsOpen(true);
+          }}>
             Edit
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -59,11 +71,16 @@ export const Actions = ({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <BrandUpdateModal
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        brand={row.original}
-      />
+      {currentBrand && (
+        <BrandUpdateModal
+          open={isOpen}
+          onOpenChange={(open) => {
+            setIsOpen(open);
+            if (!open) setBrandId(null); // Clear brandId when modal closes
+          }}
+          brand={currentBrand}
+        />
+      )}
     </>
   );
 };

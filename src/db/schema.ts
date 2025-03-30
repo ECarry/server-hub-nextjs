@@ -154,44 +154,6 @@ export const timestamps = {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 };
 
-// Device type enums
-export const server_type = pgEnum("server_type", ["tower", "rack", "blade"]);
-export const storage_type = pgEnum("storage_type", [
-  "san",
-  "nas",
-  "das",
-  "tape",
-]);
-export const network_type = pgEnum("network_type", [
-  "switch",
-  "router",
-  "firewall",
-  "load_balancer",
-]);
-
-// Document type and status enums
-export const document_type = pgEnum("document_type", [
-  "manual",
-  "datasheet",
-  "whitepaper",
-  "guide",
-  "certificate",
-]);
-export const document_status = pgEnum("document_status", [
-  "draft",
-  "published",
-  "archived",
-]);
-
-// Download type enum
-export const download_type = pgEnum("download_type", [
-  "firmware",
-  "driver",
-  "utility",
-  "management_software",
-  "bios",
-]);
-
 export const brands = pgTable("brands", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
@@ -228,21 +190,25 @@ export const productsCategoriesRelations = relations(
   })
 );
 
-export const ProductVisibility = pgEnum("visibility", ["public", "private"]);
+export const ProductVisibility = pgEnum("visibility", [
+  "draft",
+  "public",
+  "private",
+]);
+// Device type enums
+export const server_type = pgEnum("server_type", ["tower", "rack", "blade"]);
 
 export const products = pgTable("products", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
   model: text("model"),
   description: text("description"),
-  visibility: ProductVisibility("visibility").default("private").notNull(),
+  visibility: ProductVisibility("visibility").default("draft").notNull(),
   serverType: server_type("server_type"),
-  storageType: storage_type("storage_type"),
-  networkType: network_type("network_type"),
-  releaseYear: integer("release_year"),
-  specifications: text("specifications"),
+  managementIp: text("management_ip"),
+  userName: text("user_name"),
+  userPassword: text("user_password"),
   imageUrl: text("image_url"),
-  features: text("features").array(),
   brandId: uuid("brand_id")
     .notNull()
     .references(() => brands.id),
@@ -262,38 +228,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     references: [productsCategories.id],
   }),
   downloads: many(downloads),
-  documents: many(documents),
   posts: many(posts),
-}));
-
-/* Document Schema
- *  Document Table
- *  -- Document Type (manual, datasheet, whitepaper)
- *  -- Document Status (draft, published, archived)
- *  -- Document File
- */
-
-export const documents = pgTable("documents", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  title: text("title").notNull(),
-  description: text("description"),
-  type: document_type("type").notNull(),
-  status: document_status("status").notNull().default("published"),
-  fileSize: text("file_size"),
-  fileKey: text("file_key"),
-  url: text("url"),
-  productId: uuid("product_id").references(() => products.id),
-  language: text("language").default("en"),
-  publicationDate: timestamp("publication_date"),
-  version: text("version"),
-  ...timestamps,
-});
-
-export const documentsRelations = relations(documents, ({ one }) => ({
-  product: one(products, {
-    fields: [documents.productId],
-    references: [products.id],
-  }),
 }));
 
 /* Post Schema
@@ -302,14 +237,19 @@ export const documentsRelations = relations(documents, ({ one }) => ({
  *  -- Contains solutions and workarounds
  */
 
+export const postVisibility = pgEnum("post_visibility", [
+  "draft",
+  "public",
+  "private",
+]);
+
 export const posts = pgTable("posts", {
   id: uuid("id").primaryKey().defaultRandom(),
   title: text("title").notNull(),
-  content: text("content").notNull(),
-  summary: text("summary"),
+  content: text("content"),
   productId: uuid("product_id").references(() => products.id),
   authorId: text("author_id").references(() => user.id),
-  status: document_status("status").notNull().default("published"),
+  visibility: postVisibility("visibility").notNull().default("draft"),
   tags: text("tags").array(),
   views: integer("views").default(0),
   ...timestamps,
@@ -418,7 +358,6 @@ export const downloads = pgTable("downloads", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
   description: text("description"),
-  type: download_type("type").default("driver"),
   version: text("version"),
   releaseDate: timestamp("release_date"),
   operatingSystem: text("operating_system"),
