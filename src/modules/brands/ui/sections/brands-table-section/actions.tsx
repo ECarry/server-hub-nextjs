@@ -12,6 +12,8 @@ import { brandsSelectSchema } from "@/db/schema";
 import { z } from "zod";
 import { useState } from "react";
 import { BrandUpdateModal } from "../../components/brand-update-modal";
+import { trpc } from "@/trpc/client";
+import { toast } from "sonner";
 
 export const Actions = ({
   row,
@@ -19,6 +21,17 @@ export const Actions = ({
   row: Row<z.infer<typeof brandsSelectSchema>>;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const util = trpc.useUtils();
+  const remove = trpc.brands.remove.useMutation({
+    onSuccess: () => {
+      toast.success("Brand deleted successfully");
+      util.brands.getMany.invalidate();
+    },
+    onError: () => {
+      toast.error("Failed to delete brand");
+    },
+  });
 
   return (
     <>
@@ -38,7 +51,12 @@ export const Actions = ({
             Edit
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+          <DropdownMenuItem
+            variant="destructive"
+            onClick={() => remove.mutate({ id: row.original.id })}
+          >
+            Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <BrandUpdateModal

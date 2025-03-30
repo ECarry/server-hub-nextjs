@@ -67,7 +67,7 @@ export const ImageUploaderButton = ({
           <img
             src={getFileUrl(imageKey)}
             alt="logo"
-            className="w-full h-full object-cover rounded-md border border-gray-200"
+            className="w-full h-full object-contain rounded-md border border-gray-200"
           />
 
           {!isUploading && (
@@ -98,7 +98,7 @@ export const ImageUploaderButton = ({
           >
             <UploadIcon size={16} />
             <span>
-              {isUploading ? `Uploading... ${uploadProgress}%` : "Select Logo"}
+              {isUploading ? `Uploading... ${uploadProgress}%` : "Select file"}
             </span>
             <input
               type="file"

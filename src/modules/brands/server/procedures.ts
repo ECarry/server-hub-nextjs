@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { adminProcedure, baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { brands, brandsInsertSchema, brandsUpdateSchema } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { z } from "zod";
 
 export const brandsRouter = createTRPCRouter({
@@ -56,13 +56,14 @@ export const brandsRouter = createTRPCRouter({
         .update(brands)
         .set({
           ...input,
+          updatedAt: new Date(),
         })
         .where(eq(brands.id, id))
         .returning();
 
       return updatedBrand;
     }),
-  delete: adminProcedure
+  remove: adminProcedure
     .input(z.object({ id: z.string().uuid() }))
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
@@ -88,7 +89,7 @@ export const brandsRouter = createTRPCRouter({
       return deletedBrand;
     }),
   getMany: baseProcedure.query(async () => {
-    const data = await db.select().from(brands);
+    const data = await db.select().from(brands).orderBy(desc(brands.updatedAt));
 
     return data;
   }),

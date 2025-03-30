@@ -126,7 +126,7 @@ export const BrandCreateModal = ({ open, onOpenChange }: Props) => {
               </FormItem>
             )}
           />
-          <Button disabled={create.isPending} type="submit">
+          <Button disabled={create.isPending} type="submit" className="w-full">
             Create
           </Button>
         </form>
