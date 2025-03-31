@@ -15,6 +15,7 @@ import {
   IconSettings,
   IconBold,
   IconServer,
+  IconUsers,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "@/modules/dashboard/ui/components/dashboard-sidebar/nav-documents";
@@ -49,6 +50,11 @@ const data = {
       title: "Products",
       url: "/products",
       icon: IconServer,
+    },
+    {
+      title: "Users",
+      url: "/users",
+      icon: IconUsers,
     },
   ],
   navClouds: [

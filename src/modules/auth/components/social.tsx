@@ -4,6 +4,10 @@ import { Button } from "@/components/ui/button";
 import { signIn } from "../lib/auth-client";
 import { toast } from "sonner";
 import { useState } from "react";
+import {
+  IconBrandGoogleFilled,
+  IconBrandGithubFilled,
+} from "@tabler/icons-react";
 
 const Social = () => {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
@@ -36,6 +40,7 @@ const Social = () => {
             });
           }}
         >
+          <IconBrandGoogleFilled className="size-5" />
           <span>Continue with Google</span>
         </Button>
 
@@ -62,6 +67,7 @@ const Social = () => {
             });
           }}
         >
+          <IconBrandGithubFilled className="size-5" />
           <span>Continue with Github</span>
         </Button>
       </div>
