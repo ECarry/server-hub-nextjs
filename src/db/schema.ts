@@ -195,16 +195,12 @@ export const ProductVisibility = pgEnum("visibility", [
   "public",
   "private",
 ]);
-// Device type enums
-export const server_type = pgEnum("server_type", ["tower", "rack", "blade"]);
 
 export const products = pgTable("products", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
-  model: text("model"),
   description: text("description"),
   visibility: ProductVisibility("visibility").default("draft").notNull(),
-  serverType: server_type("server_type"),
   managementIp: text("management_ip"),
   userName: text("user_name"),
   userPassword: text("user_password"),

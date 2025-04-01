@@ -27,6 +27,7 @@ import { productsInsertSchema } from "@/db/schema";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUploaderButton } from "@/modules/filesUpload/ui/components/image-uploader-button";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
+import { IconDatabase, IconNetwork, IconServer } from "@tabler/icons-react";
 
 interface Props {
   open: boolean;
@@ -63,76 +64,92 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
     create.mutateAsync(data);
   };
 
+  const handleClose = () => {
+    onOpenChange(false);
+    form.reset();
+  };
+
   return (
     <ResponsiveModal
       open={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={handleClose}
       title="Create a Product"
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="brandId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Brand</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a brand" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {brands?.map((brand) => (
-                      <SelectItem
-                        key={brand.id}
-                        value={brand.id}
-                        className="flex items-center gap-2"
-                      >
-                        <img
-                          src={getFileUrl(brand.logoImageKey || "")}
-                          alt={brand.name}
-                          className="size-8 object-contain"
-                        />
-                        {brand.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div className="w-full flex gap-2">
+            <FormField
+              control={form.control}
+              name="brandId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Brand</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a brand" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="w-full">
+                      {brands?.map((brand) => (
+                        <SelectItem
+                          key={brand.id}
+                          value={brand.id}
+                          className="flex items-center gap-2"
+                        >
+                          <img
+                            src={getFileUrl(brand.logoImageKey || "")}
+                            alt={brand.name}
+                            className="size-6 object-contain"
+                          />
+                          {brand.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Category</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories?.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories?.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name === "server" && (
+                            <IconServer className="size-5" />
+                          )}
+                          {category.name === "network" && (
+                            <IconNetwork className="size-5" />
+                          )}
+                          {category.name === "storage" && (
+                            <IconDatabase className="size-5" />
+                          )}
+                          <p className="capitalize">{category.name}</p>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}
@@ -145,23 +162,6 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
                     placeholder="Enter brand name"
                     {...field}
                     className="w-full"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="model"
-            render={({ field }) => (
-              <FormItem className="mb-4">
-                <FormLabel>Model</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter brand full name"
-                    {...field}
-                    className="w-full"
-                    value={field.value || ""}
                   />
                 </FormControl>
               </FormItem>
