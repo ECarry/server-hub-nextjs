@@ -16,6 +16,7 @@ import {
   IconBold,
   IconServer,
   IconUsers,
+  IconSparkles,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "@/modules/dashboard/ui/components/dashboard-sidebar/nav-documents";
@@ -45,6 +46,11 @@ const data = {
       title: "Brands",
       url: "/brands",
       icon: IconBold,
+    },
+    {
+      title: "Series",
+      url: "/series",
+      icon: IconSparkles,
     },
     {
       title: "Products",

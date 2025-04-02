@@ -165,6 +165,7 @@ export const brands = pgTable("brands", {
 
 export const brandsRelations = relations(brands, ({ many }) => ({
   products: many(products),
+  series: many(productSeries),
 }));
 
 export const brandsInsertSchema = createInsertSchema(brands, {
@@ -196,15 +197,55 @@ export const ProductVisibility = pgEnum("visibility", [
   "private",
 ]);
 
+export const productSeries = pgTable(
+  "product_series",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    brandId: uuid("brand_id")
+      .notNull()
+      .references(() => brands.id),
+    name: text("name").notNull().unique(),
+    ...timestamps,
+  },
+  (t) => [
+    foreignKey({
+      name: "product_series_brand_id_fkey",
+      columns: [t.brandId],
+      foreignColumns: [brands.id],
+    }).onDelete("cascade"),
+  ]
+);
+
+export const productSeriesRelations = relations(
+  productSeries,
+  ({ one, many }) => ({
+    brand: one(brands, {
+      fields: [productSeries.brandId],
+      references: [brands.id],
+    }),
+    products: many(products),
+  })
+);
+
+export const seriesInsertSchema = createInsertSchema(productSeries, {
+  name: z.string().min(1).max(255),
+});
+export const seriesSelectSchema = createSelectSchema(productSeries).omit({
+  createdAt: true,
+  updatedAt: true,
+});
+export const seriesUpdateSchema = createUpdateSchema(productSeries);
+
 export const products = pgTable("products", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull().unique(),
+  model: text("model").notNull(),
+  generation: text("generation"),
   description: text("description"),
   visibility: ProductVisibility("visibility").default("draft").notNull(),
   managementIp: text("management_ip"),
   userName: text("user_name"),
   userPassword: text("user_password"),
-  imageUrl: text("image_url"),
+  imageKey: text("image_key"),
   brandId: uuid("brand_id")
     .notNull()
     .references(() => brands.id),
@@ -212,6 +253,7 @@ export const products = pgTable("products", {
     .notNull()
     .references(() => productsCategories.id),
   ...timestamps,
+  seriesId: uuid("series_id").references(() => productSeries.id),
 });
 
 export const productsSelectSchema = createSelectSchema(products).omit({
@@ -229,6 +271,10 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   categories: one(productsCategories, {
     fields: [products.categoryId],
     references: [productsCategories.id],
+  }),
+  series: one(productSeries, {
+    fields: [products.seriesId],
+    references: [productSeries.id],
   }),
   downloads: many(downloads),
   posts: many(posts),

@@ -38,7 +38,7 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
   const form = useForm<z.infer<typeof productsInsertSchema>>({
     resolver: zodResolver(productsInsertSchema),
     defaultValues: {
-      name: "",
+      model: "",
       brandId: "",
       categoryId: "",
     },
@@ -153,7 +153,7 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
 
           <FormField
             control={form.control}
-            name="name"
+            name="model"
             render={({ field }) => (
               <FormItem className="mb-4">
                 <FormLabel>Name</FormLabel>
@@ -187,7 +187,7 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
 
           <FormField
             control={form.control}
-            name="imageUrl"
+            name="imageKey"
             render={({ field }) => (
               <FormItem className="mb-4">
                 <FormLabel>Image URL</FormLabel>
