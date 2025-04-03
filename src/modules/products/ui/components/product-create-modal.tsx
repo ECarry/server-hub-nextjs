@@ -43,6 +43,7 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
       model: "",
       brandId: "",
       categoryId: "",
+      generation: "",
     },
   });
 
@@ -55,8 +56,6 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
     if (!series || !selectedBrandId) return [];
     return series.filter((s) => s.brandId === selectedBrandId);
   }, [series, selectedBrandId]);
-
-  console.log(filteredSeries);
 
   const utils = trpc.useUtils();
   const create = trpc.products.create.useMutation({
@@ -166,41 +165,61 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Category</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+          <div className="w-full flex items-center gap-2">
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories?.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name === "server" && (
+                            <IconServer className="size-5" />
+                          )}
+                          {category.name === "network" && (
+                            <IconNetwork className="size-5" />
+                          )}
+                          {category.name === "storage" && (
+                            <IconDatabase className="size-5" />
+                          )}
+                          <p className="capitalize">{category.name}</p>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="generation"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Generation</FormLabel>
                   <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
+                    <Input
+                      placeholder="Enter generation"
+                      {...field}
+                      value={field.value || ""}
+                      className="w-full"
+                    />
                   </FormControl>
-                  <SelectContent>
-                    {categories?.map((category) => (
-                      <SelectItem key={category.id} value={category.id}>
-                        {category.name === "server" && (
-                          <IconServer className="size-5" />
-                        )}
-                        {category.name === "network" && (
-                          <IconNetwork className="size-5" />
-                        )}
-                        {category.name === "storage" && (
-                          <IconDatabase className="size-5" />
-                        )}
-                        <p className="capitalize">{category.name}</p>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}

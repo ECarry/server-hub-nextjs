@@ -7,6 +7,8 @@ import { trpc } from "@/trpc/client";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
 import { ProductCreateModal } from "../../components/product-create-modal";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
 
 export const ProductsTableSection = () => {
   return (
@@ -24,14 +26,7 @@ const ProductsTableSectionSkeleton = () => {
 
 const ProductsTableSectionSuspense = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [data] = trpc.products.getMany.useSuspenseInfiniteQuery(
-    {
-      limit: 10,
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
-    }
-  );
+  const [data] = trpc.products.getMany.useSuspenseQuery();
 
   return (
     <div className="w-full flex-col justify-start space-y-6">
@@ -47,7 +42,7 @@ const ProductsTableSectionSuspense = () => {
       </div>
       <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 mt-4">
         <div className="overflow-hidden rounded-lg border">
-          {JSON.stringify(data, null, 2)}
+          <DataTable columns={columns} data={data} />
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ export const s3 = new S3Client({
 });
 
 export const getFileUrl = (fileKey: string) => {
-  if (!fileKey) return "/next.svg";
+  if (!fileKey) return "/placeholder.svg";
   const publicUrl = `${process.env.NEXT_PUBLIC_CLOUDFLARE_R2_URL}/${fileKey}`;
   return publicUrl;
 };

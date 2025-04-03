@@ -5,9 +5,7 @@ import { ProductsView } from "@/modules/products/ui/views/products-view";
 export const dynamic = "force-dynamic";
 
 const page = async () => {
-  void trpc.products.getMany.prefetchInfinite({
-    limit: 10,
-  });
+  void trpc.products.getMany.prefetch();
   void trpc.productCategories.getMany.prefetch();
   void trpc.brands.getMany.prefetch();
   void trpc.series.getMany.prefetch();

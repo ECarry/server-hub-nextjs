@@ -1,10 +1,11 @@
-import { productsSelectSchema } from "@/db/schema";
-import { ColumnDef } from "@tanstack/react-table";
+/* eslint-disable @next/next/no-img-element */
 import { Checkbox } from "@/components/ui/checkbox";
-import { z } from "zod";
-import { Actions } from "./actions";
+import { getFileUrl } from "@/modules/filesUpload/lib/utils";
+import { ProductsGetManyOutput } from "@/modules/products/types";
+import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 
-export const columns: ColumnDef<z.infer<typeof productsSelectSchema>>[] = [
+export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -32,8 +33,33 @@ export const columns: ColumnDef<z.infer<typeof productsSelectSchema>>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "brand",
+    header: "Brand",
+    cell: ({ row }) => (
+      <Link
+        href={`/products/${row.original.id}`}
+        className="flex items-center gap-2 group"
+      >
+        <img
+          src={getFileUrl(row.original.brandLogoKey || "")}
+          alt={row.original.brand}
+          className="size-6 object-contain"
+        />
+        <p className="ml-2 group-hover:underline underline-offset-4">
+          {row.original.brand}
+        </p>
+      </Link>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: "series",
+    header: "Series",
+    enableHiding: false,
+  },
+  {
+    accessorKey: "model",
+    header: "Model",
     enableHiding: false,
   },
   {
@@ -45,9 +71,5 @@ export const columns: ColumnDef<z.infer<typeof productsSelectSchema>>[] = [
       </p>
     ),
     enableHiding: false,
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => <Actions row={row} />,
   },
 ];

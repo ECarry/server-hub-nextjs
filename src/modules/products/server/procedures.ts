@@ -5,8 +5,11 @@ import {
   products,
   productsInsertSchema,
   productsUpdateSchema,
+  productsCategories,
+  productSeries,
+  brands,
 } from "@/db/schema";
-import { eq, desc, lt, and, or } from "drizzle-orm";
+import { eq, desc, getTableColumns } from "drizzle-orm";
 import { z } from "zod";
 
 export const productsRouter = createTRPCRouter({
@@ -92,20 +95,39 @@ export const productsRouter = createTRPCRouter({
 
       return deletedProduct;
     }),
-  getMany: adminProcedure
-    .input(
-      z.object({
-        cursor: z
-          .object({
-            id: z.string().uuid(),
-            updatedAt: z.date(),
-          })
-          .nullish(),
-        limit: z.number().min(1).max(100),
+  getMany: adminProcedure.query(async ({ ctx }) => {
+    const { role } = ctx.user;
+
+    if (role !== "admin") {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+      });
+    }
+
+    const data = await db
+      .select({
+        ...getTableColumns(products),
+        category: productsCategories.name,
+        brand: brands.name,
+        brandLogoKey: brands.logoImageKey,
+        series: productSeries.name,
       })
-    )
+      .from(products)
+      .innerJoin(
+        productsCategories,
+        eq(products.categoryId, productsCategories.id)
+      )
+      .innerJoin(brands, eq(products.brandId, brands.id))
+      .leftJoin(productSeries, eq(products.seriesId, productSeries.id))
+      .orderBy(desc(products.updatedAt))
+      .limit(100);
+
+    return data;
+  }),
+  getOne: adminProcedure
+    .input(z.object({ id: z.string().uuid() }))
     .query(async ({ ctx, input }) => {
-      const { cursor, limit } = input;
+      const { id } = input;
       const { role } = ctx.user;
 
       if (role !== "admin") {
@@ -114,35 +136,30 @@ export const productsRouter = createTRPCRouter({
         });
       }
 
-      const data = await db
-        .select()
+      if (!id) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+        });
+      }
+
+      const [data] = await db
+        .select({
+          ...getTableColumns(products),
+          category: productsCategories.name,
+          brand: brands.name,
+          brandLogoKey: brands.logoImageKey,
+          series: productSeries.name,
+        })
         .from(products)
-        .where(
-          cursor
-            ? or(
-                lt(products.updatedAt, cursor.updatedAt),
-                and(
-                  eq(products.updatedAt, cursor.updatedAt),
-                  lt(products.id, cursor.id)
-                )
-              )
-            : undefined
+        .innerJoin(
+          productsCategories,
+          eq(products.categoryId, productsCategories.id)
         )
-        .orderBy(desc(products.updatedAt))
-        .limit(limit + 1);
+        .innerJoin(brands, eq(products.brandId, brands.id))
+        .leftJoin(productSeries, eq(products.seriesId, productSeries.id))
+        .where(eq(products.id, id))
+        .limit(1);
 
-      const hasMore = data.length > limit;
-      // Remove the last item if there is more data
-      const items = hasMore ? data.slice(0, -1) : data;
-      // Set the next cursor to the last item if there is more data
-      const lastItem = items[items.length - 1];
-      const nextCursor = hasMore
-        ? {
-            id: lastItem.id,
-            updatedAt: lastItem.updatedAt,
-          }
-        : null;
-
-      return { items, nextCursor };
+      return data;
     }),
 });
