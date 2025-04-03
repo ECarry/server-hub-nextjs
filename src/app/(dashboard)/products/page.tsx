@@ -10,6 +10,7 @@ const page = async () => {
   });
   void trpc.productCategories.getMany.prefetch();
   void trpc.brands.getMany.prefetch();
+  void trpc.series.getMany.prefetch();
 
   return (
     <HydrateClient>

@@ -40,7 +40,7 @@ export const ResponsiveModal = ({
             <DrawerTitle>{title}</DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
-          {children}
+          <div className="p-4 pt-0">{children}</div>
         </DrawerContent>
       </Drawer>
     );

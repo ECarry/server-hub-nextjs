@@ -24,7 +24,7 @@ export const productsRouter = createTRPCRouter({
       const [existingProduct] = await db
         .select()
         .from(products)
-        .where(eq(products.name, input.name))
+        .where(eq(products.model, input.model))
         .limit(1);
 
       if (existingProduct) {

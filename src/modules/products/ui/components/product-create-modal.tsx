@@ -28,6 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ImageUploaderButton } from "@/modules/filesUpload/ui/components/image-uploader-button";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 import { IconDatabase, IconNetwork, IconServer } from "@tabler/icons-react";
+import { useMemo, useState } from "react";
 
 interface Props {
   open: boolean;
@@ -35,6 +36,7 @@ interface Props {
 }
 
 export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
+  const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null);
   const form = useForm<z.infer<typeof productsInsertSchema>>({
     resolver: zodResolver(productsInsertSchema),
     defaultValues: {
@@ -45,7 +47,16 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
   });
 
   const { data: brands } = trpc.brands.getMany.useQuery();
+  const { data: series } = trpc.series.getMany.useQuery();
   const { data: categories } = trpc.productCategories.getMany.useQuery();
+
+  // series brand id === selectedBrandId
+  const filteredSeries = useMemo(() => {
+    if (!series || !selectedBrandId) return [];
+    return series.filter((s) => s.brandId === selectedBrandId);
+  }, [series, selectedBrandId]);
+
+  console.log(filteredSeries);
 
   const utils = trpc.useUtils();
   const create = trpc.products.create.useMutation({
@@ -57,16 +68,20 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
     },
     onError: (error) => {
       toast.error(error.message);
+      console.log(error);
     },
   });
 
   const onSubmit = async (data: z.infer<typeof productsInsertSchema>) => {
+    console.log(data);
+
     create.mutateAsync(data);
   };
 
   const handleClose = () => {
     onOpenChange(false);
     form.reset();
+    setSelectedBrandId(null);
   };
 
   return (
@@ -85,7 +100,10 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
                 <FormItem className="w-full">
                   <FormLabel>Brand</FormLabel>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      setSelectedBrandId(value);
+                    }}
                     defaultValue={field.value}
                   >
                     <FormControl>
@@ -116,34 +134,31 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
 
             <FormField
               control={form.control}
-              name="categoryId"
+              name="seriesId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel>Series</FormLabel>
                   <Select
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    defaultValue={field.value || undefined}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a category" />
+                        <SelectValue placeholder="Select a series" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {categories?.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name === "server" && (
-                            <IconServer className="size-5" />
-                          )}
-                          {category.name === "network" && (
-                            <IconNetwork className="size-5" />
-                          )}
-                          {category.name === "storage" && (
-                            <IconDatabase className="size-5" />
-                          )}
-                          <p className="capitalize">{category.name}</p>
-                        </SelectItem>
-                      ))}
+                      {filteredSeries.length > 0 ? (
+                        filteredSeries?.map((series) => (
+                          <SelectItem key={series.id} value={series.id}>
+                            {series.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <p className="text-muted-foreground text-sm px-2 py-1">
+                          No series available
+                        </p>
+                      )}
                     </SelectContent>
                   </Select>
                 </FormItem>
@@ -153,13 +168,49 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
 
           <FormField
             control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Category</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories?.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name === "server" && (
+                          <IconServer className="size-5" />
+                        )}
+                        {category.name === "network" && (
+                          <IconNetwork className="size-5" />
+                        )}
+                        {category.name === "storage" && (
+                          <IconDatabase className="size-5" />
+                        )}
+                        <p className="capitalize">{category.name}</p>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="model"
             render={({ field }) => (
               <FormItem className="mb-4">
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Model</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Enter brand name"
+                    placeholder="Enter model"
                     {...field}
                     className="w-full"
                   />
