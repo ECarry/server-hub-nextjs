@@ -3,15 +3,12 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { IconDotsVertical } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import { Row } from "@tanstack/react-table";
 import { productsSelectSchema } from "@/db/schema";
 import { z } from "zod";
-import { useState } from "react";
-import { BrandUpdateModal } from "../../components/brand-update-modal";
 import { trpc } from "@/trpc/client";
 import { toast } from "sonner";
 
@@ -20,17 +17,6 @@ export const Actions = ({
 }: {
   row: Row<z.infer<typeof productsSelectSchema>>;
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [brandId, setBrandId] = useState<string | null>(null);
-
-  // Get all brands data
-  const { data: allBrands } = trpc.brands.getMany.useQuery(undefined, {
-    enabled: !!brandId && isOpen,
-  });
-
-  // Find the current brand by id when the modal is open
-  const currentBrand = allBrands?.find((brand) => brand.id === brandId);
-
   const util = trpc.useUtils();
   const remove = trpc.brands.remove.useMutation({
     onSuccess: () => {
@@ -57,15 +43,6 @@ export const Actions = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
           <DropdownMenuItem
-            onClick={() => {
-              setBrandId(row.original.id);
-              setIsOpen(true);
-            }}
-          >
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
             variant="destructive"
             onClick={() => remove.mutate({ id: row.original.id })}
           >
@@ -73,16 +50,6 @@ export const Actions = ({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {currentBrand && (
-        <BrandUpdateModal
-          open={isOpen}
-          onOpenChange={(open) => {
-            setIsOpen(open);
-            if (!open) setBrandId(null); // Clear brandId when modal closes
-          }}
-          brand={currentBrand}
-        />
-      )}
     </>
   );
 };
