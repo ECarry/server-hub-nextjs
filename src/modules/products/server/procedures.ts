@@ -56,6 +56,7 @@ export const productsRouter = createTRPCRouter({
       if (!id) {
         throw new TRPCError({
           code: "BAD_REQUEST",
+          message: "Missing product ID",
         });
       }
 

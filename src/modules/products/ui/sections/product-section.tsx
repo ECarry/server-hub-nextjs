@@ -1,5 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { z } from "zod";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
@@ -8,6 +10,38 @@ import { format, formatDistanceToNow } from "date-fns";
 import Image from "next/image";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { productsUpdateSchema } from "@/db/schema";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import {
+  IconDatabase,
+  IconEdit,
+  IconEye,
+  IconEyeClosed,
+  IconNetwork,
+  IconPlus,
+  IconServer,
+} from "@tabler/icons-react";
+import { toast } from "sonner";
+import { Separator } from "@/components/ui/separator";
+import { ProductImageUploader } from "../components/product-image-uploader";
 
 interface Props {
   productId: string;
@@ -24,53 +58,373 @@ export const ProductSection = ({ productId }: Props) => {
 };
 
 const ProductSectionSuspense = ({ productId }: Props) => {
+  const utils = trpc.useUtils();
+  const updateProduct = trpc.products.update.useMutation({
+    onSuccess: () => {
+      toast.success("Product updated successfully");
+      utils.products.getOne.invalidate({ id: productId });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
   const [data] = trpc.products.getOne.useSuspenseQuery({ id: productId });
+  const [brands] = trpc.brands.getMany.useSuspenseQuery();
+  const [series] = trpc.series.getMany.useSuspenseQuery();
+  const [categories] = trpc.productCategories.getMany.useSuspenseQuery();
+
+  const form = useForm<z.infer<typeof productsUpdateSchema>>({
+    resolver: zodResolver(productsUpdateSchema),
+    defaultValues: {
+      ...data,
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof productsUpdateSchema>) => {
+    console.log(values);
+    updateProduct.mutate({
+      ...values,
+    });
+  };
 
   return (
-    <div className="flex flex-col gap-y-6">
-      <div className="flex justify-between">
-        <div className="flex flex-col gap-y-2">
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
+        <div className="flex justify-between">
+          <div className="flex flex-col gap-y-2">
+            <div className="flex items-center gap-x-2">
+              <h1 className="text-3xl">
+                {data.brand + " " + data.series + " " + data.model}
+              </h1>
+              <Badge variant="secondary">{data.visibility}</Badge>
+            </div>
+            <div className="flex items-center gap-x-1">
+              <p className="text-sm">
+                <span className="text-muted-foreground">Created:</span>{" "}
+                {format(new Date(data.createdAt), "d MMM, yyyy")}
+              </p>
+              <p className="text-muted-foreground text-sm">・</p>
+              <p className="text-sm">
+                <span className="text-muted-foreground">Last Updated:</span>{" "}
+                {formatDistanceToNow(data.updatedAt)}
+              </p>
+            </div>
+          </div>
+
           <div className="flex items-center gap-x-2">
-            <h1 className="text-3xl">
-              {data.brand + " " + data.series + " " + data.model}
-            </h1>
-            <Badge variant="secondary">{data.visibility}</Badge>
-          </div>
-          <div className="flex items-center gap-x-1">
-            <p className="text-sm">
-              <span className="text-muted-foreground">Created:</span>{" "}
-              {format(new Date(data.createdAt), "d MMM, yyyy")}
-            </p>
-            <p className="text-muted-foreground text-sm">・</p>
-            <p className="text-sm">
-              <span className="text-muted-foreground">Last Updated:</span>{" "}
-              {formatDistanceToNow(data.updatedAt)}
-            </p>
+            <Button
+              disabled={updateProduct.isPending}
+              type="submit"
+              variant="default"
+            >
+              Save
+            </Button>
           </div>
         </div>
 
-        <div className="flex items-center gap-x-2">
-          <Button variant="destructive">Delete</Button>
-        </div>
-      </div>
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Image & Description */}
 
-      <div className="flex justify-between">
-        <div className="flex flex-col gap-y-4">
-          {/* IMAGE */}
-          <div>
-            <Image
-              src={getFileUrl(data.imageKey || "")}
-              alt={data.model}
-              width={200}
-              height={200}
-              className="object-contain rounded-lg"
-            />
+          <div className="basis-1 md:basis-1/2 2xl:basis-2/3 flex flex-col gap-y-4 w-full">
+            {/* IMAGE */}
+            <div>
+              <div>
+                <ProductImageUploader productId={productId} />
+              </div>
+              <Image
+                src={getFileUrl("")}
+                alt={data.model}
+                width={200}
+                height={200}
+                className="object-contain rounded-lg"
+              />
+            </div>
+
+            {/* DESCRIPTION */}
+            <div>
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Enter description"
+                        className="h-40"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* DOCUMENTATION */}
+            <div>
+              <h2 className="text-muted-foreground">Documentation</h2>
+            </div>
+
+            {/* Download */}
+            <div>
+              <div className="flex items-center justify-between">
+                <h2 className="text-muted-foreground">Download</h2>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="size-8 rounded-full"
+                >
+                  <IconPlus className="text-muted-foreground" />
+                </Button>
+              </div>
+            </div>
           </div>
 
-          {/* DESCRIPTION */}
-          <div></div>
+          <div className="hidden md:block">
+            <Separator orientation="vertical" />
+          </div>
+
+          {/* Product Details */}
+          <div className="basis-1 md:basis-1/2 2xl:basis-1/3 flex flex-col gap-y-4 border p-4 rounded-md">
+            <h3 className="text-lg">Product Edit</h3>
+            <h2 className="text-muted-foreground">Product Info</h2>
+            <div className="space-y-4">
+              <div className="flex items-center gap-x-2">
+                <FormField
+                  control={form.control}
+                  name="brandId"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Brand</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a brand" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="w-full">
+                          {brands?.map((brand) => (
+                            <SelectItem
+                              key={brand.id}
+                              value={brand.id}
+                              className="flex items-center gap-2"
+                            >
+                              <img
+                                src={getFileUrl(brand.logoImageKey || "")}
+                                alt={brand.name}
+                                className="size-6 object-contain"
+                              />
+                              {brand.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="seriesId"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Series</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value || undefined}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a series" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {series?.map((s) => (
+                            <SelectItem key={s.id} value={s.id}>
+                              {s.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="flex items-center gap-x-2">
+                <FormField
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Category</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {categories?.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name === "server" && (
+                                <IconServer className="size-5" />
+                              )}
+                              {category.name === "network" && (
+                                <IconNetwork className="size-5" />
+                              )}
+                              {category.name === "storage" && (
+                                <IconDatabase className="size-5" />
+                              )}
+                              <p className="capitalize">{category.name}</p>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="generation"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Generation</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter generation"
+                          {...field}
+                          value={field.value || ""}
+                          className="w-full"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="visibility"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Visibility</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select visibility" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="draft">
+                            <IconEdit className="size-5" />
+                            Draft
+                          </SelectItem>
+                          <SelectItem value="public">
+                            <IconEye className="size-5" />
+                            Public
+                          </SelectItem>
+                          <SelectItem value="private">
+                            <IconEyeClosed className="size-5" />
+                            Private
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="model"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Model</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter model"
+                        {...field}
+                        value={field.value}
+                        className="w-full"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <h2 className="text-muted-foreground">Manage Info</h2>
+              <FormField
+                control={form.control}
+                name="managementIp"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Default Management IP</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter ip address"
+                        {...field}
+                        value={field.value || ""}
+                        className="w-full"
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <div className="flex items-center gap-x-2">
+                <FormField
+                  control={form.control}
+                  name="userName"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Username</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter username"
+                          {...field}
+                          value={field.value || ""}
+                          className="w-full"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="userPassword"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter password"
+                          {...field}
+                          value={field.value || ""}
+                          className="w-full"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </form>
+    </Form>
   );
 };

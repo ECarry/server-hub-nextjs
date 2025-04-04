@@ -245,7 +245,6 @@ export const products = pgTable("products", {
   managementIp: text("management_ip"),
   userName: text("user_name"),
   userPassword: text("user_password"),
-  imageKey: text("image_key"),
   brandId: uuid("brand_id")
     .notNull()
     .references(() => brands.id),
@@ -278,8 +277,34 @@ export const productsRelations = relations(products, ({ one, many }) => ({
     fields: [products.seriesId],
     references: [productSeries.id],
   }),
+  images: many(productImage),
   downloads: many(downloads),
   posts: many(posts),
+}));
+
+export const productImage = pgTable(
+  "product_image",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    primary: boolean("primary").notNull().default(false),
+    productId: uuid("product_id").references(() => products.id),
+    imageKey: text("image_key").notNull(),
+    ...timestamps,
+  },
+  (t) => [
+    foreignKey({
+      name: "product_image_product_id_fkey",
+      columns: [t.productId],
+      foreignColumns: [products.id],
+    }).onDelete("cascade"),
+  ]
+);
+
+export const productImageRelations = relations(productImage, ({ one }) => ({
+  product: one(products, {
+    fields: [productImage.productId],
+    references: [products.id],
+  }),
 }));
 
 /* Post Schema

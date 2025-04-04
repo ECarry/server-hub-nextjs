@@ -53,6 +53,11 @@ export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "category",
+    header: "Category",
+    enableHiding: false,
+  },
+  {
     accessorKey: "series",
     header: "Series",
     enableHiding: false,
@@ -60,6 +65,11 @@ export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
   {
     accessorKey: "model",
     header: "Model",
+    enableHiding: false,
+  },
+  {
+    accessorKey: "generation",
+    header: "Generation",
     enableHiding: false,
   },
   {

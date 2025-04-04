@@ -25,7 +25,6 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { productsInsertSchema } from "@/db/schema";
 import { Textarea } from "@/components/ui/textarea";
-import { ImageUploaderButton } from "@/modules/filesUpload/ui/components/image-uploader-button";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 import { IconDatabase, IconNetwork, IconServer } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
@@ -249,22 +248,6 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
                     {...field}
                     className="w-full"
                     value={field.value || ""}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="imageKey"
-            render={({ field }) => (
-              <FormItem className="mb-4">
-                <FormLabel>Image URL</FormLabel>
-                <FormControl>
-                  <ImageUploaderButton
-                    imageKey={field.value}
-                    onUpload={(key) => field.onChange(key)}
                   />
                 </FormControl>
               </FormItem>
