@@ -7,7 +7,7 @@ import { trpc } from "@/trpc/client";
 import { Button } from "@/components/ui/button";
 import { IconPlus } from "@tabler/icons-react";
 import { ProductCreateModal } from "../../components/product-create-modal";
-import { DataTable } from "./data-table";
+import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
 
 export const ProductsTableSection = () => {
@@ -41,9 +41,7 @@ const ProductsTableSectionSuspense = () => {
         </div>
       </div>
       <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 mt-4">
-        <div className="overflow-hidden rounded-lg border">
-          <DataTable columns={columns} data={data} />
-        </div>
+        <DataTable columns={columns} data={data} />
       </div>
     </div>
   );

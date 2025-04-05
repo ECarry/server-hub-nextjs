@@ -36,25 +36,15 @@ export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
     accessorKey: "brand",
     header: "Brand",
     cell: ({ row }) => (
-      <Link
-        href={`/products/${row.original.id}`}
-        className="flex items-center gap-2 group"
-      >
+      <div className="flex items-center gap-2">
         <img
           src={getFileUrl(row.original.brandLogoKey || "")}
           alt={row.original.brand}
           className="size-6 object-contain"
         />
-        <p className="ml-2 group-hover:underline underline-offset-4">
-          {row.original.brand}
-        </p>
-      </Link>
+        <p>{row.original.brand}</p>
+      </div>
     ),
-    enableHiding: false,
-  },
-  {
-    accessorKey: "category",
-    header: "Category",
     enableHiding: false,
   },
   {
@@ -65,6 +55,18 @@ export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
   {
     accessorKey: "model",
     header: "Model",
+    cell: ({ row }) => (
+      <Link href={`/products/${row.original.id}`} className="group">
+        <p className="ml-2 group-hover:underline underline-offset-4">
+          {row.original.model}
+        </p>
+      </Link>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
     enableHiding: false,
   },
   {

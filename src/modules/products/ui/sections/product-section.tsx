@@ -122,7 +122,7 @@ const ProductSectionSuspense = ({ productId }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col md:flex-row gap-8">
           {/* Image & Description */}
 
           <div className="basis-1 md:basis-1/2 2xl:basis-2/3 flex flex-col gap-y-4 w-full">
@@ -162,10 +162,14 @@ const ProductSectionSuspense = ({ productId }: Props) => {
               />
             </div>
 
+            <Separator className="w-full mt-10" />
+
             {/* DOCUMENTATION */}
             <div>
               <h2 className="text-muted-foreground">Documentation</h2>
             </div>
+
+            <Separator className="w-full mt-10" />
 
             {/* Download */}
             <div>
