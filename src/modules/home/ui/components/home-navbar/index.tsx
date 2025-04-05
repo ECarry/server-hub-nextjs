@@ -5,6 +5,7 @@ import { SearchButtonNav } from "./search-button-nav";
 import { getCurrentUser } from "@/modules/auth/lib/get-current-user";
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/user-avatar";
+import Image from "next/image";
 
 export const HomeNavbar = async () => {
   const { user } = await getCurrentUser();
@@ -14,7 +15,7 @@ export const HomeNavbar = async () => {
       <div className="w-full grid grid-cols-[min-content_auto_min-content] grid-rows-[1fr_auto] items-center gap-x-2 md:grid-cols-[1fr_minmax(auto,500px)_1fr] lg:grid-rows-1 px-5 sm:px-6 md:px-8 lg:px-12 xl:px-20">
         <div className="flex items-center gap-7">
           <Link href="/" className="flex items-center">
-            Logo
+            <Image src="/logo.png" alt="Logo" width={128} height={64} />
           </Link>
           <div className="hidden md:flex items-center gap-5">
             <NavLinks />
