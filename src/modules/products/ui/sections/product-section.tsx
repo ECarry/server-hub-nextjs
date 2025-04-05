@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 import { trpc } from "@/trpc/client";
 import { format, formatDistanceToNow } from "date-fns";
-import Image from "next/image";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { useForm } from "react-hook-form";
@@ -41,7 +40,8 @@ import {
 } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
-import { ProductImageUploader } from "../components/product-image-uploader";
+import { ImageDropzone } from "@/modules/filesUpload/ui/components/image-dropzone";
+import { cloudflareR2 } from "@/modules/filesUpload/lib/cloudflare-r2";
 
 interface Props {
   productId: string;
@@ -72,6 +72,19 @@ const ProductSectionSuspense = ({ productId }: Props) => {
   const [brands] = trpc.brands.getMany.useSuspenseQuery();
   const [series] = trpc.series.getMany.useSuspenseQuery();
   const [categories] = trpc.productCategories.getMany.useSuspenseQuery();
+  const [images] = trpc.productImages.getMany.useSuspenseQuery({
+    productId,
+  });
+  const createProductImage = trpc.productImages.create.useMutation({
+    onSuccess: () => {
+      toast.success("Image uploaded successfully");
+      utils.productImages.getMany.invalidate({ productId });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const createPresignedUrl = trpc.filesUpload.createPresignedUrl.useMutation();
 
   const form = useForm<z.infer<typeof productsUpdateSchema>>({
     resolver: zodResolver(productsUpdateSchema),
@@ -87,6 +100,35 @@ const ProductSectionSuspense = ({ productId }: Props) => {
     });
   };
 
+  const handleImageUpload = async (file: File) => {
+    if (!file) {
+      return;
+    }
+
+    try {
+      const result = await cloudflareR2.upload({
+        file,
+        folder: "product-images",
+        getUploadUrl: async (input) => {
+          const data = await createPresignedUrl.mutateAsync(input);
+          return {
+            uploadUrl: data.uploadUrl,
+            publicUrl: data.publicUrl,
+            fileKey: data.fileKey,
+          };
+        },
+      });
+
+      await createProductImage.mutateAsync({
+        productId,
+        imageKey: result.fileKey,
+      });
+    } catch (error) {
+      console.error("Upload failed:", error);
+      toast.error(error instanceof Error ? error.message : "Upload failed");
+    }
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-full">
@@ -96,7 +138,17 @@ const ProductSectionSuspense = ({ productId }: Props) => {
               <h1 className="text-3xl">
                 {data.brand + " " + data.series + " " + data.model}
               </h1>
-              <Badge variant="secondary">{data.visibility}</Badge>
+              <Badge
+                variant={
+                  data.visibility === "public"
+                    ? "green"
+                    : data.visibility === "private"
+                    ? "secondary"
+                    : "destructive"
+                }
+              >
+                {data.visibility}
+              </Badge>
             </div>
             <div className="flex items-center gap-x-1">
               <p className="text-sm">
@@ -127,17 +179,24 @@ const ProductSectionSuspense = ({ productId }: Props) => {
 
           <div className="basis-1 md:basis-1/2 2xl:basis-2/3 flex flex-col gap-y-4 w-full">
             {/* IMAGE */}
-            <div>
-              <div>
-                <ProductImageUploader productId={productId} />
-              </div>
-              <Image
-                src={getFileUrl("")}
-                alt={data.model}
-                width={200}
-                height={200}
-                className="object-contain rounded-lg"
-              />
+            <div className="flex items-center gap-x-2">
+              <ImageDropzone onUpload={handleImageUpload} />
+
+              {images?.map((image) => (
+                <div
+                  key={image.id}
+                  className="flex items-center bg-muted rounded-md size-50 px-1"
+                >
+                  <img
+                    key={image.id}
+                    src={getFileUrl(image.imageKey)}
+                    alt={data.model}
+                    width={200}
+                    height={200}
+                    className="object-contain rounded-lg"
+                  />
+                </div>
+              ))}
             </div>
 
             {/* DESCRIPTION */}

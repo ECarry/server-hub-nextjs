@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 import { ProductsGetManyOutput } from "@/modules/products/types";
@@ -81,6 +82,24 @@ export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
       <p className="text-muted-foreground px-1.5 truncate max-w-64">
         {row.original.description}
       </p>
+    ),
+    enableHiding: false,
+  },
+  {
+    accessorKey: "visibility",
+    header: "Visibility",
+    cell: ({ row }) => (
+      <Badge
+        variant={
+          row.original.visibility === "public"
+            ? "green"
+            : row.original.visibility === "private"
+            ? "secondary"
+            : "destructive"
+        }
+      >
+        {row.original.visibility}
+      </Badge>
     ),
     enableHiding: false,
   },

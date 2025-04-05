@@ -288,7 +288,9 @@ export const productImage = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     primary: boolean("primary").notNull().default(false),
-    productId: uuid("product_id").references(() => products.id),
+    productId: uuid("product_id")
+      .references(() => products.id)
+      .notNull(),
     imageKey: text("image_key").notNull(),
     ...timestamps,
   },
@@ -300,6 +302,14 @@ export const productImage = pgTable(
     }).onDelete("cascade"),
   ]
 );
+
+export const productImageInsertSchema = createInsertSchema(productImage, {
+  productId: z.string().uuid(),
+  imageKey: z.string(),
+  primary: z.boolean().default(false),
+});
+export const productImageUpdateSchema = createUpdateSchema(productImage);
+export const productImageSelectSchema = createSelectSchema(productImage);
 
 export const productImageRelations = relations(productImage, ({ one }) => ({
   product: one(products, {
