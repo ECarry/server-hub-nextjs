@@ -166,7 +166,16 @@ const ProductSectionSuspense = ({ productId }: Props) => {
 
             {/* DOCUMENTATION */}
             <div>
-              <h2 className="text-muted-foreground">Documentation</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-muted-foreground">Documentation</h2>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="size-8 rounded-full"
+                >
+                  <IconPlus className="text-muted-foreground" />
+                </Button>
+              </div>
             </div>
 
             <Separator className="w-full mt-10" />

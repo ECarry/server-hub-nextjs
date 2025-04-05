@@ -279,6 +279,7 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   }),
   images: many(productImage),
   downloads: many(downloads),
+  documents: many(documents),
   posts: many(posts),
 }));
 
@@ -426,6 +427,26 @@ export const commentsReactionsRelations = relations(
   })
 );
 
+/* Document Schema
+ *  Document Table for firmware, drivers, and utilities
+ */
+
+export const documents = pgTable("documents", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().unique(),
+  description: text("description"),
+  version: text("version"),
+  releaseDate: timestamp("release_date"),
+  fileSize: text("file_size"),
+  fileType: text("file_type"),
+  fileKey: text("file_key"),
+  ...timestamps,
+});
+
+export const documentsRelations = relations(documents, ({ many }) => ({
+  product: many(products),
+}));
+
 /* Download Schema
  *  Download Table for firmware, drivers, and utilities
  */
@@ -441,7 +462,6 @@ export const downloads = pgTable("downloads", {
   fileSize: text("file_size"),
   fileType: text("file_type"),
   fileKey: text("file_key"),
-  url: text("url"),
   downloadCount: integer("download_count").default(0),
   checksumMd5: text("checksum_md5"),
   checksumSha256: text("checksum_sha256"),

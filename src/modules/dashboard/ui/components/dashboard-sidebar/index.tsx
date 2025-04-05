@@ -5,6 +5,7 @@ import {
   IconCamera,
   IconDashboard,
   IconDatabase,
+  IconArticle,
   IconFileAi,
   IconFileDescription,
   IconFileWord,
@@ -56,6 +57,11 @@ const data = {
       title: "Products",
       url: "/products",
       icon: IconServer,
+    },
+    {
+      title: "Posts",
+      url: "/posts",
+      icon: IconArticle,
     },
     {
       title: "Users",
