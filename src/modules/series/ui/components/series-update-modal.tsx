@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { ResponsiveModal } from "@/components/responsive-modal";
@@ -15,28 +16,39 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { seriesSelectSchema } from "@/db/schema";
+import { seriesUpdateSchema } from "@/db/schema";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  series: z.infer<typeof seriesSelectSchema>;
+  series: z.infer<typeof seriesUpdateSchema>;
 }
 
 export const SeriesUpdateModal = ({ open, onOpenChange, series }: Props) => {
-  const form = useForm<z.infer<typeof seriesSelectSchema>>({
-    resolver: zodResolver(seriesSelectSchema),
+  const form = useForm<z.infer<typeof seriesUpdateSchema>>({
+    resolver: zodResolver(seriesUpdateSchema),
     defaultValues: {
+      id: series.id,
       brandId: series.brandId,
       name: series.name,
     },
   });
 
   const utils = trpc.useUtils();
+  const { data: brands } = trpc.brands.getMany.useQuery();
   const update = trpc.series.update.useMutation({
     onSuccess: () => {
       onOpenChange(false);
       form.reset();
+
       utils.series.getMany.invalidate();
       toast.success("Series updated successfully");
     },
@@ -45,7 +57,7 @@ export const SeriesUpdateModal = ({ open, onOpenChange, series }: Props) => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof seriesSelectSchema>) => {
+  const onSubmit = async (data: z.infer<typeof seriesUpdateSchema>) => {
     console.log(data);
     update.mutateAsync({
       ...data,
@@ -83,12 +95,26 @@ export const SeriesUpdateModal = ({ open, onOpenChange, series }: Props) => {
               <FormItem className="mb-4">
                 <FormLabel>Brand</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Enter brand full name"
-                    {...field}
-                    className="w-full"
+                  <Select
                     value={field.value || ""}
-                  />
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a brand" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brands?.map((brand) => (
+                        <SelectItem key={brand.id} value={brand.id}>
+                          <img
+                            src={getFileUrl(brand.logoImageKey || "")}
+                            alt={brand.name}
+                            className="size-6 object-contain"
+                          />
+                          {brand.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
               </FormItem>
             )}
