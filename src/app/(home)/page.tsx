@@ -5,6 +5,9 @@ export const dynamic = "force-dynamic";
 
 const page = async () => {
   void trpc.brands.getMany.prefetch();
+  void trpc.home.getManyProducts.prefetchInfinite({
+    limit: 10,
+  });
 
   return (
     <HydrateClient>

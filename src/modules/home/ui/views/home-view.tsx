@@ -1,13 +1,14 @@
 import { Hero } from "@/modules/home/ui/components/hero";
-import { getCurrentUser } from "@/modules/auth/lib/get-current-user";
+import { ProductsSection } from "../sections/products-section";
 
 export const HomeView = async () => {
-  const { user } = await getCurrentUser();
-
   return (
-    <div>
+    <div className="flex flex-col space-y-6">
       <Hero />
-      <pre>{JSON.stringify(user, null, 2)}</pre>
+      <div className="">
+        <h1 className="text-5xl font-semibold">Discover</h1>
+      </div>
+      <ProductsSection />
     </div>
   );
 };

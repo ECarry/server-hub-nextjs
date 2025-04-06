@@ -6,8 +6,10 @@ import { productsRouter } from "@/modules/products/server/procedures";
 import { seriesRouter } from "@/modules/series/server/procedures";
 import { productImageRouter } from "@/modules/product-images/server/procedures";
 import { documentationRouter } from "@/modules/documentation/server/procedures";
+import { homeRouter } from "@/modules/home/server/procedures";
 
 export const appRouter = createTRPCRouter({
+  home: homeRouter,
   brands: brandsRouter,
   series: seriesRouter,
   products: productsRouter,
