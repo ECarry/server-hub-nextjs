@@ -437,48 +437,100 @@ export const commentsReactionsRelations = relations(
   })
 );
 
+export const fileVisibility = pgEnum("file_visibility", ["public", "private"]);
+
 /* Document Schema
  *  Document Table for firmware, drivers, and utilities
  */
 
-export const documents = pgTable("documents", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull().unique(),
-  description: text("description"),
-  version: text("version"),
-  releaseDate: timestamp("release_date"),
-  fileSize: text("file_size"),
-  fileType: text("file_type"),
-  fileKey: text("file_key"),
-  ...timestamps,
-});
+export const documents = pgTable(
+  "documents",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull().unique(),
+    description: text("description"),
+    version: text("version"),
+    releaseDate: timestamp("release_date"),
+    fileSize: text("file_size"),
+    fileType: text("file_type"),
+    fileKey: text("file_key"),
+    visibility: fileVisibility("visibility").default("private").notNull(),
+    productId: uuid("product_id")
+      .references(() => products.id)
+      .notNull(),
+    ...timestamps,
+  },
+  (t) => [
+    foreignKey({
+      name: "documents_product_id_fkey",
+      columns: [t.productId],
+      foreignColumns: [products.id],
+    }).onDelete("cascade"),
+  ]
+);
 
-export const documentsRelations = relations(documents, ({ many }) => ({
-  product: many(products),
+export const documentsInsertSchema = createInsertSchema(documents, {
+  name: z.string().min(1).max(255),
+  productId: z.string().uuid(),
+});
+export const documentsSelectSchema = createSelectSchema(documents).omit({
+  createdAt: true,
+  updatedAt: true,
+});
+export const documentsUpdateSchema = createUpdateSchema(documents);
+
+export const documentsRelations = relations(documents, ({ one }) => ({
+  product: one(products, {
+    fields: [documents.productId],
+    references: [products.id],
+  }),
 }));
 
 /* Download Schema
  *  Download Table for firmware, drivers, and utilities
  */
 
-export const downloads = pgTable("downloads", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull().unique(),
-  description: text("description"),
-  version: text("version"),
-  releaseDate: timestamp("release_date"),
-  operatingSystem: text("operating_system"),
-  architecture: text("architecture"),
-  fileSize: text("file_size"),
-  fileType: text("file_type"),
-  fileKey: text("file_key"),
-  downloadCount: integer("download_count").default(0),
-  checksumMd5: text("checksum_md5"),
-  checksumSha256: text("checksum_sha256"),
-  installationNotes: text("installation_notes"),
-  productId: uuid("product_id").references(() => products.id),
-  ...timestamps,
+export const downloads = pgTable(
+  "downloads",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull().unique(),
+    description: text("description"),
+    version: text("version"),
+    releaseDate: timestamp("release_date"),
+    operatingSystem: text("operating_system"),
+    architecture: text("architecture"),
+    fileSize: text("file_size"),
+    fileType: text("file_type"),
+    fileKey: text("file_key"),
+    downloadCount: integer("download_count").default(0),
+    checksumMd5: text("checksum_md5"),
+    checksumSha256: text("checksum_sha256"),
+    installationNotes: text("installation_notes"),
+    visibility: fileVisibility("visibility").default("private").notNull(),
+    productId: uuid("product_id")
+      .references(() => products.id)
+      .notNull(),
+    ...timestamps,
+  },
+  (t) => [
+    foreignKey({
+      name: "downloads_product_id_fkey",
+      columns: [t.productId],
+      foreignColumns: [products.id],
+    }).onDelete("cascade"),
+  ]
+);
+
+export const downloadsInsertSchema = createInsertSchema(downloads, {
+  name: z.string().min(1).max(255),
+  productId: z.string().uuid(),
 });
+export const downloadsSelectSchema = createSelectSchema(downloads).omit({
+  createdAt: true,
+  updatedAt: true,
+});
+export const downloadsUpdateSchema = createUpdateSchema(downloads);
 
 export const downloadsRelations = relations(downloads, ({ one }) => ({
   product: one(products, {

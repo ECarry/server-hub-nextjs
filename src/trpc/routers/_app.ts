@@ -5,6 +5,7 @@ import { productCategoriesRouter } from "@/modules/product-categories/server/pro
 import { productsRouter } from "@/modules/products/server/procedures";
 import { seriesRouter } from "@/modules/series/server/procedures";
 import { productImageRouter } from "@/modules/product-images/server/procedures";
+import { documentationRouter } from "@/modules/documentation/server/procedures";
 
 export const appRouter = createTRPCRouter({
   brands: brandsRouter,
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   filesUpload: filesUploadRouter,
   productCategories: productCategoriesRouter,
   productImages: productImageRouter,
+  documentation: documentationRouter,
 });
 
 // export type definition of API

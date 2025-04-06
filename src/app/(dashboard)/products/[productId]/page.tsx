@@ -19,6 +19,9 @@ const page = async ({ params }: Props) => {
   void trpc.productImages.getMany.prefetch({
     productId: (await params).productId,
   });
+  void trpc.documentation.getMany.prefetch({
+    productId: (await params).productId,
+  });
 
   return (
     <HydrateClient>

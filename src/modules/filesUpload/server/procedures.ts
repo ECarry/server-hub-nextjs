@@ -30,12 +30,7 @@ export const filesUploadRouter = createTRPCRouter({
     .input(
       z.object({
         filename: z.string(),
-        contentType: z
-          .string()
-          .refine(
-            (type) => type.startsWith("image/"),
-            "Invalid file type. Only images are allowed"
-          ),
+        contentType: z.string(),
         folder: z.string(),
       })
     )

@@ -46,11 +46,6 @@ export class CloudflareR2Client {
         `File size exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit`
       );
     }
-
-    // validate file type
-    if (!file.type.startsWith("image/")) {
-      throw new UploadError("Only image files are allowed");
-    }
   }
 
   /**
