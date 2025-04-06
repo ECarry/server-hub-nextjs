@@ -42,6 +42,7 @@ import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { ImageDropzone } from "@/modules/filesUpload/ui/components/image-dropzone";
 import { cloudflareR2 } from "@/modules/filesUpload/lib/cloudflare-r2";
+import { ProductImagesCarousel } from "@/modules/product-images/ui/components/product-images-carousel";
 
 interface Props {
   productId: string;
@@ -182,21 +183,7 @@ const ProductSectionSuspense = ({ productId }: Props) => {
             <div className="flex items-center gap-x-2">
               <ImageDropzone onUpload={handleImageUpload} />
 
-              {images?.map((image) => (
-                <div
-                  key={image.id}
-                  className="flex items-center bg-muted rounded-md size-50 px-1"
-                >
-                  <img
-                    key={image.id}
-                    src={getFileUrl(image.imageKey)}
-                    alt={data.model}
-                    width={200}
-                    height={200}
-                    className="object-contain rounded-lg"
-                  />
-                </div>
-              ))}
+              <ProductImagesCarousel images={images} />
             </div>
 
             {/* DESCRIPTION */}

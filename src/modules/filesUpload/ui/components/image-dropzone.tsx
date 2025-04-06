@@ -5,7 +5,7 @@ import { IconPhotoPlus } from "@tabler/icons-react";
 interface UploadZoneProps {
   onUpload: (file: File) => Promise<void>;
 }
-
+// [TODO]: Uploading animation
 export function ImageDropzone({ onUpload }: UploadZoneProps) {
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: async (acceptedFiles) => {
