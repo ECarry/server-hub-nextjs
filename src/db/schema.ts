@@ -9,6 +9,7 @@ import {
   uuid,
   foreignKey,
   primaryKey,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import {
   createInsertSchema,
@@ -177,12 +178,16 @@ export const brandsSelectSchema = createSelectSchema(brands).omit({
 });
 export const brandsUpdateSchema = createUpdateSchema(brands);
 
-export const productsCategories = pgTable("products_categories", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  name: text("name").notNull().unique(),
-  description: text("description"),
-  ...timestamps,
-});
+export const productsCategories = pgTable(
+  "products_categories",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull().unique(),
+    description: text("description"),
+    ...timestamps,
+  },
+  (t) => [uniqueIndex("products_categories_name_idx").on(t.name)]
+);
 
 export const productsCategoriesRelations = relations(
   productsCategories,
@@ -213,6 +218,7 @@ export const productSeries = pgTable(
       columns: [t.brandId],
       foreignColumns: [brands.id],
     }).onDelete("cascade"),
+    uniqueIndex("product_series_name_idx").on(t.name),
   ]
 );
 
