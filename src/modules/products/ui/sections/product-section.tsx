@@ -150,7 +150,7 @@ const ProductSectionSuspense = ({ productId }: Props) => {
           className="space-y-6 w-full"
         >
           <div className="flex justify-between">
-            <div className="flex flex-col gap-y-2">
+            <div className="flex flex-col">
               <div className="flex items-center gap-x-2">
                 <h1 className="text-3xl">
                   {data.brand + " " + data.series + " " + data.model}
@@ -179,7 +179,7 @@ const ProductSectionSuspense = ({ productId }: Props) => {
                 </p>
               </div>
             </div>
-
+            {/* Button */}
             <div className="flex items-center gap-x-2">
               <Button
                 disabled={updateProduct.isPending}
@@ -229,7 +229,9 @@ const ProductSectionSuspense = ({ productId }: Props) => {
               {/* DOCUMENTATION */}
               <div>
                 <div className="flex items-center justify-between">
-                  <h2 className="text-muted-foreground">Documentation</h2>
+                  <h2 className="text-muted-foreground text-lg">
+                    Documentation
+                  </h2>
                   <Button
                     type="button"
                     variant="outline"
@@ -256,9 +258,19 @@ const ProductSectionSuspense = ({ productId }: Props) => {
                       </Link>
 
                       {document.visibility === "public" ? (
-                        <Badge variant="default">Public</Badge>
+                        <Badge
+                          variant="default"
+                          className="text-muted-foreground"
+                        >
+                          Public
+                        </Badge>
                       ) : (
-                        <Badge variant="secondary">Private</Badge>
+                        <Badge
+                          variant="secondary"
+                          className="text-muted-foreground"
+                        >
+                          Private
+                        </Badge>
                       )}
                     </div>
                   ))}
@@ -270,7 +282,7 @@ const ProductSectionSuspense = ({ productId }: Props) => {
               {/* Download */}
               <div>
                 <div className="flex items-center justify-between">
-                  <h2 className="text-muted-foreground">Download</h2>
+                  <h2 className="text-muted-foreground text-lg">Download</h2>
                   <Button
                     type="button"
                     variant="outline"
@@ -286,7 +298,7 @@ const ProductSectionSuspense = ({ productId }: Props) => {
               <Separator orientation="vertical" />
             </div>
 
-            {/* Product Details */}
+            {/* Product Form */}
             <div className="basis-1 md:basis-1/2 2xl:basis-1/3 flex flex-col gap-y-4 border p-4 rounded-md">
               <h3 className="text-lg">Product Edit</h3>
               <h2 className="text-muted-foreground">Product Info</h2>

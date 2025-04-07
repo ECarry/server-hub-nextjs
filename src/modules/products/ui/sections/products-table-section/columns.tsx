@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 import { ProductsGetManyOutput } from "@/modules/products/types";
+import { IconEye, IconEyeX, IconLoader } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
@@ -89,15 +90,14 @@ export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
     accessorKey: "visibility",
     header: "Visibility",
     cell: ({ row }) => (
-      <Badge
-        variant={
-          row.original.visibility === "public"
-            ? "green"
-            : row.original.visibility === "private"
-            ? "secondary"
-            : "destructive"
-        }
-      >
+      <Badge variant="secondary" className="text-muted-foreground px-1.5">
+        {row.original.visibility === "public" ? (
+          <IconEye />
+        ) : row.original.visibility === "private" ? (
+          <IconEyeX />
+        ) : (
+          <IconLoader />
+        )}
         {row.original.visibility}
       </Badge>
     ),
