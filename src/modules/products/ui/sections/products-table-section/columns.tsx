@@ -3,7 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 import { ProductsGetManyOutput } from "@/modules/products/types";
-import { IconEye, IconEyeX, IconLoader } from "@tabler/icons-react";
+import {
+  IconDatabase,
+  IconEye,
+  IconEyeX,
+  IconLoader,
+  IconNetwork,
+  IconServer,
+} from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
@@ -67,13 +74,24 @@ export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "category",
-    header: "Category",
+    accessorKey: "generation",
+    header: "Generation",
     enableHiding: false,
   },
   {
-    accessorKey: "generation",
-    header: "Generation",
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => (
+      <>
+        {row.original.category === "server" ? (
+          <IconServer className="size-4" />
+        ) : row.original.category === "storage" ? (
+          <IconDatabase className="size-4" />
+        ) : (
+          <IconNetwork className="size-4" />
+        )}
+      </>
+    ),
     enableHiding: false,
   },
   {
