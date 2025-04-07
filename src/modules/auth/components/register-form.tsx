@@ -11,22 +11,24 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import CardWrapper from "./card-wrapper";
-import Link from "next/link";
 import { useState } from "react";
 import { z } from "zod";
-import { signIn } from "../lib/auth-client";
-import { toast } from "sonner";
+import { signUp } from "../lib/auth-client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1, {
     message: "Password is required",
   }),
+  confirmPassword: z.string().min(1, {
+    message: "Confirm password is required",
+  }),
 });
 
-const LoginForm = () => {
+const RegisterForm = () => {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,32 +36,37 @@ const LoginForm = () => {
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await signIn.email({
-      ...values,
-      callbackURL: "/dashboard",
-      fetchOptions: {
+    await signUp.email(
+      {
+        email: values.email, // user email address
+        password: values.password, // user password -> min 8 characters by default
+        name: values.email, // user display name
+        callbackURL: "/", // a url to redirect to after the user verifies their email (optional)
+      },
+      {
         onRequest: () => {
           setLoading(true);
         },
-        onResponse: () => {
+        onSuccess: () => {
           setLoading(false);
         },
         onError: (ctx) => {
           toast.error(ctx.error.message);
         },
-      },
-    });
+      }
+    );
   };
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account? Create here"
-      backButtonHref="/register"
+      headerLabel="Create account"
+      backButtonLabel="Already have an account? Log in here"
+      backButtonHref="/login"
       showSocial
     >
       <Form {...form}>
@@ -98,12 +105,23 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-          </div>
 
-          <div className="flex items-center">
-            <Button size="sm" variant="link" className="ml-auto px-0" asChild>
-              <Link href="/auth/reset">Forgot password?</Link>
-            </Button>
+            <FormField
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="password"
+                      placeholder="Confirm Password"
+                      className="rounded-2xl h-12 bg-primary-foreground"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <Button
@@ -112,7 +130,7 @@ const LoginForm = () => {
             size={"lg"}
             className="w-full rounded-2xl"
           >
-            <span>Login</span>
+            <span>Register</span>
           </Button>
         </form>
       </Form>
@@ -120,4 +138,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default RegisterForm;

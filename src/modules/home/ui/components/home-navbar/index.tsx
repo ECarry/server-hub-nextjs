@@ -31,10 +31,10 @@ export const HomeNavbar = async () => {
             {!user ? (
               <div className="hidden lg:flex flex-row items-center gap-3">
                 <Button variant="ghost" size="lg" asChild>
-                  <Link href="/auth/login">Log in</Link>
+                  <Link href="/login">Log in</Link>
                 </Button>
                 <Button variant="default" size="lg" asChild>
-                  <Link href="/auth/register">Create free account</Link>
+                  <Link href="/login">Create free account</Link>
                 </Button>
               </div>
             ) : (
