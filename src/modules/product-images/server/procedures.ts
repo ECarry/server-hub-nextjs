@@ -36,6 +36,31 @@ export const productImageRouter = createTRPCRouter({
 
       return newImage;
     }),
+  remove: adminProcedure
+    .input(z.object({ id: z.string().uuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      const { role } = ctx.user;
+
+      if (role !== "admin") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+        });
+      }
+
+      if (!id) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+        });
+      }
+
+      const [deletedImage] = await db
+        .delete(productImage)
+        .where(eq(productImage.id, id))
+        .returning();
+
+      return deletedImage;
+    }),
   getMany: baseProcedure
     .input(z.object({ productId: z.string().uuid() }))
     .query(async ({ input }) => {

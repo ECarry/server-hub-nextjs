@@ -2,7 +2,7 @@ import { z } from "zod";
 import { cache } from "react";
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, adminProcedure } from "@/trpc/init";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3 } from "../lib/utils";
 
@@ -75,6 +75,53 @@ export const filesUploadRouter = createTRPCRouter({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to generate upload URL",
+        });
+      }
+    }),
+  deleteFile: adminProcedure
+    .input(
+      z.object({
+        fileKey: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { fileKey } = input;
+      const { role } = ctx.user;
+
+      if (role !== "admin") {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "FORBIDDEN",
+        });
+      }
+
+      if (!fileKey) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "File key is required",
+        });
+      }
+
+      // Create the S3 command for deleting an object
+      const command = new DeleteObjectCommand({
+        Bucket: process.env.CLOUDFLARE_R2_BUCKET_NAME,
+        Key: fileKey,
+      });
+
+      try {
+        // Execute the delete command directly
+        await s3.send(command);
+        return { success: true };
+      } catch (error) {
+        if (error instanceof Error) {
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: error.message,
+          });
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to delete file",
         });
       }
     }),
