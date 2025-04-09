@@ -1,22 +1,21 @@
 "use client";
 
-import { signOut, useSession } from "@/modules/auth/lib/auth-client";
+import { useSession } from "@/modules/auth/lib/auth-client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { LogOut, Loader2, Bookmark } from "lucide-react";
+import { Bookmark, ArrowUpRight, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import ThemeToggle from "@/modules/home/ui/components/theme-toggle";
 
 const AuthButton = () => {
-  const router = useRouter();
-  const [isSignOut, setIsSignOut] = useState<boolean>(false);
   const { data: session } = useSession();
 
   if (!session) {
@@ -44,51 +43,66 @@ const AuthButton = () => {
           <AvatarFallback>{session.user.name.charAt(0)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-60  backdrop-blur p-[8px]">
-        <div className="flex flex-col pt-2 px-2.5">
-          <h1 className="truncate ">{session.user.name}</h1>
-          <p className="text-sm text-muted-foreground">{session.user.email}</p>
-        </div>
-        <div className="flex flex-col gap-2 py-2">
-          <DropdownMenuItem asChild>
-            <button>
-              <span className="w-full">
-                <div className="flex items-center gap-2">
-                  <Bookmark size={20} />
-                  Saved
-                </div>
-              </span>
-            </button>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <button
-              className="w-full"
-              onClick={async () => {
-                setIsSignOut(true);
-                await signOut({
-                  fetchOptions: {
-                    onSuccess() {
-                      router.push("/");
-                    },
-                  },
-                });
-                setIsSignOut(false);
-              }}
-              disabled={isSignOut}
+      <DropdownMenuContent align="end" className="w-60">
+        <DropdownMenuLabel className="font-normal select-none">
+          <div className="flex flex-col gap-2">
+            <h1 className="font-medium leading-none">{session.user.name}</h1>
+            <p className="text-sm leading-none text-muted-foreground">
+              {session.user.email}
+            </p>
+            <Button
+              variant={"secondary"}
+              className="mt-2 text-sm"
+              onClick={() => {}}
             >
-              <span className="w-full">
-                {isSignOut ? (
-                  <Loader2 size={20} className="animate-spin" />
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <LogOut size={20} />
-                    Sign Out
-                  </div>
-                )}
-              </span>
-            </button>
-          </DropdownMenuItem>
-        </div>
+              Request content
+            </Button>
+          </div>
+
+          <DropdownMenuSeparator />
+        </DropdownMenuLabel>
+        <DropdownMenuItem asChild>
+          <Link
+            className="flex justify-start items-center gap-x-2"
+            href="/collections"
+          >
+            <Bookmark className="size-5" />
+            <span>Collections</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <div
+            className="flex justify-start items-center gap-x-2"
+            onClick={() => {}}
+          >
+            <Settings className="size-5" />
+            <span>Settings</span>
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <ThemeToggle />
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link
+            className="flex justify-between items-center"
+            href={"https://github.com/ECarry/server-hub-nextjs"}
+            target="_blank"
+          >
+            <span>Github</span>
+            <ArrowUpRight className="size-5" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <button
+            type="submit"
+            className="w-full h-full cursor-pointer"
+            onClick={() => {}}
+          >
+            Log out
+          </button>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
