@@ -44,7 +44,7 @@ import { ImageDropzone } from "@/modules/filesUpload/ui/components/image-dropzon
 import { cloudflareR2 } from "@/modules/filesUpload/lib/cloudflare-r2";
 import { ProductImagesCarousel } from "@/modules/product-images/ui/components/product-images-carousel";
 import { DocumentUploaderModal } from "@/modules/documentation/ui/components/document-uploader-modal";
-import Link from "next/link";
+import { FilesAccordion } from "@/components/files-accordion";
 
 interface Props {
   productId: string;
@@ -242,38 +242,8 @@ const ProductSectionSuspense = ({ productId }: Props) => {
                   </Button>
                 </div>
 
-                <div className="space-y-4">
-                  {documents.map((document) => (
-                    <div
-                      key={document.id}
-                      className="flex items-center gap-x-2"
-                    >
-                      <Link
-                        href={getFileUrl(document.fileKey || "")}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline underline-offset-2"
-                      >
-                        {document.name}
-                      </Link>
-
-                      {document.visibility === "public" ? (
-                        <Badge
-                          variant="default"
-                          className="text-muted-foreground"
-                        >
-                          Public
-                        </Badge>
-                      ) : (
-                        <Badge
-                          variant="secondary"
-                          className="text-muted-foreground"
-                        >
-                          Private
-                        </Badge>
-                      )}
-                    </div>
-                  ))}
+                <div className="space-y-4 mt-2">
+                  <FilesAccordion documents={documents} />
                 </div>
               </div>
 
