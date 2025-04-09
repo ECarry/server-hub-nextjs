@@ -40,6 +40,7 @@ import {
 
 import { Product } from "@/modules/home/types";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
+import { trpc } from "@/trpc/client";
 
 export function ProductCard({ product }: { product: Product }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -47,6 +48,10 @@ export function ProductCard({ product }: { product: Product }) {
   const [current, setCurrent] = React.useState(0);
   const [scrollPrev, setScrollPrev] = React.useState<boolean>(false);
   const [scrollNext, setScrollNext] = React.useState<boolean>(true);
+
+  const { data: images } = trpc.home.getProductImages.useQuery({
+    productId: product.id,
+  });
 
   React.useEffect(() => {
     if (!api) {
@@ -69,8 +74,6 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="group relative flex flex-col gap-y-3 md:gap-y-4">
-      <Link href="/" className="peer absolute inset-0 z-10" />
-
       <Image
         src="/placeholder.svg"
         alt=""
@@ -90,18 +93,17 @@ export function ProductCard({ product }: { product: Product }) {
           }}
         >
           <CarouselContent className="m-0">
-            {Array.from({ length: 3 }).map((_, index) => (
+            {images?.map((image, index) => (
               <CarouselItem
                 key={index}
                 className="px-7 flex items-center justify-center"
               >
-                <Image
-                  src="/placeholder.svg"
+                <img
+                  src={getFileUrl(image.imageKey)}
                   alt=""
                   width={362}
                   height={362}
                   className="rounded-3xl overflow-hidden h-[283px] object-contain"
-                  priority={index === 0 ? true : false}
                 />
               </CarouselItem>
             ))}
@@ -124,7 +126,7 @@ export function ProductCard({ product }: { product: Product }) {
 
         <div className="absolute z-10 bottom-3 left-1/2 transform -translate-x-1/2 invisible group-hover:visible">
           <div className="flex gap-3">
-            {Array.from({ length: 3 }).map((_, index) => (
+            {images?.map((_, index) => (
               <button
                 key={index}
                 className="relative size-1.5 overflow-hidden rounded-full"
@@ -157,7 +159,10 @@ export function ProductCard({ product }: { product: Product }) {
             {product.brand} {product.series}
           </span>
           <span className="line-clamp-1 text-sm text-muted-foreground font-normal">
-            {product.model}
+            {product.model}{" "}
+            <span className="text-xs text-muted-foreground/80">
+              {product.generation}
+            </span>
           </span>
         </div>
 

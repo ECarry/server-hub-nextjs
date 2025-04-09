@@ -1,11 +1,13 @@
 import { db } from "@/db";
 import {
   brands,
+  productImage,
   products,
   productsCategories,
   productSeries,
 } from "@/db/schema";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { TRPCError } from "@trpc/server";
 import { and, or, eq, lt, desc, getTableColumns } from "drizzle-orm";
 import { z } from "zod";
 
@@ -71,5 +73,23 @@ export const homeRouter = createTRPCRouter({
         : null;
 
       return { items, nextCursor };
+    }),
+  getProductImages: baseProcedure
+    .input(z.object({ productId: z.string().uuid() }))
+    .query(async ({ input }) => {
+      const { productId } = input;
+
+      if (!productId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+        });
+      }
+
+      const data = await db
+        .select()
+        .from(productImage)
+        .where(eq(productImage.productId, productId));
+
+      return data;
     }),
 });
