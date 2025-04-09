@@ -1,3 +1,5 @@
+import { IMAGE_SIZE_LIMIT } from "@/constants";
+
 interface UploadToR2Options {
   file: File;
   folder: string;
@@ -40,11 +42,8 @@ export class CloudflareR2Client {
    * @throws {UploadError} if file validation fails
    */
   private validateFile(file: File) {
-    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-    if (file.size > MAX_FILE_SIZE) {
-      throw new UploadError(
-        `File size exceeds ${MAX_FILE_SIZE / 1024 / 1024}MB limit`
-      );
+    if (file.size > IMAGE_SIZE_LIMIT) {
+      throw new UploadError(`File size exceeds ${IMAGE_SIZE_LIMIT}MB limit`);
     }
   }
 
