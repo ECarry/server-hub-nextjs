@@ -71,8 +71,6 @@ export const ProductCreateModal = ({ open, onOpenChange }: Props) => {
   });
 
   const onSubmit = async (data: z.infer<typeof productsInsertSchema>) => {
-    console.log(data);
-
     create.mutateAsync(data);
   };
 

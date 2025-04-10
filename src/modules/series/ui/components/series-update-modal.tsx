@@ -58,7 +58,6 @@ export const SeriesUpdateModal = ({ open, onOpenChange, series }: Props) => {
   });
 
   const onSubmit = async (data: z.infer<typeof seriesUpdateSchema>) => {
-    console.log(data);
     update.mutateAsync({
       ...data,
     });

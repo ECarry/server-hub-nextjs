@@ -62,11 +62,11 @@
     "input-otp": "^1.4.2",
     "lucide-react": "^0.484.0",
     "motion": "^12.6.1",
-    "next": "15.2.3",
+    "next": "15.3.0",
     "next-themes": "^0.4.6",
-    "react": "^19.0.0",
+    "react": "19.1.0",
     "react-day-picker": "8.10.1",
-    "react-dom": "^19.0.0",
+    "react-dom": "19.1.0",
     "react-dropzone": "^14.3.8",
     "react-error-boundary": "^5.0.0",
     "react-hook-form": "^7.54.2",
@@ -85,13 +85,17 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.2",
     "drizzle-kit": "^0.30.5",
     "eslint": "^9",
-    "eslint-config-next": "15.2.3",
+    "eslint-config-next": "15.3.0",
     "tailwindcss": "^4",
     "tsx": "^4.19.3",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@types/react": "19.1.0",
+    "@types/react-dom": "19.1.2"
   }
 }

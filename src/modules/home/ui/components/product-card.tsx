@@ -69,8 +69,6 @@ export function ProductCard({ product }: { product: Product }) {
     });
   }, [api]);
 
-  console.log(product);
-
   return (
     <div className="group relative flex flex-col gap-y-3 md:gap-y-4">
       <div className="relative rounded-[28px] overflow-hidden w-full hidden md:block md:bg-foreground/[0.04] md:group-hover:bg-foreground/[0.06] transition duration-300 md:pt-6 md:pb-7 h-[300px]">
