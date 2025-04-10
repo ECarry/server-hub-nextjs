@@ -3,7 +3,6 @@
 
 import React from "react";
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
@@ -74,16 +73,7 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <div className="group relative flex flex-col gap-y-3 md:gap-y-4">
-      <Image
-        src="/placeholder.svg"
-        alt=""
-        width={362}
-        height={362}
-        className="rounded-3xl overflow-hidden w-full md:hidden h-[283px] object-contain"
-        priority
-      />
-
-      <div className="relative rounded-[28px] overflow-hidden w-full hidden md:block md:bg-foreground/[0.04] md:group-hover:bg-foreground/[0.06] transition duration-300 md:pt-6 md:pb-7">
+      <div className="relative rounded-[28px] overflow-hidden w-full hidden md:block md:bg-foreground/[0.04] md:group-hover:bg-foreground/[0.06] transition duration-300 md:pt-6 md:pb-7 h-[300px]">
         <Carousel
           setApi={setApi}
           className="m-0"
@@ -100,10 +90,8 @@ export function ProductCard({ product }: { product: Product }) {
               >
                 <img
                   src={getFileUrl(image.imageKey)}
-                  alt=""
-                  width={362}
-                  height={362}
-                  className="rounded-3xl overflow-hidden h-[283px] object-contain"
+                  alt="Product Image"
+                  className="rounded-3xl overflow-hidden object-contain h-[283px] w-full"
                 />
               </CarouselItem>
             ))}
