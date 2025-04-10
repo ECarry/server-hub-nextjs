@@ -140,7 +140,7 @@ export function ProductCard({ product }: { product: Product }) {
           />
         </div>
 
-        <div className="flex grow flex-col">
+        <Link href={`/product/${product.id}`} className="flex grow flex-col">
           <span className="line-clamp-1 text-body-medium-bold underline decoration-transparent group-hover:decoration-current transition-colors ease-out">
             {product.brand} {product.series}
           </span>
@@ -150,7 +150,7 @@ export function ProductCard({ product }: { product: Product }) {
               {product.generation}
             </span>
           </span>
-        </div>
+        </Link>
 
         {/* BOTTOM BUTTON  */}
         <div
