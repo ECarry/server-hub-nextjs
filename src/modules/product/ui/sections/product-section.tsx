@@ -2,6 +2,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 import { trpc } from "@/trpc/client";
 import Link from "next/link";
@@ -23,7 +24,20 @@ export const ProductSection = ({ productId }: Props) => {
 };
 
 const ProductLoadingSkeleton = () => {
-  return <div>Loading...</div>;
+  return (
+    <div className="flex flex-col space-y-6">
+      <div className="flex flex-col gap-y-6">
+        <div className="size-16 md:size-24 rounded-3xl overflow-hidden border p-2 flex items-center justify-center bg-muted">
+          <Skeleton className="size-full" />
+        </div>
+        <div className="flex flex-col space-y-2">
+          <Skeleton className="h-10 w-20" />
+          <Skeleton className="h-10 w-100" />
+        </div>
+        <Skeleton className="w-full h-11 flex items-center bg-muted rounded-2xl px-4 gap-2" />
+      </div>
+    </div>
+  );
 };
 
 const ProductsSectionSuspense = ({ productId }: Props) => {
