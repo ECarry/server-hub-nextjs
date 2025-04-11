@@ -132,7 +132,7 @@ export function ProductCard({ product }: { product: Product }) {
 
       {/* BOTTOM LOGO TITLE  */}
       <div className="flex items-center gap-x-3 w-full">
-        <div className="shrink-0 h-10 w-10 rounded-xl overflow-hidden">
+        <div className="shrink-0 h-10 w-10 rounded-xl overflow-hidden bg-muted p-1">
           <img
             src={getFileUrl(product.brandLogoKey ?? "")}
             alt="logo"

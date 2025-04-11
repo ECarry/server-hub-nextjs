@@ -1,4 +1,4 @@
-import { ProductView } from "@/modules/product/views/product-view";
+import { ProductView } from "@/modules/product/ui/views/product-view";
 import { HydrateClient, trpc } from "@/trpc/server";
 
 export const dynamic = "force-dynamic";

@@ -36,7 +36,7 @@ const ProductsSectionSuspense = ({ productId }: Props) => {
       {/* Header */}
       <div className="flex flex-col gap-y-6">
         {/* Logo */}
-        <div className="size-16 md:size-24 rounded-3xl overflow-hidden border p-2 flex items-center justify-center">
+        <div className="size-16 md:size-24 rounded-3xl overflow-hidden border p-2 flex items-center justify-center bg-muted">
           <img
             src={getFileUrl(data?.brandLogoKey || "")}
             alt="logo"
