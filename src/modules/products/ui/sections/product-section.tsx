@@ -34,11 +34,10 @@ import {
   IconEdit,
   IconEye,
   IconEyeClosed,
-  IconEyeX,
   IconNetwork,
   IconPlus,
   IconServer,
-  IconLoader,
+  IconPointFilled,
 } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
@@ -157,28 +156,9 @@ const ProductSectionSuspense = ({ productId }: Props) => {
                 <h1 className="text-3xl">
                   {data.brand + " " + data.series + " " + data.model}
                 </h1>
-                <Badge
-                  variant="secondary"
-                  className="text-muted-foreground px-1.5"
-                >
-                  {data.visibility === "public" ? (
-                    <>
-                      <IconEye className="text-green-500" />
-                      <span className="text-green-500">{data.visibility}</span>
-                    </>
-                  ) : data.visibility === "private" ? (
-                    <>
-                      <IconEyeX className="text-rose-500" />
-                      <span className="text-rose-500">{data.visibility}</span>
-                    </>
-                  ) : (
-                    <>
-                      <IconLoader className="animate-spin" />
-                      <span className="text-muted-foreground">
-                        {data.visibility}
-                      </span>
-                    </>
-                  )}
+                <Badge variant={data.visibility} className="px-1.5 capitalize">
+                  <IconPointFilled />
+                  {data.visibility}
                 </Badge>
               </div>
               <div className="flex items-center gap-x-1">

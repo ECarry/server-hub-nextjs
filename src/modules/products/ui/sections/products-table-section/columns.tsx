@@ -5,10 +5,8 @@ import { getFileUrl } from "@/modules/filesUpload/lib/utils";
 import { ProductsGetManyOutput } from "@/modules/products/types";
 import {
   IconDatabase,
-  IconEye,
-  IconEyeX,
-  IconLoader,
   IconNetwork,
+  IconPointFilled,
   IconServer,
 } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -108,25 +106,9 @@ export const columns: ColumnDef<ProductsGetManyOutput[number]>[] = [
     accessorKey: "visibility",
     header: "Visibility",
     cell: ({ row }) => (
-      <Badge variant="secondary" className="text-muted-foreground px-1.5">
-        {row.original.visibility === "public" ? (
-          <>
-            <IconEye className="text-green-500" />
-            <span className="text-green-500">{row.original.visibility}</span>
-          </>
-        ) : row.original.visibility === "private" ? (
-          <>
-            <IconEyeX className="text-rose-500" />
-            <span className="text-rose-500">{row.original.visibility}</span>
-          </>
-        ) : (
-          <>
-            <IconLoader className="animate-spin" />
-            <span className="text-muted-foreground">
-              {row.original.visibility}
-            </span>
-          </>
-        )}
+      <Badge variant={row.original.visibility} className="px-1.5 capitalize">
+        <IconPointFilled />
+        {row.original.visibility}
       </Badge>
     ),
     enableHiding: false,

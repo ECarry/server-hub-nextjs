@@ -19,6 +19,14 @@ const badgeVariants = cva(
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         green:
           "border-transparent bg-lime-400 text-white [a&]:hover:bg-lime-400/90 focus-visible:ring-lime-400/20 dark:focus-visible:ring-lime-400/40 dark:bg-lime-400/70",
+        draft:
+          "border-transparent bg-zinc-100 text-zinc-600 [a&]:hover:bg-zinc-200/90 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-800/80",
+        private:
+          "border-transparent bg-purple-100 text-purple-700 [a&]:hover:bg-purple-100/90 dark:bg-purple-900/30 dark:text-purple-400 dark:hover:bg-purple-900/20",
+        progress:
+          "border-transparent bg-blue-100 text-blue-700 [a&]:hover:bg-blue-100/90 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/20",
+        public:
+          "border-transparent bg-green-100 text-green-500 [a&]:hover:bg-green-100/90 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/20",
       },
     },
     defaultVariants: {
