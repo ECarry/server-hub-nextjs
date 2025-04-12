@@ -3,7 +3,13 @@ import { HomeView } from "@/modules/home/ui/views/home-view";
 
 export const dynamic = "force-dynamic";
 
-const page = async () => {
+interface Props {
+  searchParams: Promise<{ brandId?: string }>;
+}
+
+const page = async ({ searchParams }: Props) => {
+  const { brandId } = await searchParams;
+
   void trpc.brands.getMany.prefetch();
   void trpc.home.getManyProducts.prefetchInfinite({
     limit: 10,
@@ -11,7 +17,7 @@ const page = async () => {
 
   return (
     <HydrateClient>
-      <HomeView />
+      <HomeView brandId={brandId} />
     </HydrateClient>
   );
 };

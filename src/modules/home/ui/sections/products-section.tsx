@@ -18,7 +18,7 @@ export const ProductsSection = () => {
 
 const ProductLoadingSkeleton = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 content-start gap-x-6 gap-y-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 content-start gap-x-6 gap-y-10">
       {Array.from({ length: 10 }).map((_, index) => (
         <Skeleton key={index} className="h-[283px] w-full" />
       ))}
@@ -37,7 +37,7 @@ export const ProductsSectionSuspense = () => {
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 content-start gap-x-6 gap-y-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 content-start gap-x-6 gap-y-10">
       {data.pages
         .flatMap((page) => page.items)
         .map((product) => (

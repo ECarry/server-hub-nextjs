@@ -1,32 +1,31 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const menus = [{ name: "Home", link: "/" }];
+const menus = [
+  { name: "Home", link: "/" },
+  { name: "Blog", link: "/blog" },
+  { name: "About", link: "/about" },
+];
 
 export const NavLinks = () => {
+  const pathname = usePathname();
+
   return (
     <>
       {menus.map((menu) => (
-        <Button
+        <Link
           key={menu.link}
-          variant="link"
-          size="lg"
-          className="px-0"
-          asChild
+          href={menu.link}
+          className={
+            menu.link === pathname
+              ? "text-primary font-semibold"
+              : "text-muted-foreground hover:text-primary transition-colors duration-200 font-semibold"
+          }
         >
-          <Link
-            href={menu.link}
-            className={
-              menu.link === "/"
-                ? "text-primary"
-                : "text-muted-foreground hover:text-primary"
-            }
-          >
-            {menu.name}
-          </Link>
-        </Button>
+          {menu.name}
+        </Link>
       ))}
     </>
   );
