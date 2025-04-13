@@ -14,9 +14,14 @@ import { Bookmark, ArrowUpRight, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ThemeToggle from "@/modules/home/ui/components/theme-toggle";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AuthButton = () => {
-  const { data: session } = useSession();
+  const { data: session, isPending } = useSession();
+
+  if (isPending) {
+    return <Skeleton className="size-9 rounded-full" />;
+  }
 
   if (!session) {
     return (
