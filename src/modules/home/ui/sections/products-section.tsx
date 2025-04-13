@@ -6,11 +6,16 @@ import { ErrorBoundary } from "react-error-boundary";
 import { ProductCard } from "../components/product-card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const ProductsSection = () => {
+interface Props {
+  brandId?: string;
+  categoryId?: string;
+}
+
+export const ProductsSection = ({ brandId, categoryId }: Props) => {
   return (
     <Suspense fallback={<ProductLoadingSkeleton />}>
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
-        <ProductsSectionSuspense />
+        <ProductsSectionSuspense brandId={brandId} categoryId={categoryId} />
       </ErrorBoundary>
     </Suspense>
   );
@@ -26,10 +31,12 @@ const ProductLoadingSkeleton = () => {
   );
 };
 
-export const ProductsSectionSuspense = () => {
+export const ProductsSectionSuspense = ({ brandId, categoryId }: Props) => {
   const [data] = trpc.home.getManyProducts.useSuspenseInfiniteQuery(
     {
       limit: 10,
+      brandId,
+      categoryId,
     },
     {
       getNextPageParam: (lastPage) => lastPage.nextCursor,

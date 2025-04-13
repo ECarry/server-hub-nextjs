@@ -15,6 +15,8 @@ export const homeRouter = createTRPCRouter({
   getManyProducts: baseProcedure
     .input(
       z.object({
+        brandId: z.string().uuid().nullish(),
+        categoryId: z.string().uuid().nullish(),
         cursor: z
           .object({
             id: z.string().uuid(),
@@ -25,7 +27,7 @@ export const homeRouter = createTRPCRouter({
       })
     )
     .query(async ({ input }) => {
-      const { cursor, limit } = input;
+      const { brandId, categoryId, cursor, limit } = input;
 
       const data = await db
         .select({
@@ -45,6 +47,8 @@ export const homeRouter = createTRPCRouter({
         .where(
           and(
             eq(products.visibility, "public"),
+            brandId ? eq(brands.id, brandId) : undefined,
+            categoryId ? eq(productsCategories.id, categoryId) : undefined,
             cursor
               ? or(
                   lt(products.updatedAt, cursor.updatedAt),

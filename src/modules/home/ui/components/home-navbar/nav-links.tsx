@@ -20,8 +20,8 @@ export const NavLinks = () => {
           href={menu.link}
           className={
             menu.link === pathname
-              ? "text-primary font-semibold"
-              : "text-muted-foreground hover:text-primary transition-colors duration-200 font-semibold"
+              ? "text-primary"
+              : "text-muted-foreground hover:text-primary transition-colors duration-200"
           }
         >
           {menu.name}

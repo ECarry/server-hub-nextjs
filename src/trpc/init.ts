@@ -1,7 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { cache } from "react";
 import superjson from "superjson";
-import { auth } from "@/modules/auth/lib/auth";
+import { getSession } from "@/modules/auth/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
@@ -14,7 +14,7 @@ export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
    */
-  const session: Session | null = await auth.api.getSession({
+  const session: Session | null = await getSession({
     headers: await headers(),
   });
 
