@@ -44,7 +44,7 @@ const CategoriesSectionSuspense = ({ categoryId }: Props) => {
       url.searchParams.delete("categoryId");
     }
 
-    router.push(url.toString());
+    router.push(url.toString(), { scroll: false });
   };
 
   return (

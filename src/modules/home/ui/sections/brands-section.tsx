@@ -48,7 +48,7 @@ const BrandsSectionSuspense = ({ brandId }: Props) => {
       url.searchParams.delete("brandId");
     }
 
-    router.push(url.toString());
+    router.push(url.toString(), { scroll: false });
   };
 
   return (
