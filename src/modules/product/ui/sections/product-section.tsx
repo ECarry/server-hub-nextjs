@@ -4,6 +4,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getFileUrl } from "@/modules/filesUpload/lib/utils";
+import { useSave } from "@/modules/save-product/hooks/use-save";
+import { SaveButton } from "@/modules/save-product/ui/components/save-button";
 import { trpc } from "@/trpc/client";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -45,6 +47,15 @@ const ProductsSectionSuspense = ({ productId }: Props) => {
     id: productId,
   });
 
+  const [user] = trpc.users.getOne.useSuspenseQuery({
+    productId,
+  });
+
+  const { isPending, onClick } = useSave({
+    productId,
+    isSaved: user.productSaved,
+  });
+
   return (
     <div className="flex flex-col space-y-6">
       {/* Header */}
@@ -59,9 +70,9 @@ const ProductsSectionSuspense = ({ productId }: Props) => {
         </div>
         {/* Title */}
         <div className="flex flex-col space-y-2">
-          <div className="text-3xl md:text-4xl font-bold">{data?.brand} — </div>
+          <div className="text-3xl md:text-4xl font-bold">{data?.model} — </div>
           <div className="text-3xl md:text-4xl font-bold">
-            {data?.brandFullName} {data?.series} {data?.model}
+            {data?.brandFullName} {data?.series}
           </div>
         </div>
         {/* Pro */}
@@ -80,6 +91,15 @@ const ProductsSectionSuspense = ({ productId }: Props) => {
         >
           {data?.category}
         </Link>
+      </div>
+      <div>
+        <SaveButton
+          onClick={onClick}
+          disabled={isPending}
+          isSaved={user.productSaved}
+          className="rounded-full px-4 text-base"
+          size="lg"
+        />
       </div>
     </div>
   );

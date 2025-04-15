@@ -544,3 +544,33 @@ export const downloadsRelations = relations(downloads, ({ one }) => ({
     references: [products.id],
   }),
 }));
+
+export const saveProduct = pgTable(
+  "save_product",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    productId: uuid("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    ...timestamps,
+  },
+  (t) => [
+    primaryKey({
+      name: "save_product_pk",
+      columns: [t.userId, t.productId],
+    }),
+  ]
+);
+
+export const saveProductRelations = relations(saveProduct, ({ one }) => ({
+  user: one(user, {
+    fields: [saveProduct.userId],
+    references: [user.id],
+  }),
+  product: one(products, {
+    fields: [saveProduct.productId],
+    references: [products.id],
+  }),
+}));
