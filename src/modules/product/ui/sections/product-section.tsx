@@ -70,7 +70,9 @@ const ProductsSectionSuspense = ({ productId }: Props) => {
         </div>
         {/* Title */}
         <div className="flex flex-col space-y-2">
-          <div className="text-3xl md:text-4xl font-bold">{data?.model} — </div>
+          <div className="text-3xl md:text-4xl font-bold">
+            {data?.model} {data?.generation}
+          </div>
           <div className="text-3xl md:text-4xl font-bold">
             {data?.brandFullName} {data?.series}
           </div>

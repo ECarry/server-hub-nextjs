@@ -154,7 +154,13 @@ const ProductSectionSuspense = ({ productId }: Props) => {
             <div className="flex flex-col">
               <div className="flex items-center gap-x-2">
                 <h1 className="text-3xl">
-                  {data.brand + " " + data.series + " " + data.model}
+                  {data.brand +
+                    " " +
+                    data.series +
+                    " " +
+                    data.model +
+                    " " +
+                    data.generation}
                 </h1>
                 <Badge variant={data.visibility} className="px-1.5 capitalize">
                   <IconPointFilled />
