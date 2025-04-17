@@ -1,13 +1,13 @@
 import { db } from "@/db";
 import { adminProcedure, baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { brands, brandsInsertSchema, brandsUpdateSchema } from "@/db/schema";
+import { posts, postsInsertSchema, postsUpdateSchema } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-export const brandsRouter = createTRPCRouter({
+export const postsRouter = createTRPCRouter({
   create: adminProcedure
-    .input(brandsInsertSchema)
+    .input(postsInsertSchema)
     .mutation(async ({ ctx, input }) => {
       const { role } = ctx.user;
 
@@ -17,25 +17,25 @@ export const brandsRouter = createTRPCRouter({
         });
       }
 
-      const [existingBrand] = await db
+      const [existingPost] = await db
         .select()
-        .from(brands)
-        .where(eq(brands.name, input.name))
+        .from(posts)
+        .where(eq(posts.title, input.title))
         .limit(1);
 
-      if (existingBrand) {
+      if (existingPost) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Brand already exists",
+          message: "Post already exists",
         });
       }
 
-      const [newBrand] = await db.insert(brands).values(input).returning();
+      const [newPost] = await db.insert(posts).values(input).returning();
 
-      return newBrand;
+      return newPost;
     }),
   update: adminProcedure
-    .input(brandsUpdateSchema)
+    .input(postsUpdateSchema)
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
       const { role } = ctx.user;
@@ -52,16 +52,22 @@ export const brandsRouter = createTRPCRouter({
         });
       }
 
-      const [updatedBrand] = await db
-        .update(brands)
+      const [updatedPost] = await db
+        .update(posts)
         .set({
           ...input,
           updatedAt: new Date(),
         })
-        .where(eq(brands.id, id))
+        .where(eq(posts.id, id))
         .returning();
 
-      return updatedBrand;
+      if (!updatedPost) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+      }
+
+      return updatedPost;
     }),
   remove: adminProcedure
     .input(z.object({ id: z.string().uuid() }))
@@ -81,15 +87,21 @@ export const brandsRouter = createTRPCRouter({
         });
       }
 
-      const [deletedBrand] = await db
-        .delete(brands)
-        .where(eq(brands.id, id))
+      const [deletedPost] = await db
+        .delete(posts)
+        .where(eq(posts.id, id))
         .returning();
 
-      return deletedBrand;
+      if (!deletedPost) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+        });
+      }
+
+      return deletedPost;
     }),
   getMany: baseProcedure.query(async () => {
-    const data = await db.select().from(brands);
+    const data = await db.select().from(posts);
 
     return data;
   }),

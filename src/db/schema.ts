@@ -348,6 +348,15 @@ export const posts = pgTable("posts", {
   ...timestamps,
 });
 
+export const postsInsertSchema = createInsertSchema(posts, {
+  title: z.string().min(1).max(255),
+});
+export const postsUpdateSchema = createUpdateSchema(posts);
+export const postsSelectSchema = createSelectSchema(posts).omit({
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const postsRelations = relations(posts, ({ one, many }) => ({
   product: one(products, {
     fields: [posts.productId],

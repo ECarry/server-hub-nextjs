@@ -1,7 +1,14 @@
-import React from "react";
+import { HydrateClient } from "@/trpc/server";
+import { PostsView } from "@/modules/posts/ui/views/posts-view";
 
-const page = () => {
-  return <div>page</div>;
+export const dynamic = "force-dynamic";
+
+const page = async () => {
+  return (
+    <HydrateClient>
+      <PostsView />
+    </HydrateClient>
+  );
 };
 
 export default page;
