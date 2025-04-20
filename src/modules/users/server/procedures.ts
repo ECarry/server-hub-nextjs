@@ -16,6 +16,10 @@ export const usersRouter = createTRPCRouter({
       const { productId } = input;
       const { id: userId } = ctx.user;
 
+      if (!userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
       const savedProducts = db
         .$with("saved_products")
         .as(

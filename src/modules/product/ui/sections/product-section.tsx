@@ -47,13 +47,13 @@ const ProductsSectionSuspense = ({ productId }: Props) => {
     id: productId,
   });
 
-  const [user] = trpc.users.getOne.useSuspenseQuery({
+  const { data: user } = trpc.users.getOne.useQuery({
     productId,
   });
 
   const { isPending, onClick } = useSave({
     productId,
-    isSaved: user.productSaved,
+    isSaved: user?.productSaved || false,
   });
 
   return (
@@ -98,7 +98,7 @@ const ProductsSectionSuspense = ({ productId }: Props) => {
         <SaveButton
           onClick={onClick}
           disabled={isPending}
-          isSaved={user.productSaved}
+          isSaved={user?.productSaved || false}
           className="rounded-full px-4 text-base"
           size="lg"
         />

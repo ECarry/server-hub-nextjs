@@ -14,9 +14,6 @@ const page = async ({ params }: Props) => {
   void trpc.product.getOne.prefetch({
     id: productId,
   });
-  void trpc.users.getOne.prefetch({
-    productId,
-  });
 
   return (
     <HydrateClient>
