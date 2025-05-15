@@ -43,12 +43,14 @@ const SeriesTableSectionSkeleton = () => {
           <div className="rounded-md border">
             <Table>
               <TableHeader className="bg-muted sticky top-0 z-10">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <TableHead key={index}>
-                    <Skeleton className="h-8 w-24" />
-                  </TableHead>
-                ))}
-              </TableHeader>
+  <TableRow>
+    {Array.from({ length: 5 }).map((_, index) => (
+      <TableHead key={index}>
+        <Skeleton className="h-8 w-24" />
+      </TableHead>
+    ))}
+  </TableRow>
+</TableHeader>
               <TableBody className="**:data-[slot=table-cell]:first:w-8">
                 {Array.from({ length: 10 }).map((_, index) => (
                   <TableRow key={index}>
